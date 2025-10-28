@@ -97,6 +97,15 @@ USING (
     )
 );
 
+-- Allow users to find challenges by invite code (for join flow)
+CREATE POLICY "Users can view challenges by invite code"
+ON public.challenges FOR SELECT
+TO authenticated
+USING (
+    invite_code IS NOT NULL
+    AND invite_code != ''
+);
+
 -- Insert policy: authenticated users can create
 CREATE POLICY "Authenticated users can create challenges"
 ON public.challenges FOR INSERT
