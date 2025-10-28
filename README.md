@@ -147,20 +147,23 @@ See `/supabase/migrations/` for the complete schema.
 - [x] Navigation and routing
 - [x] shadcn/ui component library integration
 
-### In Progress 🚧
-- [ ] Challenge creation wizard with metric builder
-- [ ] Challenge discovery and joining flows
-- [ ] Daily entry form with all metric types
-- [ ] Progress visualization (calendar, streaks)
-- [ ] File upload system
+### Recently Completed ✅
+- [x] Challenge creation wizard with metric builder
+- [x] Challenge discovery and joining flows (public & private)
+- [x] Daily entry form with all metric types (boolean, number, duration, choice, text, file)
+- [x] Progress visualization (calendar view, streak tracking, statistics)
+- [x] File upload system with image optimization
+- [x] Delete and leave challenge functionality
+- [x] Progress dashboard with calendar and stats
 
 ### Planned 📋
 - [ ] Leaderboards and rankings
 - [ ] Email notifications
 - [ ] Data export functionality
-- [ ] Mobile optimization
+- [ ] Enhanced mobile optimization
 - [ ] Dark mode
-- [ ] Search and filters
+- [ ] Advanced search and filters
+- [ ] Social features (comments, reactions)
 
 ## Deployment
 
@@ -199,8 +202,20 @@ Run migrations on your production Supabase instance using the Supabase dashboard
 - Clear `.next` directory and rebuild
 - Verify all dependencies are installed
 
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is open source and available under the MIT License.
+
 ## Acknowledgments
 
 - Built with [Next.js](https://nextjs.org/)
 - Powered by [Supabase](https://supabase.com/)
 - UI components from [shadcn/ui](https://ui.shadcn.com/)
+
+---
+
+**⭐ If you find this project helpful, please give it a star!**
