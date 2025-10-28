@@ -1,10 +1,41 @@
 # DailyGrit - Daily Challenge Tracker
 
-A comprehensive web application for building better habits through accountability and consistent tracking. DailyGrit enables users to create personalized challenges, track daily progress with flexible metrics, and maintain motivation through streak tracking and visual progress indicators.
+A web application for tracking habits and challenges through daily check-ins and metrics. Built as a full-stack application demonstrating modern web development practices with Next.js, TypeScript, and Supabase.
 
-## Overview
+## What This Project Does
 
-DailyGrit addresses the common challenge of maintaining consistency in personal development goals. Whether building a fitness routine, learning a new skill, establishing a meditation practice, or breaking bad habits, DailyGrit provides the structure and accountability needed for long-term success.
+DailyGrit is a habit tracking application that helps users maintain consistency in their personal goals. Users can create challenges with custom metrics, log daily progress, and view their completion history through calendars and streak counters.
+
+The application demonstrates several key technical implementations:
+- Flexible metric system supporting multiple data types
+- Row-level security for multi-tenant data isolation
+- Real-time file uploads with image optimization
+- Complex database relationships with proper normalization
+- Server-side rendering and server actions in Next.js
+
+## Why Use This Application
+
+**For End Users:**
+- Track any type of goal with customizable metrics (workouts, reading, meditation, etc.)
+- See progress through visual calendars and streak tracking
+- Share challenges with friends or keep them private
+- Upload photos to document progress
+
+**For Developers:**
+- Reference implementation of Next.js 15 with App Router
+- Example of Supabase integration with proper RLS policies
+- Pattern for handling complex form validation and multi-step workflows
+- Demonstration of file upload with optimization
+- Implementation of authentication and authorization
+
+## Problem Being Solved
+
+Many people struggle to maintain consistency when working toward personal goals. Generic todo lists lack the structure and motivation needed for habit formation. This application provides:
+
+1. Structured tracking through defined challenges and metrics
+2. Visual feedback through streaks and calendars
+3. Accountability through shared challenges
+4. Flexibility to track any type of measurable goal
 
 ### What Makes DailyGrit Different
 
