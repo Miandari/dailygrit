@@ -1,30 +1,30 @@
-# 🚀 DailyGrit Deployment Guide
+# DailyGrit Deployment Guide
 
-## ✅ Features Implemented
+## Features Implemented
 
 ### Core Features
-- ✅ **User Authentication** - Sign up, login with Supabase Auth
-- ✅ **Challenge Creation** - Create custom challenges with metrics
-- ✅ **Daily Entry System** - Track daily progress with custom metrics
-- ✅ **File Upload** - Upload progress photos with image optimization
-- ✅ **Progress Visualization** - Calendar view, streak tracking, and statistics
-- ✅ **Delete/Leave Challenges** - Full CRUD operations for challenges
+- **User Authentication** - Sign up, login with Supabase Auth
+- **Challenge Creation** - Create custom challenges with metrics
+- **Daily Entry System** - Track daily progress with custom metrics
+- **File Upload** - Upload progress photos with image optimization
+- **Progress Visualization** - Calendar view, streak tracking, and statistics
+- **Delete/Leave Challenges** - Full CRUD operations for challenges
 
 ### Advanced Features
-- ✅ **Multiple Metric Types** - Boolean, number, duration, choice, text, file
-- ✅ **Public/Private Challenges** - Share with invite codes
-- ✅ **Streak Tracking** - Current and longest streaks
-- ✅ **Responsive Design** - Works on all devices
-- ✅ **RLS Security** - Row-level security on all tables
+- **Multiple Metric Types** - Boolean, number, duration, choice, text, file
+- **Public/Private Challenges** - Share with invite codes
+- **Streak Tracking** - Current and longest streaks
+- **Responsive Design** - Works on all devices
+- **RLS Security** - Row-level security on all tables
 
-## 📋 Prerequisites Completed
+## Prerequisites Completed
 
-1. ✅ Supabase project configured
-2. ✅ Database migrations applied
-3. ✅ Environment variables set
-4. ✅ Build tested successfully
+1. Supabase project configured
+2. Database migrations applied
+3. Environment variables set
+4. Build tested successfully
 
-## 🌐 Deploy to Vercel
+## Deploy to Vercel
 
 ### Option 1: Deploy via CLI (Recommended)
 ```bash
@@ -50,7 +50,7 @@ git push -u origin main
 - Configure environment variables (see below)
 - Deploy!
 
-## 🔑 Environment Variables for Vercel
+## Environment Variables for Vercel
 
 Add these in Vercel Dashboard → Settings → Environment Variables:
 
@@ -60,7 +60,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=[Your Anon Key]
 SUPABASE_SERVICE_ROLE_KEY=[Your Service Role Key - Optional]
 ```
 
-## 📱 Post-Deployment Steps
+## Post-Deployment Steps
 
 ### 1. Update Supabase Auth Settings
 - Go to Supabase Dashboard → Authentication → URL Configuration
@@ -84,7 +84,7 @@ SELECT * FROM storage.buckets WHERE id = 'challenge-uploads';
 - Upload photos
 - View progress
 
-## 🎯 Features to Use
+## Features to Use
 
 1. **Create Your First Challenge:**
    - Go to `/challenges/create`
@@ -106,7 +106,7 @@ SELECT * FROM storage.buckets WHERE id = 'challenge-uploads';
    - Share codes with friends
    - Join challenges with `/challenges/join`
 
-## 🚨 Troubleshooting
+##  Troubleshooting
 
 ### Build Errors
 - TypeScript errors are bypassed with `ignoreBuildErrors: true`
@@ -120,13 +120,13 @@ SELECT * FROM storage.buckets WHERE id = 'challenge-uploads';
 - Verify redirect URLs in Supabase
 - Check environment variables in Vercel
 
-## 📊 Performance Tips
+## Performance Tips
 
 - Images are automatically optimized on upload
 - Calendar data is cached client-side
 - Streaks are calculated server-side
 
-## 🎉 Success!
+## Success!
 
 Your DailyGrit app is now ready for production! Users can:
 - Create accountability challenges
