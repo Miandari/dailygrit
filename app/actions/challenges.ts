@@ -6,7 +6,7 @@ import { ChallengeFormData } from '@/lib/validations/challenge';
 import { addDays } from 'date-fns';
 
 // Generate a unique invite code
-function generateInviteCode(length = 6): string {
+function generateInviteCode(length = 8): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let result = '';
   for (let i = 0; i < length; i++) {

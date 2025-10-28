@@ -51,16 +51,16 @@ export default function JoinWithCodePage() {
               <Input
                 id="inviteCode"
                 type="text"
-                placeholder="e.g., ABC123"
+                placeholder="e.g., ABC12345"
                 value={inviteCode}
                 onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-                maxLength={6}
+                maxLength={8}
                 required
                 disabled={isLoading}
                 className="text-center text-2xl font-mono tracking-wider"
               />
               <p className="text-sm text-gray-600">
-                The code is 6 characters and not case sensitive
+                The code is 8 characters and not case sensitive
               </p>
             </div>
 
@@ -71,7 +71,7 @@ export default function JoinWithCodePage() {
             )}
 
             <div className="flex gap-2">
-              <Button type="submit" disabled={isLoading || inviteCode.length !== 6} className="flex-1">
+              <Button type="submit" disabled={isLoading || inviteCode.length !== 8} className="flex-1">
                 {isLoading ? 'Joining...' : 'Join Challenge'}
               </Button>
               <Button
