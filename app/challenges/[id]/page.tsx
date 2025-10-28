@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 import DeleteChallengeButton from '@/components/challenges/DeleteChallengeButton';
 import LeaveChallengeButton from '@/components/challenges/LeaveChallengeButton';
+import CopyInviteCodeButton from '@/components/challenges/CopyInviteCodeButton';
 
 export default async function ChallengePage({
   params
@@ -189,16 +190,7 @@ export default async function ChallengePage({
                 <code className="rounded bg-gray-100 px-4 py-2 text-xl font-mono">
                   {challenge.invite_code}
                 </code>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    if (challenge.invite_code) {
-                      navigator.clipboard.writeText(challenge.invite_code);
-                    }
-                  }}
-                >
-                  Copy Code
-                </Button>
+                <CopyInviteCodeButton inviteCode={challenge.invite_code} />
               </div>
             </CardContent>
           </Card>
