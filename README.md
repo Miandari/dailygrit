@@ -1,17 +1,83 @@
 # DailyGrit - Daily Challenge Tracker
 
-A web application for creating, joining, and tracking daily challenges with custom metrics. Built with Next.js, Supabase, and TypeScript.
+A comprehensive web application for building better habits through accountability and consistent tracking. DailyGrit enables users to create personalized challenges, track daily progress with flexible metrics, and maintain motivation through streak tracking and visual progress indicators.
+
+## Overview
+
+DailyGrit addresses the common challenge of maintaining consistency in personal development goals. Whether building a fitness routine, learning a new skill, establishing a meditation practice, or breaking bad habits, DailyGrit provides the structure and accountability needed for long-term success.
+
+### What Makes DailyGrit Different
+
+Unlike simple habit trackers, DailyGrit offers:
+
+**Flexible Metric System**: Define exactly what success looks like for your challenge. Track binary yes/no completions, specific numbers (steps, minutes, calories), time durations, multiple choice selections, written reflections, or visual progress through photo uploads.
+
+**Accountability Through Sharing**: Create public challenges that others can join, or use private invite codes for accountability groups. See your progress alongside others working toward similar goals.
+
+**Visual Progress Tracking**: Calendar views show your consistency at a glance, with completed days, missed days, and upcoming entries clearly marked. Streak counters provide immediate feedback on your momentum.
+
+**Smart Data Management**: All entries are securely stored with row-level security. Your data remains private unless you explicitly choose to share challenges publicly. Export capabilities allow you to own your progress data.
+
+### Core Use Cases
+
+- **Fitness Goals**: Track workouts, nutrition, sleep, or weight with customizable metrics
+- **Learning & Development**: Monitor study time, practice sessions, or skill-building activities
+- **Wellness Habits**: Log meditation, journaling, hydration, or mental health check-ins
+- **Creative Projects**: Track daily writing, art creation, or music practice
+- **Productivity**: Monitor deep work sessions, task completion, or time management
+- **Social Accountability**: Join existing challenges or create group challenges for teams
+
+### Technical Implementation
+
+Built with Next.js, Supabase, and TypeScript.
 
 ## Features
 
-- ✅ User authentication (email/password + Google OAuth)
-- 📊 Custom challenge creation with flexible metrics
-- 🎯 Daily progress tracking
-- 📈 Streak counting and progress visualization
-- 👥 Social features (join challenges, view participant progress)
-- 🔒 Privacy settings (public or invite-only challenges)
-- 📧 Email notifications (planned)
-- 📥 Data export (planned)
+### Authentication & User Management
+- Secure user authentication with email/password
+- OAuth integration with Google (configurable)
+- User profile management with avatars and bio
+- Password reset and account recovery
+
+### Challenge Creation & Management
+- Multi-step challenge creation wizard
+- Six metric types: boolean, number, duration, choice, text, and file upload
+- Configurable validation rules (min/max values, required fields, character limits)
+- Public challenges discoverable by all users
+- Private challenges with shareable invite codes
+- Challenge editing and deletion capabilities
+- Automatic creator participation
+
+### Daily Progress Tracking
+- Dynamic form generation based on challenge metrics
+- Support for all metric types with appropriate input controls
+- Photo uploads with automatic image optimization
+- Entry locking to prevent retrospective editing (optional)
+- Notes field for additional context on each entry
+- Validation of required fields before submission
+
+### Progress Visualization
+- Calendar view showing daily completion status
+- Visual indicators for completed, missed, and upcoming days
+- Current streak counter with milestone achievements
+- Longest streak tracking for personal bests
+- Completion rate statistics
+- Progress timeline showing days remaining
+
+### Social Features
+- Browse public challenges
+- Search and filter challenges
+- Join challenges with one click
+- View participant counts
+- Leave challenges at any time
+- Private challenge sharing via invite codes
+
+### Data Security
+- Row-level security on all database operations
+- User data isolation
+- Secure file storage with access controls
+- Input validation and sanitization
+- Protected API routes
 
 ## Tech Stack
 
@@ -135,35 +201,36 @@ The application uses the following main tables:
 
 See `/supabase/migrations/` for the complete schema.
 
-## Key Features Implementation Status
+## Implementation Status
 
-### Completed ✅
-- [x] Next.js project setup with TypeScript and Tailwind CSS
-- [x] Supabase integration (client & server)
-- [x] Authentication system (email/password + Google OAuth)
-- [x] Database schema and migrations
-- [x] Row Level Security policies
-- [x] Basic dashboard layout
-- [x] Navigation and routing
-- [x] shadcn/ui component library integration
+### Core Features (Completed)
+- Next.js 15 project setup with TypeScript and Tailwind CSS
+- Supabase integration for backend services
+- Authentication system with email/password and OAuth
+- PostgreSQL database schema with comprehensive migrations
+- Row Level Security policies for data protection
+- Responsive dashboard layout and navigation
+- shadcn/ui component library integration
+- Challenge creation wizard with metric builder
+- Public and private challenge discovery
+- Complete daily entry system supporting all metric types
+- Calendar-based progress visualization
+- Streak tracking and statistics
+- File upload with automatic image optimization
+- Challenge management (delete, leave)
+- Dedicated progress dashboard for each challenge
 
-### Recently Completed ✅
-- [x] Challenge creation wizard with metric builder
-- [x] Challenge discovery and joining flows (public & private)
-- [x] Daily entry form with all metric types (boolean, number, duration, choice, text, file)
-- [x] Progress visualization (calendar view, streak tracking, statistics)
-- [x] File upload system with image optimization
-- [x] Delete and leave challenge functionality
-- [x] Progress dashboard with calendar and stats
-
-### Planned 📋
-- [ ] Leaderboards and rankings
-- [ ] Email notifications
-- [ ] Data export functionality
-- [ ] Enhanced mobile optimization
-- [ ] Dark mode
-- [ ] Advanced search and filters
-- [ ] Social features (comments, reactions)
+### Planned Enhancements
+- Leaderboards and participant rankings
+- Email notification system for reminders and milestones
+- Data export functionality (CSV, JSON)
+- Enhanced mobile responsive design
+- Dark mode theme support
+- Advanced search with filters and sorting
+- Social interaction features (comments, reactions, encouragement)
+- Challenge templates for quick setup
+- Detailed analytics and insights
+- Gamification elements (badges, achievements)
 
 ## Deployment
 
@@ -218,4 +285,4 @@ This project is open source and available under the MIT License.
 
 ---
 
-**⭐ If you find this project helpful, please give it a star!**
+**If you find this project helpful, please consider giving it a star on GitHub.**
