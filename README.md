@@ -1,36 +1,206 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DailyGrit - Daily Challenge Tracker
+
+A web application for creating, joining, and tracking daily challenges with custom metrics. Built with Next.js, Supabase, and TypeScript.
+
+## Features
+
+- ✅ User authentication (email/password + Google OAuth)
+- 📊 Custom challenge creation with flexible metrics
+- 🎯 Daily progress tracking
+- 📈 Streak counting and progress visualization
+- 👥 Social features (join challenges, view participant progress)
+- 🔒 Privacy settings (public or invite-only challenges)
+- 📧 Email notifications (planned)
+- 📥 Data export (planned)
+
+## Tech Stack
+
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript
+- **Styling**: Tailwind CSS v4, shadcn/ui components
+- **Backend**: Supabase (PostgreSQL, Authentication, Storage)
+- **State Management**: Zustand, TanStack Query
+- **Forms**: React Hook Form with Zod validation
+- **Deployment**: Vercel (recommended)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 20+ and npm
+- A Supabase account (https://supabase.com)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd dailygrit
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up Supabase**
+
+   Follow the instructions in `/supabase/README.md`:
+   - Create a new Supabase project
+   - Run the migrations from `/supabase/migrations/`
+   - Get your project credentials
+
+4. **Configure environment variables**
+
+   Copy `.env.local.example` to `.env.local`:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+   Fill in your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+   NEXT_PUBLIC_APP_URL=http://localhost:3000
+   ```
+
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Project Structure
+
+```
+dailygrit/
+├── app/                      # Next.js App Router pages
+│   ├── (auth)/              # Auth pages (login, signup)
+│   ├── dashboard/           # Dashboard and user pages
+│   ├── challenges/          # Challenge pages
+│   ├── actions/             # Server actions
+│   └── layout.tsx           # Root layout
+├── components/              # React components
+│   ├── ui/                  # shadcn/ui components
+│   ├── auth/                # Auth-related components
+│   ├── challenges/          # Challenge components
+│   ├── tracking/            # Progress tracking components
+│   └── layout/              # Layout components
+├── lib/                     # Utility libraries
+│   ├── supabase/            # Supabase client configuration
+│   ├── hooks/               # Custom React hooks
+│   ├── stores/              # Zustand stores
+│   ├── types/               # TypeScript type definitions
+│   └── utils/               # Utility functions
+├── supabase/                # Supabase configuration
+│   ├── migrations/          # Database migrations
+│   └── functions/           # Edge functions
+└── public/                  # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development Workflow
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint errors
+npm run format       # Format code with Prettier
+npm run type-check   # Run TypeScript type checking
+```
 
-## Learn More
+### Code Style
 
-To learn more about Next.js, take a look at the following resources:
+This project uses:
+- ESLint for code linting
+- Prettier for code formatting (with Tailwind CSS plugin)
+- TypeScript for type safety
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run `npm run format` before committing to ensure consistent code style.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Database Schema
 
-## Deploy on Vercel
+The application uses the following main tables:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `profiles` - User profiles extending Supabase auth.users
+- `challenges` - Challenge definitions with metrics
+- `challenge_participants` - Users participating in challenges
+- `daily_entries` - Daily tracking entries
+- `user_storage_usage` - File upload quota tracking
+- `notification_preferences` - User notification settings
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `/supabase/migrations/` for the complete schema.
+
+## Key Features Implementation Status
+
+### Completed ✅
+- [x] Next.js project setup with TypeScript and Tailwind CSS
+- [x] Supabase integration (client & server)
+- [x] Authentication system (email/password + Google OAuth)
+- [x] Database schema and migrations
+- [x] Row Level Security policies
+- [x] Basic dashboard layout
+- [x] Navigation and routing
+- [x] shadcn/ui component library integration
+
+### In Progress 🚧
+- [ ] Challenge creation wizard with metric builder
+- [ ] Challenge discovery and joining flows
+- [ ] Daily entry form with all metric types
+- [ ] Progress visualization (calendar, streaks)
+- [ ] File upload system
+
+### Planned 📋
+- [ ] Leaderboards and rankings
+- [ ] Email notifications
+- [ ] Data export functionality
+- [ ] Mobile optimization
+- [ ] Dark mode
+- [ ] Search and filters
+
+## Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Import the project in Vercel
+3. Add environment variables in Vercel dashboard
+4. Deploy
+
+Vercel will automatically:
+- Build the Next.js application
+- Set up serverless functions
+- Configure custom domain (if provided)
+
+### Database Migrations
+
+Run migrations on your production Supabase instance using the Supabase dashboard SQL editor or CLI.
+
+## Troubleshooting
+
+### Common Issues
+
+**Authentication not working**
+- Verify environment variables are set correctly
+- Check Supabase project settings for allowed redirect URLs
+- Ensure OAuth providers are configured in Supabase dashboard
+
+**Database errors**
+- Verify migrations have been run in correct order
+- Check RLS policies are enabled
+- Ensure service role key is set for server-side operations
+
+**Build errors**
+- Run `npm run type-check` to identify TypeScript errors
+- Clear `.next` directory and rebuild
+- Verify all dependencies are installed
+
+## Acknowledgments
+
+- Built with [Next.js](https://nextjs.org/)
+- Powered by [Supabase](https://supabase.com/)
+- UI components from [shadcn/ui](https://ui.shadcn.com/)
