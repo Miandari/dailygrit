@@ -25,12 +25,18 @@
 
 ### 3. Run database migrations
 
-#### Option A: Using Supabase Dashboard (Recommended for first-time setup)
+The project includes 3 clean migrations that must be run in order:
+
+1. **20250127000001_initial_schema.sql** - Creates all tables and indexes
+2. **20250127000002_row_level_security.sql** - Sets up RLS policies and access control
+3. **20250127000003_storage_setup.sql** - Configures file storage
+
+#### Option A: Using Supabase Dashboard (Recommended)
 1. Go to SQL Editor in your Supabase dashboard
 2. Open `migrations/20250127000001_initial_schema.sql`
 3. Copy and paste the entire content into the SQL Editor
 4. Click "Run"
-5. Repeat for `migrations/20250127000002_rls_policies.sql`
+5. Repeat for the remaining 2 migrations in order
 
 #### Option B: Using Supabase CLI
 ```bash
@@ -52,11 +58,15 @@ supabase db push
 
 ### 5. Configure Storage
 
-The migration automatically creates the `progress-files` bucket.
+The migration automatically creates the `challenge-uploads` bucket with:
+- Public access for viewing
+- 5MB max file size per upload
+- Allowed types: JPEG, PNG, GIF, WebP
 
 Optional: Adjust storage limits
-1. Go to Storage > Settings
-2. Adjust file size limits if needed (default is 50MB per file)
+1. Go to Storage in your Supabase dashboard
+2. Select the `challenge-uploads` bucket
+3. Adjust file size limits if needed
 
 ### 6. Set up Email Templates (Optional for MVP)
 
@@ -82,9 +92,8 @@ You should see:
 - challenges
 - challenge_participants
 - daily_entries
-- notification_preferences
 - profiles
-- user_storage_usage
+- user_challenge_access
 
 ## Local Development with Supabase CLI
 
