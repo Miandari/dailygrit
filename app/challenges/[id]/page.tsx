@@ -94,7 +94,7 @@ export default async function ChallengePage({
                 {isParticipant && !isCreator && <Badge variant="secondary">Participating</Badge>}
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 justify-end">
               {!isParticipant && user && challenge.is_public && (
                 <Button asChild>
                   <Link href={`/challenges/${id}/join`}>Join Challenge</Link>
@@ -109,6 +109,9 @@ export default async function ChallengePage({
                 <>
                   <Button asChild>
                     <Link href="/dashboard/today">Go to Today&apos;s Tasks</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link href={`/challenges/${id}/entries`}>View All Days</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link href={`/challenges/${id}/progress`}>View Progress</Link>

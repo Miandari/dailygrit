@@ -131,10 +131,15 @@ export default async function DashboardPage() {
               const challenge = participation.challenge;
               if (!challenge) return null;
 
-              const daysElapsed = Math.floor(
-                (new Date().getTime() - new Date(challenge.starts_at).getTime()) /
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const startDate = new Date(challenge.starts_at);
+              startDate.setHours(0, 0, 0, 0);
+
+              const daysElapsed = Math.max(0, Math.floor(
+                (today.getTime() - startDate.getTime()) /
                   (1000 * 60 * 60 * 24)
-              );
+              ));
               const progress = Math.min(100, (daysElapsed / challenge.duration_days) * 100);
 
               return (
@@ -151,8 +156,14 @@ export default async function DashboardPage() {
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-gray-600">Progress</span>
                           <span className="font-medium">
-                            Day {Math.min(daysElapsed + 1, challenge.duration_days)} of{' '}
-                            {challenge.duration_days}
+                            {daysElapsed === 0 && today < startDate ? (
+                              'Not started'
+                            ) : (
+                              <>
+                                Day {Math.min(daysElapsed + 1, challenge.duration_days)} of{' '}
+                                {challenge.duration_days}
+                              </>
+                            )}
                           </span>
                         </div>
                         <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">

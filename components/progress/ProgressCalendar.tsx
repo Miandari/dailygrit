@@ -9,6 +9,9 @@ import { cn } from '@/lib/utils';
 interface DailyEntry {
   entry_date: string;
   is_completed: boolean;
+  points_earned?: number;
+  bonus_points?: number;
+  submitted_at?: string;
 }
 
 interface ProgressCalendarProps {
@@ -29,7 +32,7 @@ export function ProgressCalendar({ entries, challengeStartDate, challengeEndDate
     entries.map(entry => [entry.entry_date, entry])
   );
 
-  const getDayStatus = (day: Date): 'completed' | 'missed' | 'future' | 'outside' => {
+  const getDayStatus = (day: Date): 'completed' | 'late' | 'missed' | 'today' | 'future' | 'outside' => {
     const dayStr = format(day, 'yyyy-MM-dd');
 
     // Create copies to avoid mutation and normalize to midnight local time
@@ -55,28 +58,43 @@ export function ProgressCalendar({ entries, challengeStartDate, challengeEndDate
       return 'future';
     }
 
-    // Check if there's an entry for this day
+    // Check if day is today
+    if (dayMidnight.getTime() === todayMidnight.getTime()) {
+      const entry = entryMap.get(dayStr);
+      if (entry?.is_completed) {
+        return 'completed';
+      }
+      return 'today';
+    }
+
+    // Check if there's an entry for this day (past days only)
     const entry = entryMap.get(dayStr);
     if (entry?.is_completed) {
+      // Check if it was submitted late (after the entry_date)
+      if (entry.submitted_at) {
+        const submittedDate = new Date(entry.submitted_at);
+        submittedDate.setHours(0, 0, 0, 0);
+        // If submitted on a different day than entry_date, it's late
+        if (submittedDate.getTime() > dayMidnight.getTime()) {
+          return 'late';
+        }
+      }
       return 'completed';
     }
 
     return 'missed';
   };
 
-  const getDayIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case 'missed':
-        return <Circle className="h-5 w-5 text-red-400" />;
-      case 'future':
-        return <Circle className="h-5 w-5 text-gray-300" />;
-      case 'outside':
-        return <Minus className="h-5 w-5 text-gray-200" />;
-      default:
-        return null;
+  const getDayPoints = (day: Date, status: string): number | null => {
+    if (status === 'completed' || status === 'late' || status === 'missed') {
+      const dayStr = format(day, 'yyyy-MM-dd');
+      const entry = entryMap.get(dayStr);
+      if (entry) {
+        return (entry.points_earned || 0) + (entry.bonus_points || 0);
+      }
+      return 0; // Missed day = 0 points
     }
+    return null; // Today, future, or outside - no points to show
   };
 
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -127,42 +145,71 @@ export function ProgressCalendar({ entries, challengeStartDate, challengeEndDate
           const status = getDayStatus(day);
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isToday = isSameDay(day, new Date());
+          const points = getDayPoints(day, status);
 
           return (
             <div
               key={index}
               className={cn(
-                'aspect-square flex flex-col items-center justify-center rounded-lg border',
+                'aspect-square flex flex-col items-center justify-center rounded-lg border-2 transition-colors',
                 !isCurrentMonth && 'opacity-50',
-                isToday && 'border-blue-500 border-2',
-                status === 'completed' && 'bg-green-50',
-                status === 'missed' && 'bg-red-50',
-                status === 'outside' && 'bg-gray-50'
+                status === 'completed' && 'border-green-500 bg-green-50',
+                status === 'late' && 'border-yellow-500 bg-yellow-50',
+                status === 'missed' && 'border-red-400 bg-red-50',
+                status === 'today' && 'border-blue-500 bg-blue-50',
+                status === 'future' && 'border-gray-200 bg-white',
+                status === 'outside' && 'border-gray-100 bg-gray-50'
               )}
             >
               <span className={cn(
-                'text-sm mb-1',
-                !isCurrentMonth && 'text-gray-400'
+                'text-xs font-medium mb-0.5',
+                !isCurrentMonth && 'text-gray-400',
+                status === 'outside' && 'text-gray-300'
               )}>
                 {format(day, 'd')}
               </span>
-              {getDayIcon(status)}
+              {points !== null ? (
+                <span className={cn(
+                  'text-sm font-bold',
+                  status === 'completed' && 'text-green-700',
+                  status === 'late' && 'text-yellow-700',
+                  status === 'missed' && 'text-red-600'
+                )}>
+                  {points}
+                </span>
+              ) : status === 'outside' ? (
+                <Minus className="h-4 w-4 text-gray-300" />
+              ) : null}
             </div>
           );
         })}
       </div>
 
-      <div className="flex items-center justify-center gap-6 mt-6 text-sm">
+      <div className="flex items-center justify-center gap-4 mt-6 text-sm flex-wrap">
         <div className="flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 text-green-500" />
-          <span>Completed</span>
+          <div className="w-6 h-6 border-2 border-green-500 bg-green-50 rounded flex items-center justify-center">
+            <span className="text-xs font-bold text-green-700">12</span>
+          </div>
+          <span>On Time</span>
         </div>
         <div className="flex items-center gap-2">
-          <Circle className="h-4 w-4 text-red-400" />
+          <div className="w-6 h-6 border-2 border-yellow-500 bg-yellow-50 rounded flex items-center justify-center">
+            <span className="text-xs font-bold text-yellow-700">8</span>
+          </div>
+          <span>Late</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 border-2 border-blue-500 bg-blue-50 rounded" />
+          <span>Today</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 border-2 border-red-400 bg-red-50 rounded flex items-center justify-center">
+            <span className="text-xs font-bold text-red-600">0</span>
+          </div>
           <span>Missed</span>
         </div>
         <div className="flex items-center gap-2">
-          <Circle className="h-4 w-4 text-gray-300" />
+          <div className="w-6 h-6 border-2 border-gray-200 bg-white rounded" />
           <span>Upcoming</span>
         </div>
       </div>

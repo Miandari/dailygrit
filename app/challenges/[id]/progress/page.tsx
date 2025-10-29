@@ -54,7 +54,7 @@ export default async function ProgressPage({
   // Fetch my entries
   const { data: myEntries } = await supabase
     .from('daily_entries')
-    .select('entry_date, is_completed, points_earned, bonus_points')
+    .select('entry_date, is_completed, points_earned, bonus_points, submitted_at')
     .eq('participant_id', myParticipation.id)
     .order('entry_date', { ascending: true });
 
@@ -139,8 +139,17 @@ export default async function ProgressPage({
             </Link>
           </Button>
 
-          <h1 className="text-3xl font-bold text-gray-900">Challenge Progress</h1>
-          <p className="mt-2 text-gray-600">{challenge.name}</p>
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Challenge Progress</h1>
+              <p className="mt-2 text-gray-600">{challenge.name}</p>
+            </div>
+            <Button asChild>
+              <Link href={`/challenges/${id}/entries`}>
+                View All Days
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Tabs */}

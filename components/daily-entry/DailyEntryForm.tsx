@@ -39,6 +39,7 @@ interface DailyEntryFormProps {
   participationId: string;
   existingEntry?: any;
   isLocked?: boolean;
+  targetDate?: string; // YYYY-MM-DD format, defaults to today
 }
 
 export default function DailyEntryForm({
@@ -46,6 +47,7 @@ export default function DailyEntryForm({
   participationId,
   existingEntry,
   isLocked = false,
+  targetDate,
 }: DailyEntryFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,6 +76,7 @@ export default function DailyEntryForm({
         metricData: formData,
         isCompleted: true,
         notes: formData.notes || '',
+        targetDate: targetDate,
       });
 
       if (!result.success) {

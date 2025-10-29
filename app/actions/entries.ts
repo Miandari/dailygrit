@@ -11,6 +11,7 @@ interface SaveEntryData {
   metricData: Record<string, any>;
   isCompleted: boolean;
   notes?: string;
+  targetDate?: string; // YYYY-MM-DD format, defaults to today
 }
 
 export async function saveDailyEntry(data: SaveEntryData) {
@@ -62,7 +63,7 @@ export async function saveDailyEntry(data: SaveEntryData) {
 
     const currentStreak = participantData?.current_streak || 0;
 
-    const today = getTodayDateString();
+    const today = data.targetDate || getTodayDateString();
 
     // Check if entry already exists
     const { data: existingEntry } = await supabase
