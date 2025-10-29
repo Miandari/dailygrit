@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import Link from 'next/link';
+import { Settings } from 'lucide-react';
 import DeleteChallengeButton from '@/components/challenges/DeleteChallengeButton';
 import LeaveChallengeButton from '@/components/challenges/LeaveChallengeButton';
 import CopyInviteCodeButton from '@/components/challenges/CopyInviteCodeButton';
@@ -116,10 +117,18 @@ export default async function ChallengePage({
                 </>
               )}
               {isCreator && (
-                <DeleteChallengeButton
-                  challengeId={challenge.id}
-                  challengeName={challenge.name}
-                />
+                <>
+                  <Button asChild variant="outline">
+                    <Link href={`/challenges/${id}/edit`}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Edit Settings
+                    </Link>
+                  </Button>
+                  <DeleteChallengeButton
+                    challengeId={challenge.id}
+                    challengeName={challenge.name}
+                  />
+                </>
               )}
             </div>
           </div>
