@@ -95,10 +95,15 @@ export default async function ChallengePage({
               </div>
             </div>
             <div className="flex gap-2">
-              {!isParticipant && user && (
+              {!isParticipant && user && challenge.is_public && (
                 <Button asChild>
                   <Link href={`/challenges/${id}/join`}>Join Challenge</Link>
                 </Button>
+              )}
+              {!isParticipant && user && !challenge.is_public && !isCreator && (
+                <div className="text-sm text-gray-600 py-2">
+                  This is a private challenge. Request to join from the Browse page.
+                </div>
               )}
               {isParticipant && (
                 <>
@@ -118,6 +123,11 @@ export default async function ChallengePage({
               )}
               {isCreator && (
                 <>
+                  <Button asChild variant="outline">
+                    <Link href={`/challenges/${id}/participants`}>
+                      Manage Participants
+                    </Link>
+                  </Button>
                   <Button asChild variant="outline">
                     <Link href={`/challenges/${id}/edit`}>
                       <Settings className="mr-2 h-4 w-4" />

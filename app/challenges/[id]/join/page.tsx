@@ -52,6 +52,11 @@ export default async function JoinChallengePage({
     redirect(`/challenges/${id}`);
   }
 
+  // For private challenges, redirect to browse page (they should use Request to Join)
+  if (!challenge.is_public) {
+    redirect('/challenges/browse');
+  }
+
   // Get participant count
   const { count: participantCount } = await supabase
     .from('challenge_participants')
