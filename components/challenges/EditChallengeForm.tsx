@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
 import { recalculateAllPoints } from '@/app/actions/recalculatePoints';
+import { updateChallengeSettings } from '@/app/actions/updateChallenge';
 import { MetricFormData } from '@/lib/validations/challenge';
 
 interface EditChallengeFormProps {
@@ -17,12 +18,59 @@ interface EditChallengeFormProps {
 
 export default function EditChallengeForm({ challenge }: EditChallengeFormProps) {
   const router = useRouter();
+  const [metrics, setMetrics] = useState<MetricFormData[]>(challenge.metrics || []);
+  const [enableStreakBonus, setEnableStreakBonus] = useState(challenge.enable_streak_bonus || false);
+  const [streakBonusPoints, setStreakBonusPoints] = useState(challenge.streak_bonus_points || 5);
+  const [enablePerfectDayBonus, setEnablePerfectDayBonus] = useState(challenge.enable_perfect_day_bonus || false);
+  const [perfectDayBonusPoints, setPerfectDayBonusPoints] = useState(challenge.perfect_day_bonus_points || 10);
+
+  const [isSaving, setIsSaving] = useState(false);
   const [isRecalculating, setIsRecalculating] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
   const [recalculateMessage, setRecalculateMessage] = useState('');
   const [error, setError] = useState('');
 
-  const metrics = (challenge.metrics as MetricFormData[]) || [];
   const totalPossiblePoints = metrics.reduce((sum, m) => sum + (m.points || 1), 0);
+
+  const updateMetricPoints = (index: number, points: number) => {
+    const updated = [...metrics];
+    updated[index] = { ...updated[index], points };
+    setMetrics(updated);
+  };
+
+  const updateMetricThreshold = (index: number, threshold: number) => {
+    const updated = [...metrics];
+    updated[index] = { ...updated[index], threshold, scoring_mode: 'binary' };
+    setMetrics(updated);
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    setError('');
+    setSaveMessage('');
+
+    try {
+      const result = await updateChallengeSettings({
+        challengeId: challenge.id,
+        metrics,
+        enable_streak_bonus: enableStreakBonus,
+        streak_bonus_points: streakBonusPoints,
+        enable_perfect_day_bonus: enablePerfectDayBonus,
+        perfect_day_bonus_points: perfectDayBonusPoints,
+      });
+
+      if (result.success) {
+        setSaveMessage('Settings saved successfully!');
+        router.refresh();
+      } else {
+        setError(result.error || 'Failed to save settings');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleRecalculate = async () => {
     setIsRecalculating(true);
@@ -49,32 +97,56 @@ export default function EditChallengeForm({ challenge }: EditChallengeFormProps)
 
   return (
     <div className="space-y-6">
-      {/* Metrics Summary */}
+      {/* Metrics Configuration */}
       <Card>
         <CardHeader>
           <CardTitle>Metrics & Points</CardTitle>
           <CardDescription>
-            Current scoring configuration for this challenge
+            Configure points and thresholds for each metric
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {metrics.map((metric, index) => (
               <div
                 key={metric.id}
-                className="flex items-center justify-between rounded-lg border p-3"
+                className="rounded-lg border p-4 space-y-3"
               >
-                <div className="flex-1">
-                  <div className="font-medium">{metric.name}</div>
-                  <div className="text-sm text-gray-500">
-                    Type: {metric.type}
-                    {metric.threshold !== undefined && ` • Threshold: ${metric.threshold}`}
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="font-medium">{metric.name}</div>
+                    <div className="text-sm text-gray-500">Type: {metric.type}</div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-bold text-blue-600">
-                    {metric.points || 1} pts
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor={`points-${index}`}>Points</Label>
+                    <Input
+                      id={`points-${index}`}
+                      type="number"
+                      min="0"
+                      value={metric.points || 1}
+                      onChange={(e) => updateMetricPoints(index, Number(e.target.value))}
+                      className="mt-1"
+                    />
                   </div>
+
+                  {(metric.type === 'number' || metric.type === 'duration') && (
+                    <div>
+                      <Label htmlFor={`threshold-${index}`}>
+                        Minimum for Full Points
+                      </Label>
+                      <Input
+                        id={`threshold-${index}`}
+                        type="number"
+                        min="0"
+                        value={metric.threshold || 0}
+                        onChange={(e) => updateMetricThreshold(index, Number(e.target.value))}
+                        className="mt-1"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -89,44 +161,89 @@ export default function EditChallengeForm({ challenge }: EditChallengeFormProps)
         </CardContent>
       </Card>
 
-      {/* Bonus Points */}
+      {/* Bonus Points Configuration */}
       <Card>
         <CardHeader>
           <CardTitle>Bonus Points</CardTitle>
-          <CardDescription>Current bonus configuration</CardDescription>
+          <CardDescription>Configure bonus rewards</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-medium">Streak Bonus</div>
-              <div className="text-sm text-gray-500">
-                {challenge.enable_streak_bonus
-                  ? `Enabled: ${challenge.streak_bonus_points} points per streak day`
-                  : 'Disabled'}
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="enable_streak_bonus"
+                checked={enableStreakBonus}
+                onChange={(e) => setEnableStreakBonus(e.target.checked)}
+                className="mt-1"
+              />
+              <div className="flex-1">
+                <Label htmlFor="enable_streak_bonus" className="font-medium cursor-pointer">
+                  Enable streak bonus
+                </Label>
+                <p className="text-sm text-gray-600">
+                  Award extra points based on current streak
+                </p>
+                {enableStreakBonus && (
+                  <div className="mt-2">
+                    <Label htmlFor="streak_bonus_points" className="text-xs">
+                      Points per streak day
+                    </Label>
+                    <Input
+                      id="streak_bonus_points"
+                      type="number"
+                      min="0"
+                      value={streakBonusPoints}
+                      onChange={(e) => setStreakBonusPoints(Number(e.target.value))}
+                      className="mt-1 max-w-xs"
+                    />
+                  </div>
+                )}
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-medium">Perfect Day Bonus</div>
-              <div className="text-sm text-gray-500">
-                {challenge.enable_perfect_day_bonus
-                  ? `Enabled: ${challenge.perfect_day_bonus_points} points`
-                  : 'Disabled'}
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="enable_perfect_day_bonus"
+                checked={enablePerfectDayBonus}
+                onChange={(e) => setEnablePerfectDayBonus(e.target.checked)}
+                className="mt-1"
+              />
+              <div className="flex-1">
+                <Label htmlFor="enable_perfect_day_bonus" className="font-medium cursor-pointer">
+                  Enable perfect day bonus
+                </Label>
+                <p className="text-sm text-gray-600">
+                  Award bonus points for completing all required metrics
+                </p>
+                {enablePerfectDayBonus && (
+                  <div className="mt-2">
+                    <Label htmlFor="perfect_day_bonus_points" className="text-xs">
+                      Bonus points
+                    </Label>
+                    <Input
+                      id="perfect_day_bonus_points"
+                      type="number"
+                      min="0"
+                      value={perfectDayBonusPoints}
+                      onChange={(e) => setPerfectDayBonusPoints(Number(e.target.value))}
+                      className="mt-1 max-w-xs"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Recalculate Points */}
+      {/* Save Settings */}
       <Card>
         <CardHeader>
-          <CardTitle>Recalculate All Points</CardTitle>
+          <CardTitle>Save Changes</CardTitle>
           <CardDescription>
-            Recalculate points for all existing entries based on the current scoring
-            configuration. This will update all participant scores.
+            Save your scoring configuration changes
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -137,22 +254,50 @@ export default function EditChallengeForm({ challenge }: EditChallengeFormProps)
               </Alert>
             )}
 
+            {saveMessage && (
+              <Alert>
+                <AlertDescription>{saveMessage}</AlertDescription>
+              </Alert>
+            )}
+
+            <Button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="w-full"
+            >
+              {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isSaving ? 'Saving...' : 'Save Settings'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Recalculate Points */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recalculate All Points</CardTitle>
+          <CardDescription>
+            Recalculate points for all existing entries based on the current scoring
+            configuration. Make sure to save your changes first!
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
             {recalculateMessage && (
               <Alert>
                 <AlertDescription>{recalculateMessage}</AlertDescription>
               </Alert>
             )}
 
-            <div className="flex gap-2">
-              <Button
-                onClick={handleRecalculate}
-                disabled={isRecalculating}
-                className="flex-1"
-              >
-                {isRecalculating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isRecalculating ? 'Recalculating...' : 'Recalculate All Points'}
-              </Button>
-            </div>
+            <Button
+              onClick={handleRecalculate}
+              disabled={isRecalculating}
+              variant="secondary"
+              className="w-full"
+            >
+              {isRecalculating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isRecalculating ? 'Recalculating...' : 'Recalculate All Points'}
+            </Button>
 
             <p className="text-xs text-gray-500">
               Note: This operation may take a few moments if there are many entries.
