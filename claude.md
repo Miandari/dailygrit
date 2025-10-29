@@ -84,6 +84,13 @@ Should be able to use:
 
 ## Pending Work
 
+### UX Improvements
+- [ ] **Interactive Daily Metrics Cards** - Make metrics clickable on challenge detail page for quick logging
+  - Need to handle challenges with many metrics (pagination or scrolling)
+  - Show recent values/activity for each metric
+  - Consider modal or inline quick-log functionality
+  - Location: `/app/challenges/[id]/page.tsx`
+
 ### Database Migrations
 - [ ] Run `supabase/temp_add_threshold_type.sql` to add threshold_type to existing metrics
 - [ ] Investigate and fix foreign key schema cache issue

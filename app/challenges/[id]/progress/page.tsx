@@ -3,8 +3,8 @@ import { notFound, redirect } from 'next/navigation';
 import { ProgressCalendar } from '@/components/progress/ProgressCalendar';
 import { StreakDisplay } from '@/components/progress/StreakDisplay';
 import { ParticipantsLeaderboard } from '@/components/progress/ParticipantsLeaderboard';
-import { ParticipantProgressCard } from '@/components/progress/ParticipantProgressCard';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -89,7 +89,7 @@ export default async function ProgressPage({
   // Merge participants with profiles
   const participantsWithProfiles = allParticipants?.map(p => ({
     ...p,
-    profiles: profileMap.get(p.user_id)
+    profile: profileMap.get(p.user_id) || { username: 'Unknown User', avatar_url: null }
   })) || [];
 
   // Fetch all entries for all participants
@@ -110,22 +110,29 @@ export default async function ProgressPage({
   }, {} as Record<string, any[]>) || {};
 
   // Calculate stats for each participant
-  const participantsWithStats = participantsWithProfiles.map(participant => {
-    const entries = entriesByParticipant[participant.id] || [];
-    const completedDays = entries.filter(e => e.is_completed).length;
-    const lastActivity = entries.length > 0
-      ? entries[entries.length - 1].entry_date
-      : null;
+  const participantsWithStats = participantsWithProfiles
+    .map(participant => {
+      const entries = entriesByParticipant[participant.id] || [];
+      const completedDays = entries.filter(e => e.is_completed).length;
+      const lastActivity = entries.length > 0
+        ? entries[entries.length - 1].entry_date
+        : null;
 
-    return {
-      ...participant,
-      profile: participant.profiles || { username: 'Unknown User', avatar_url: null },
-      completedDays,
-      totalDays: maxDays,
-      lastActivity,
-      entries,
-    };
-  });
+      return {
+        ...participant,
+        completedDays,
+        totalDays: maxDays,
+        lastActivity,
+        entries,
+      };
+    })
+    .sort((a, b) => {
+      // Sort by total points (descending), then by current streak (descending)
+      if (b.total_points !== a.total_points) {
+        return (b.total_points || 0) - (a.total_points || 0);
+      }
+      return (b.current_streak || 0) - (a.current_streak || 0);
+    });
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -139,24 +146,55 @@ export default async function ProgressPage({
             </Link>
           </Button>
 
-          <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Challenge Progress</h1>
-              <p className="mt-2 text-gray-600">{challenge.name}</p>
-            </div>
-            <Button asChild>
-              <Link href={`/challenges/${id}/entries`}>
-                View All Days
-              </Link>
-            </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Challenge Progress</h1>
+            <p className="mt-2 text-gray-600">{challenge.name}</p>
           </div>
         </div>
 
+        {/* Quick Personal Stats */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-sm text-gray-600">Your Rank</div>
+              <div className="text-2xl font-bold">
+                #{participantsWithStats.findIndex(p => p.user_id === user.id) + 1}
+              </div>
+              <div className="text-xs text-gray-500">of {participantsWithStats.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-sm text-gray-600">Total Points</div>
+              <div className="text-2xl font-bold">{myParticipation.total_points || 0}</div>
+              <div className="text-xs text-gray-500">
+                {myEntries?.reduce((sum, e) => sum + (e.bonus_points || 0), 0) || 0} bonus
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-sm text-gray-600">Current Streak</div>
+              <div className="text-2xl font-bold">{myParticipation.current_streak || 0}</div>
+              <div className="text-xs text-gray-500">days in a row</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-sm text-gray-600">Completion</div>
+              <div className="text-2xl font-bold">
+                {maxDays > 0 ? Math.round((myCompletedDays / maxDays) * 100) : 0}%
+              </div>
+              <div className="text-xs text-gray-500">{myCompletedDays}/{maxDays} days</div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Tabs */}
-        <Tabs defaultValue="your-progress" className="w-full">
+        <Tabs defaultValue="leaderboard" className="w-full">
           <TabsList className="mb-8">
+            <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
             <TabsTrigger value="your-progress">Your Progress</TabsTrigger>
-            <TabsTrigger value="all-participants">All Participants</TabsTrigger>
           </TabsList>
 
           {/* Your Progress Tab */}
@@ -245,32 +283,15 @@ export default async function ProgressPage({
             </div>
           </TabsContent>
 
-          {/* All Participants Tab */}
-          <TabsContent value="all-participants" className="space-y-8">
+          {/* Leaderboard Tab */}
+          <TabsContent value="leaderboard" className="space-y-8">
             {/* Leaderboard */}
             <ParticipantsLeaderboard
               participants={participantsWithStats}
               currentUserId={user.id}
+              challengeStartDate={new Date(challenge.starts_at)}
+              challengeEndDate={new Date(challenge.ends_at)}
             />
-
-            {/* Individual Progress Cards */}
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">Individual Progress</h2>
-              <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-                {participantsWithStats.map(participant => (
-                  <ParticipantProgressCard
-                    key={participant.id}
-                    participant={participant}
-                    entries={participant.entries}
-                    challengeStartDate={new Date(challenge.starts_at)}
-                    challengeEndDate={new Date(challenge.ends_at)}
-                    isCurrentUser={participant.user_id === user.id}
-                    completedDays={participant.completedDays}
-                    totalDays={participant.totalDays}
-                  />
-                ))}
-              </div>
-            </div>
           </TabsContent>
         </Tabs>
       </div>

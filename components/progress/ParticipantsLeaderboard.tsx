@@ -1,6 +1,10 @@
+'use client';
+
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Trophy, TrendingUp, Calendar } from 'lucide-react';
+import { ParticipantDetailModal } from './ParticipantDetailModal';
 
 interface Participant {
   id: string;
@@ -15,14 +19,24 @@ interface Participant {
   completedDays: number;
   totalDays: number;
   lastActivity: string | null;
+  entries: any[];
 }
 
 interface ParticipantsLeaderboardProps {
   participants: Participant[];
   currentUserId: string;
+  challengeStartDate: Date;
+  challengeEndDate: Date;
 }
 
-export function ParticipantsLeaderboard({ participants, currentUserId }: ParticipantsLeaderboardProps) {
+export function ParticipantsLeaderboard({
+  participants,
+  currentUserId,
+  challengeStartDate,
+  challengeEndDate
+}: ParticipantsLeaderboardProps) {
+  const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
+
   // Sort by total points, then by current streak
   const sortedParticipants = [...participants].sort((a, b) => {
     const pointsA = a.total_points || 0;
@@ -56,8 +70,9 @@ export function ParticipantsLeaderboard({ participants, currentUserId }: Partici
             return (
               <div
                 key={participant.id}
-                className={`flex items-center justify-between rounded-lg border p-3 ${
-                  isCurrentUser ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                onClick={() => setSelectedParticipant(participant)}
+                className={`flex items-center justify-between rounded-lg border p-3 cursor-pointer hover:bg-gray-50 transition-colors ${
+                  isCurrentUser ? 'border-blue-500 bg-blue-50 hover:bg-blue-100' : 'border-gray-200'
                 }`}
               >
                 <div className="flex items-center gap-3 flex-1">
@@ -108,6 +123,16 @@ export function ParticipantsLeaderboard({ participants, currentUserId }: Partici
           )}
         </div>
       </CardContent>
+
+      {selectedParticipant && (
+        <ParticipantDetailModal
+          participant={selectedParticipant}
+          challengeStartDate={challengeStartDate}
+          challengeEndDate={challengeEndDate}
+          isOpen={!!selectedParticipant}
+          onClose={() => setSelectedParticipant(null)}
+        />
+      )}
     </Card>
   );
 }
