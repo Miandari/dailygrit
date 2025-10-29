@@ -40,7 +40,7 @@ export default async function ProgressPage({
   // Check if user is participant
   const { data: myParticipation } = await supabase
     .from('challenge_participants')
-    .select('id, current_streak, longest_streak, status')
+    .select('id, current_streak, longest_streak, status, total_points')
     .eq('challenge_id', id)
     .eq('user_id', user.id)
     .single();
@@ -52,7 +52,7 @@ export default async function ProgressPage({
   // Fetch my entries
   const { data: myEntries } = await supabase
     .from('daily_entries')
-    .select('entry_date, is_completed')
+    .select('entry_date, is_completed, points_earned, bonus_points')
     .eq('participant_id', myParticipation.id)
     .order('entry_date', { ascending: true });
 
@@ -79,8 +79,7 @@ export default async function ProgressPage({
         avatar_url
       )
     `)
-    .eq('challenge_id', id)
-    .eq('status', 'active');
+    .eq('challenge_id', id);
 
   // Fetch all entries for all participants
   const participantIds = allParticipants?.map(p => p.id) || [];
@@ -144,6 +143,23 @@ export default async function ProgressPage({
 
           {/* Your Progress Tab */}
           <TabsContent value="your-progress" className="space-y-8">
+            {/* Points Card */}
+            <div className="rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 p-6 shadow-lg text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold mb-1 opacity-90">Total Points</h3>
+                  <div className="text-5xl font-bold">{myParticipation.total_points || 0}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm opacity-90 mb-1">Points breakdown</div>
+                  <div className="space-y-1 text-sm">
+                    <div>Base: {myEntries?.reduce((sum, e) => sum + (e.points_earned || 0), 0) || 0}</div>
+                    <div>Bonus: {myEntries?.reduce((sum, e) => sum + (e.bonus_points || 0), 0) || 0}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Streak Display */}
             <StreakDisplay
               currentStreak={myParticipation.current_streak || 0}
