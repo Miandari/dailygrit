@@ -64,22 +64,31 @@ export default async function ProgressPage({
   );
   const maxDays = Math.min(totalDays, challenge.duration_days);
 
-  // Fetch all participants with their profiles
-  const { data: allParticipants } = await supabase
+  // Fetch all participants (without join to avoid schema cache issues)
+  const { data: allParticipants, error: participantsError } = await supabase
     .from('challenge_participants')
-    .select(`
-      id,
-      user_id,
-      current_streak,
-      longest_streak,
-      total_points,
-      status,
-      profiles:user_id (
-        username,
-        avatar_url
-      )
-    `)
+    .select('id, user_id, current_streak, longest_streak, total_points, status')
     .eq('challenge_id', id);
+
+  if (participantsError) {
+    console.error('Error fetching participants:', participantsError);
+  }
+
+  // Fetch profiles separately
+  const userIds = allParticipants?.map(p => p.user_id) || [];
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, username, avatar_url')
+    .in('id', userIds);
+
+  // Create a map of user_id to profile
+  const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+
+  // Merge participants with profiles
+  const participantsWithProfiles = allParticipants?.map(p => ({
+    ...p,
+    profiles: profileMap.get(p.user_id)
+  })) || [];
 
   // Fetch all entries for all participants
   const participantIds = allParticipants?.map(p => p.id) || [];
@@ -99,7 +108,7 @@ export default async function ProgressPage({
   }, {} as Record<string, any[]>) || {};
 
   // Calculate stats for each participant
-  const participantsWithStats = allParticipants?.map(participant => {
+  const participantsWithStats = participantsWithProfiles.map(participant => {
     const entries = entriesByParticipant[participant.id] || [];
     const completedDays = entries.filter(e => e.is_completed).length;
     const lastActivity = entries.length > 0
@@ -108,15 +117,13 @@ export default async function ProgressPage({
 
     return {
       ...participant,
-      profile: Array.isArray(participant.profiles)
-        ? participant.profiles[0]
-        : participant.profiles,
+      profile: participant.profiles || { username: 'Unknown User', avatar_url: null },
       completedDays,
       totalDays: maxDays,
       lastActivity,
       entries,
     };
-  }) || [];
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
