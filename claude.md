@@ -91,6 +91,13 @@ Should be able to use:
   - Consider modal or inline quick-log functionality
   - Location: `/app/challenges/[id]/page.tsx`
 
+- [ ] **Dashboard Redesign** - Implement balanced two-column layout
+  - Left column: Today's Progress (expandable), Active Challenges (with stats and quick actions)
+  - Right column: Quick Stats widget, Streak tracker, Quick actions, Recent activity
+  - Remove fire emoji from streak displays
+  - Add expandable metrics for incomplete days
+  - Location: `/app/dashboard/page.tsx`
+
 ### Database Migrations
 - [ ] Run `supabase/temp_add_threshold_type.sql` to add threshold_type to existing metrics
 - [ ] Investigate and fix foreign key schema cache issue

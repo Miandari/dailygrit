@@ -16,6 +16,7 @@ import {
 import DeleteChallengeButton from '@/components/challenges/DeleteChallengeButton';
 import LeaveChallengeButton from '@/components/challenges/LeaveChallengeButton';
 import CopyInviteCodeButton from '@/components/challenges/CopyInviteCodeButton';
+import JoinChallengeButton from '@/components/challenges/JoinChallengeButton';
 
 export default async function ChallengePage({
   params
@@ -105,6 +106,20 @@ export default async function ChallengePage({
 
   const isCreator = challenge.creator_id === user?.id;
 
+  // Check if user has pending join request
+  let joinRequest: any = null;
+  if (user && !isParticipant && !isCreator) {
+    const { data: request } = await supabase
+      .from('challenge_join_requests')
+      .select('id, status')
+      .eq('challenge_id', id)
+      .eq('user_id', user.id)
+      .in('status', ['pending', 'approved'])
+      .single();
+
+    joinRequest = request;
+  }
+
   // Get creator profile separately
   const { data: creatorProfile } = await supabase
     .from('profiles')
@@ -141,15 +156,13 @@ export default async function ChallengePage({
               </div>
             </div>
             <div className="flex gap-2 justify-end">
-              {!isParticipant && user && challenge.is_public && (
-                <Button asChild>
-                  <Link href={`/challenges/${id}/join`}>Join Challenge</Link>
-                </Button>
-              )}
-              {!isParticipant && user && !challenge.is_public && !isCreator && (
-                <div className="text-sm text-gray-600 py-2">
-                  This is a private challenge. Request to join from the Browse page.
-                </div>
+              {!isParticipant && user && !isCreator && (
+                <JoinChallengeButton
+                  challengeId={id}
+                  isPublic={challenge.is_public}
+                  hasPendingRequest={!!joinRequest}
+                  requestStatus={joinRequest?.status}
+                />
               )}
               {isParticipant && (
                 <>

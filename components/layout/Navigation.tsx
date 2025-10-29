@@ -74,6 +74,7 @@ export function Navigation() {
   const navItems = [
     { href: '/dashboard', label: 'Dashboard' },
     { href: '/dashboard/today', label: 'Today' },
+    { href: '/dashboard/challenges', label: 'Challenges' },
     { href: '/challenges/browse', label: 'Browse' },
     { href: '/challenges/create', label: 'Create' },
   ];

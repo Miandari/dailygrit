@@ -18,13 +18,6 @@ export function StreakDisplay({
 }: StreakDisplayProps) {
   const completionRate = totalDays > 0 ? Math.round((completedDays / totalDays) * 100) : 0;
 
-  const getStreakEmoji = (streak: number) => {
-    if (streak >= 30) return '🔥';
-    if (streak >= 7) return '⭐';
-    if (streak >= 3) return '✨';
-    return '💫';
-  };
-
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <Card>
@@ -34,10 +27,7 @@ export function StreakDisplay({
           </div>
           <div className="ml-4">
             <p className="text-sm font-medium text-gray-600">Current Streak</p>
-            <div className="flex items-center gap-2">
-              <p className="text-2xl font-bold">{currentStreak}</p>
-              <span className="text-xl">{getStreakEmoji(currentStreak)}</span>
-            </div>
+            <p className="text-2xl font-bold">{currentStreak}</p>
             <p className="text-xs text-gray-500">days in a row</p>
           </div>
         </CardContent>
