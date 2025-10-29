@@ -5,7 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { Search } from 'lucide-react';
+import { Search, Lock } from 'lucide-react';
+import RequestToJoinButton from '@/components/challenges/RequestToJoinButton';
 
 export default async function BrowseChallengesPage({
   searchParams,
@@ -19,21 +20,10 @@ export default async function BrowseChallengesPage({
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Fetch all public challenges
+  // Fetch all challenges (public and private)
   let query = supabase
     .from('challenges')
-    .select(`
-      *,
-      profiles:creator_id (
-        id,
-        username,
-        avatar_url
-      ),
-      challenge_participants!inner (
-        id
-      )
-    `)
-    .eq('is_public', true)
+    .select('*')
     .order('created_at', { ascending: false });
 
   // Add search filter if provided
@@ -43,7 +33,16 @@ export default async function BrowseChallengesPage({
 
   const { data: challenges } = await query;
 
-  // Get participant counts for each challenge
+  // Fetch creator profiles separately
+  const creatorIds = challenges?.map(c => c.creator_id) || [];
+  const { data: creators } = await supabase
+    .from('profiles')
+    .select('id, username, avatar_url')
+    .in('id', creatorIds);
+
+  const creatorMap = new Map(creators?.map(c => [c.id, c]) || []);
+
+  // Get participant counts and join request status for each challenge
   const challengesWithCounts = await Promise.all(
     (challenges || []).map(async (challenge) => {
       // Count participants
@@ -55,6 +54,9 @@ export default async function BrowseChallengesPage({
 
       // Check if current user is participating
       let isParticipating = false;
+      let hasRequestedToJoin = false;
+      let requestStatus = null;
+
       if (user) {
         const { data: participation } = await supabase
           .from('challenge_participants')
@@ -64,12 +66,30 @@ export default async function BrowseChallengesPage({
           .single();
 
         isParticipating = !!participation;
+
+        // Check for existing join request if not participating
+        if (!isParticipating && !challenge.is_public) {
+          const { data: joinRequest } = await supabase
+            .from('challenge_join_requests')
+            .select('status')
+            .eq('challenge_id', challenge.id)
+            .eq('user_id', user.id)
+            .single();
+
+          if (joinRequest) {
+            hasRequestedToJoin = true;
+            requestStatus = joinRequest.status;
+          }
+        }
       }
 
       return {
         ...challenge,
+        creator: creatorMap.get(challenge.creator_id),
         participantCount: count || 0,
         isParticipating,
+        hasRequestedToJoin,
+        requestStatus,
       };
     })
   );
@@ -93,7 +113,7 @@ export default async function BrowseChallengesPage({
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Browse Challenges</h1>
         <p className="mt-2 text-gray-600">
-          Discover public challenges and join ones that interest you
+          Discover public and private challenges
         </p>
 
         {/* Search bar */}
@@ -109,14 +129,6 @@ export default async function BrowseChallengesPage({
           </div>
           <Button type="submit">Search</Button>
         </form>
-
-        {/* Private challenge join */}
-        <div className="mt-4">
-          <p className="text-sm text-gray-600 mb-2">Have an invite code?</p>
-          <Button asChild variant="outline">
-            <Link href="/challenges/join">Join Private Challenge</Link>
-          </Button>
-        </div>
       </div>
 
       {challenges && challenges.length === 0 && (
@@ -158,7 +170,7 @@ export default async function BrowseChallengesPage({
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Created by</span>
                       <span className="font-medium">
-                        {(challenge as any).profiles?.username || 'Unknown'}
+                        {challenge.creator?.username || 'Unknown'}
                       </span>
                     </div>
 
@@ -199,7 +211,13 @@ export default async function BrowseChallengesPage({
                       </div>
                     )}
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {!challenge.is_public && (
+                        <Badge variant="outline" className="text-xs flex items-center gap-1">
+                          <Lock className="h-3 w-3" />
+                          Private
+                        </Badge>
+                      )}
                       {(challenge.metrics as any[])?.length > 0 && (
                         <Badge variant="secondary" className="text-xs">
                           {(challenge.metrics as any[]).length} metrics
@@ -210,7 +228,27 @@ export default async function BrowseChallengesPage({
                           Participating
                         </Badge>
                       )}
+                      {challenge.hasRequestedToJoin && challenge.requestStatus === 'pending' && (
+                        <Badge variant="secondary" className="text-xs">
+                          Request Pending
+                        </Badge>
+                      )}
+                      {challenge.requestStatus === 'rejected' && (
+                        <Badge variant="destructive" className="text-xs">
+                          Request Rejected
+                        </Badge>
+                      )}
                     </div>
+
+                    {/* Request to Join button for private challenges */}
+                    {!challenge.is_public && !challenge.isParticipating && !challenge.hasRequestedToJoin && user && (
+                      <div className="mt-3">
+                        <RequestToJoinButton
+                          challengeId={challenge.id}
+                          challengeName={challenge.name}
+                        />
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
