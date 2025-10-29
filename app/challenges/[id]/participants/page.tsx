@@ -41,11 +41,18 @@ export default async function ParticipantsManagementPage({
   }
 
   // Fetch all participants
-  const { data: participants } = await supabase
+  const { data: participants, error: participantsError } = await supabase
     .from('challenge_participants')
     .select('id, user_id, joined_at, status, current_streak, total_points')
     .eq('challenge_id', id)
     .order('joined_at', { ascending: true });
+
+  console.log('Participants query:', {
+    challengeId: id,
+    participants,
+    participantsError,
+    count: participants?.length || 0
+  });
 
   // Fetch profiles
   const userIds = participants?.map(p => p.user_id) || [];
