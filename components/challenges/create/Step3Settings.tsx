@@ -14,6 +14,7 @@ const step3Schema = z.object({
   is_public: z.boolean(),
   is_template: z.boolean(),
   lock_entries_after_day: z.boolean(),
+  show_participant_details: z.boolean(),
   failure_mode: z.enum(['strict', 'flexible', 'grace']),
 });
 
@@ -38,6 +39,7 @@ export function Step3Settings({ onNext, onPrev }: Step3SettingsProps) {
       is_public: formData.is_public ?? true,
       is_template: formData.is_template ?? false,
       lock_entries_after_day: formData.lock_entries_after_day ?? false,
+      show_participant_details: formData.show_participant_details ?? true,
       failure_mode: formData.failure_mode ?? 'flexible',
     },
   });
@@ -46,6 +48,7 @@ export function Step3Settings({ onNext, onPrev }: Step3SettingsProps) {
   const watchFailureMode = watch('failure_mode');
   const watchLockEntries = watch('lock_entries_after_day');
   const watchIsTemplate = watch('is_template');
+  const watchShowParticipantDetails = watch('show_participant_details');
 
   const onSubmit = (data: Step3FormData) => {
     updateFormData(data);
@@ -171,6 +174,24 @@ export function Step3Settings({ onNext, onPrev }: Step3SettingsProps) {
               </Label>
               <p className="text-sm text-gray-600">
                 Allow others to copy this challenge structure
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start space-x-3">
+            <input
+              type="checkbox"
+              id="show_participant_details"
+              checked={watchShowParticipantDetails}
+              onChange={(e) => setValue('show_participant_details', e.target.checked)}
+              className="mt-1"
+            />
+            <div className="flex-1">
+              <Label htmlFor="show_participant_details" className="font-medium cursor-pointer">
+                Show participant details to other members
+              </Label>
+              <p className="text-sm text-gray-600">
+                Allow participants to see each other's full progress including metric data and notes
               </p>
             </div>
           </div>

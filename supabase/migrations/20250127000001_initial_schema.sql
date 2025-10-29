@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS public.challenges (
     invite_code TEXT UNIQUE,
     lock_entries_after_day BOOLEAN DEFAULT false,
     failure_mode TEXT DEFAULT 'flexible',
+    show_participant_details BOOLEAN DEFAULT true,
     metrics JSONB DEFAULT '[]'::JSONB,
     creator_settings JSONB DEFAULT '{}'::JSONB,
     cover_image_url TEXT,

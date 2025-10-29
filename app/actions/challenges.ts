@@ -50,6 +50,7 @@ export async function createChallenge(data: ChallengeFormData) {
         is_template: data.is_template,
         invite_code: inviteCode,
         lock_entries_after_day: data.lock_entries_after_day,
+        show_participant_details: data.show_participant_details ?? true,
         failure_mode: data.failure_mode,
         metrics: data.metrics,
         creator_settings: {},

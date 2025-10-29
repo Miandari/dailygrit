@@ -189,14 +189,23 @@ USING (user_id = auth.uid());
 -- DAILY ENTRIES POLICIES
 -- =====================================================
 
--- View: users can see their own entries
-CREATE POLICY "Users can view their own entries"
+-- View: users can see entries from all participants in accessible challenges
+CREATE POLICY "Users can view entries from accessible challenges"
 ON public.daily_entries FOR SELECT
 TO authenticated
 USING (
     participant_id IN (
-        SELECT id FROM public.challenge_participants
-        WHERE user_id = auth.uid()
+        SELECT cp.id
+        FROM public.challenge_participants cp
+        WHERE cp.challenge_id IN (
+            SELECT id FROM public.challenges
+            WHERE is_public = true
+            OR id IN (
+                SELECT challenge_id
+                FROM public.user_challenge_access
+                WHERE user_id = auth.uid() AND can_view = true
+            )
+        )
     )
 );
 

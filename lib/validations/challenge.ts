@@ -42,6 +42,7 @@ export const challengeFormSchema = z.object({
   is_public: z.boolean().default(true),
   is_template: z.boolean().default(false),
   lock_entries_after_day: z.boolean().default(false),
+  show_participant_details: z.boolean().default(true),
   failure_mode: z.enum(['strict', 'flexible', 'grace']).default('flexible'),
 });
 
