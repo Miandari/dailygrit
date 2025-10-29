@@ -52,6 +52,10 @@ export async function createChallenge(data: ChallengeFormData) {
         lock_entries_after_day: data.lock_entries_after_day,
         show_participant_details: data.show_participant_details ?? true,
         failure_mode: data.failure_mode,
+        enable_streak_bonus: data.enable_streak_bonus ?? false,
+        streak_bonus_points: data.streak_bonus_points ?? 5,
+        enable_perfect_day_bonus: data.enable_perfect_day_bonus ?? false,
+        perfect_day_bonus_points: data.perfect_day_bonus_points ?? 10,
         metrics: data.metrics,
         creator_settings: {},
       } as any)

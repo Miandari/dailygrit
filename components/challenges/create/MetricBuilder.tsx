@@ -248,6 +248,49 @@ export function MetricBuilder({ metric, onSave, onCancel }: MetricBuilderProps) 
         </div>
       )}
 
+      {/* Scoring Configuration */}
+      <div className="border-t pt-4 space-y-4">
+        <h4 className="font-medium text-sm">Scoring Configuration</h4>
+
+        <div>
+          <Label htmlFor="points">Points *</Label>
+          <Input
+            id="points"
+            type="number"
+            min="0"
+            value={formData.points || 1}
+            onChange={(e) =>
+              setFormData({ ...formData, points: Number(e.target.value) })
+            }
+            placeholder="1"
+            className="mt-1"
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Points awarded when this metric is completed
+          </p>
+        </div>
+
+        {(formData.type === 'number' || formData.type === 'duration') && (
+          <div>
+            <Label htmlFor="threshold">Minimum for Full Points</Label>
+            <Input
+              id="threshold"
+              type="number"
+              min="0"
+              value={formData.threshold || 0}
+              onChange={(e) =>
+                setFormData({ ...formData, threshold: Number(e.target.value), scoring_mode: 'binary' })
+              }
+              placeholder="0"
+              className="mt-1"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              User must reach this value to earn full points
+            </p>
+          </div>
+        )}
+      </div>
+
       <div className="flex items-center space-x-2">
         <Checkbox
           id="required"

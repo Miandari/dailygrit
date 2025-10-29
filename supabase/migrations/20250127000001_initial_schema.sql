@@ -35,6 +35,10 @@ CREATE TABLE IF NOT EXISTS public.challenges (
     lock_entries_after_day BOOLEAN DEFAULT false,
     failure_mode TEXT DEFAULT 'flexible',
     show_participant_details BOOLEAN DEFAULT true,
+    enable_streak_bonus BOOLEAN DEFAULT false,
+    streak_bonus_points INTEGER DEFAULT 5,
+    enable_perfect_day_bonus BOOLEAN DEFAULT false,
+    perfect_day_bonus_points INTEGER DEFAULT 10,
     metrics JSONB DEFAULT '[]'::JSONB,
     creator_settings JSONB DEFAULT '{}'::JSONB,
     cover_image_url TEXT,
@@ -56,6 +60,7 @@ CREATE TABLE IF NOT EXISTS public.challenge_participants (
     status TEXT DEFAULT 'active',
     current_streak INTEGER DEFAULT 0,
     longest_streak INTEGER DEFAULT 0,
+    total_points INTEGER DEFAULT 0,
     UNIQUE(challenge_id, user_id),
     CONSTRAINT valid_status CHECK (status IN ('active', 'paused', 'completed', 'failed'))
 );
@@ -72,6 +77,8 @@ CREATE TABLE IF NOT EXISTS public.daily_entries (
     is_locked BOOLEAN DEFAULT false NOT NULL,
     notes TEXT,
     file_urls TEXT[] DEFAULT ARRAY[]::TEXT[],
+    points_earned INTEGER DEFAULT 0,
+    bonus_points INTEGER DEFAULT 0,
     submitted_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

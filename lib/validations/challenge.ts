@@ -20,6 +20,14 @@ export const metricSchema = z.object({
   required: z.boolean().default(true),
   order: z.number(),
   config: metricConfigSchema,
+  // Scoring configuration
+  points: z.number().min(0).default(1),
+  scoring_mode: z.enum(['binary', 'scaled', 'tiered']).optional(),
+  threshold: z.number().optional(),
+  tiers: z.array(z.object({
+    threshold: z.number(),
+    points: z.number(),
+  })).optional(),
 });
 
 // Challenge creation schema
@@ -44,6 +52,11 @@ export const challengeFormSchema = z.object({
   lock_entries_after_day: z.boolean().default(false),
   show_participant_details: z.boolean().default(true),
   failure_mode: z.enum(['strict', 'flexible', 'grace']).default('flexible'),
+  // Bonus points configuration
+  enable_streak_bonus: z.boolean().default(false),
+  streak_bonus_points: z.number().min(0).default(5),
+  enable_perfect_day_bonus: z.boolean().default(false),
+  perfect_day_bonus_points: z.number().min(0).default(10),
 });
 
 export type ChallengeFormData = z.infer<typeof challengeFormSchema>;
@@ -61,6 +74,7 @@ export const defaultMetricTemplates = {
     type: 'boolean' as const,
     required: true,
     config: {},
+    points: 1,
   },
   number: {
     name: '',
@@ -71,6 +85,9 @@ export const defaultMetricTemplates = {
       max: 100,
       units: '',
     },
+    points: 1,
+    scoring_mode: 'binary' as const,
+    threshold: 0,
   },
   duration: {
     name: '',
@@ -80,6 +97,9 @@ export const defaultMetricTemplates = {
       min: 0,
       max: 1440, // 24 hours in minutes
     },
+    points: 1,
+    scoring_mode: 'binary' as const,
+    threshold: 0,
   },
   choice: {
     name: '',
@@ -88,6 +108,7 @@ export const defaultMetricTemplates = {
     config: {
       options: ['Option 1', 'Option 2'],
     },
+    points: 1,
   },
   file: {
     name: '',
@@ -97,6 +118,7 @@ export const defaultMetricTemplates = {
       acceptedTypes: ['image/*'],
       maxSizeMB: 10,
     },
+    points: 1,
   },
   text: {
     name: '',
@@ -105,5 +127,6 @@ export const defaultMetricTemplates = {
     config: {
       maxLength: 500,
     },
+    points: 1,
   },
 };

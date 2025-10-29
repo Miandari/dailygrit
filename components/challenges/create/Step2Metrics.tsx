@@ -68,6 +68,7 @@ function SortableMetricCard({ metric, onEdit, onDelete }: SortableMetricCardProp
               <span className="font-medium">{metric.name}</span>
               <Badge variant="secondary">{getTypeLabel(metric.type)}</Badge>
               {metric.required && <Badge variant="outline">Required</Badge>}
+              <Badge variant="default" className="bg-blue-600">{metric.points || 1} pts</Badge>
             </div>
             {metric.config?.units && (
               <span className="text-sm text-gray-500">Units: {metric.config.units}</span>

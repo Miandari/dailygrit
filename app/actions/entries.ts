@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { format } from 'date-fns';
+import { calculateEntryScore } from '@/lib/utils/scoring';
 
 interface SaveEntryData {
   participantId: string;
@@ -40,12 +41,25 @@ export async function saveDailyEntry(data: SaveEntryData) {
       return { success: false, error: 'Invalid participation' };
     }
 
-    // Get challenge to check if entries should be locked
+    // Get challenge with metrics and bonus configuration
     const { data: challenge } = await supabase
       .from('challenges')
-      .select('lock_entries_after_day')
+      .select('lock_entries_after_day, metrics, enable_streak_bonus, streak_bonus_points, enable_perfect_day_bonus, perfect_day_bonus_points')
       .eq('id', participation.challenge_id)
       .single() as any;
+
+    if (!challenge) {
+      return { success: false, error: 'Challenge not found' };
+    }
+
+    // Get current streak for bonus calculation
+    const { data: participantData } = await supabase
+      .from('challenge_participants')
+      .select('current_streak')
+      .eq('id', data.participantId)
+      .single() as any;
+
+    const currentStreak = participantData?.current_streak || 0;
 
     const today = format(new Date(), 'yyyy-MM-dd');
 
@@ -61,13 +75,23 @@ export async function saveDailyEntry(data: SaveEntryData) {
       return { success: false, error: 'Entry is locked and cannot be modified' };
     }
 
+    // Calculate points
+    const scoring = calculateEntryScore(
+      challenge.metrics || [],
+      data.metricData,
+      challenge,
+      currentStreak
+    );
+
     const entryData = {
       participant_id: data.participantId,
       entry_date: today,
       metric_data: data.metricData,
       is_completed: data.isCompleted,
       notes: data.notes || null,
-      is_locked: challenge?.lock_entries_after_day || false,
+      is_locked: challenge.lock_entries_after_day || false,
+      points_earned: scoring.basePoints,
+      bonus_points: scoring.bonusPoints,
       submitted_at: new Date().toISOString(),
     };
 
@@ -101,9 +125,13 @@ export async function saveDailyEntry(data: SaveEntryData) {
       await updateStreak(participation.id);
     }
 
+    // Update participant's total points
+    await updateTotalPoints(participation.id);
+
     revalidatePath('/dashboard/today');
     revalidatePath('/dashboard');
     revalidatePath(`/challenges/${participation.challenge_id}`);
+    revalidatePath(`/challenges/${participation.challenge_id}/progress`);
 
     return { success: true };
   } catch (error) {
@@ -168,6 +196,34 @@ async function updateStreak(participantId: string) {
       .eq('id', participantId);
   } catch (error) {
     console.error('Error updating streak:', error);
+  }
+}
+
+async function updateTotalPoints(participantId: string) {
+  const supabase = await createClient();
+
+  try {
+    // Sum all points from daily entries for this participant
+    const { data: entries } = await supabase
+      .from('daily_entries')
+      .select('points_earned, bonus_points')
+      .eq('participant_id', participantId);
+
+    if (!entries) {
+      return;
+    }
+
+    const totalPoints = entries.reduce((sum, entry) => {
+      return sum + (entry.points_earned || 0) + (entry.bonus_points || 0);
+    }, 0);
+
+    // Update participant's total points
+    await supabase
+      .from('challenge_participants')
+      .update({ total_points: totalPoints })
+      .eq('id', participantId);
+  } catch (error) {
+    console.error('Error updating total points:', error);
   }
 }
 

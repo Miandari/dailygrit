@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useChallengeWizardStore } from '@/lib/stores/challengeStore';
@@ -16,6 +17,10 @@ const step3Schema = z.object({
   lock_entries_after_day: z.boolean(),
   show_participant_details: z.boolean(),
   failure_mode: z.enum(['strict', 'flexible', 'grace']),
+  enable_streak_bonus: z.boolean(),
+  streak_bonus_points: z.number().min(0),
+  enable_perfect_day_bonus: z.boolean(),
+  perfect_day_bonus_points: z.number().min(0),
 });
 
 type Step3FormData = z.infer<typeof step3Schema>;
@@ -41,6 +46,10 @@ export function Step3Settings({ onNext, onPrev }: Step3SettingsProps) {
       lock_entries_after_day: formData.lock_entries_after_day ?? false,
       show_participant_details: formData.show_participant_details ?? true,
       failure_mode: formData.failure_mode ?? 'flexible',
+      enable_streak_bonus: formData.enable_streak_bonus ?? false,
+      streak_bonus_points: formData.streak_bonus_points ?? 5,
+      enable_perfect_day_bonus: formData.enable_perfect_day_bonus ?? false,
+      perfect_day_bonus_points: formData.perfect_day_bonus_points ?? 10,
     },
   });
 
@@ -49,6 +58,10 @@ export function Step3Settings({ onNext, onPrev }: Step3SettingsProps) {
   const watchLockEntries = watch('lock_entries_after_day');
   const watchIsTemplate = watch('is_template');
   const watchShowParticipantDetails = watch('show_participant_details');
+  const watchEnableStreakBonus = watch('enable_streak_bonus');
+  const watchStreakBonusPoints = watch('streak_bonus_points');
+  const watchEnablePerfectDayBonus = watch('enable_perfect_day_bonus');
+  const watchPerfectDayBonusPoints = watch('perfect_day_bonus_points');
 
   const onSubmit = (data: Step3FormData) => {
     updateFormData(data);
@@ -193,6 +206,82 @@ export function Step3Settings({ onNext, onPrev }: Step3SettingsProps) {
               <p className="text-sm text-gray-600">
                 Allow participants to see each other's full progress including metric data and notes
               </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Bonus Points</CardTitle>
+          <CardDescription>Reward participants for consistency and perfect days</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="enable_streak_bonus"
+                checked={watchEnableStreakBonus}
+                onChange={(e) => setValue('enable_streak_bonus', e.target.checked)}
+                className="mt-1"
+              />
+              <div className="flex-1">
+                <Label htmlFor="enable_streak_bonus" className="font-medium cursor-pointer">
+                  Enable streak bonus
+                </Label>
+                <p className="text-sm text-gray-600">
+                  Award extra points based on current streak
+                </p>
+                {watchEnableStreakBonus && (
+                  <div className="mt-2">
+                    <Label htmlFor="streak_bonus_points" className="text-xs">
+                      Points per streak day
+                    </Label>
+                    <Input
+                      id="streak_bonus_points"
+                      type="number"
+                      min="0"
+                      value={watchStreakBonusPoints}
+                      onChange={(e) => setValue('streak_bonus_points', Number(e.target.value))}
+                      className="mt-1 max-w-xs"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="enable_perfect_day_bonus"
+                checked={watchEnablePerfectDayBonus}
+                onChange={(e) => setValue('enable_perfect_day_bonus', e.target.checked)}
+                className="mt-1"
+              />
+              <div className="flex-1">
+                <Label htmlFor="enable_perfect_day_bonus" className="font-medium cursor-pointer">
+                  Enable perfect day bonus
+                </Label>
+                <p className="text-sm text-gray-600">
+                  Award bonus points for completing all required metrics
+                </p>
+                {watchEnablePerfectDayBonus && (
+                  <div className="mt-2">
+                    <Label htmlFor="perfect_day_bonus_points" className="text-xs">
+                      Bonus points
+                    </Label>
+                    <Input
+                      id="perfect_day_bonus_points"
+                      type="number"
+                      min="0"
+                      value={watchPerfectDayBonusPoints}
+                      onChange={(e) => setValue('perfect_day_bonus_points', Number(e.target.value))}
+                      className="mt-1 max-w-xs"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </CardContent>

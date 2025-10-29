@@ -72,6 +72,7 @@ export default async function ProgressPage({
       user_id,
       current_streak,
       longest_streak,
+      total_points,
       status,
       profiles:user_id (
         username,

@@ -7,6 +7,7 @@ interface Participant {
   user_id: string;
   current_streak: number;
   longest_streak: number;
+  total_points: number;
   profile: {
     username: string;
     avatar_url: string | null;
@@ -22,21 +23,16 @@ interface ParticipantsLeaderboardProps {
 }
 
 export function ParticipantsLeaderboard({ participants, currentUserId }: ParticipantsLeaderboardProps) {
-  // Sort by completion rate, then by current streak
+  // Sort by total points, then by current streak
   const sortedParticipants = [...participants].sort((a, b) => {
-    const completionRateA = a.totalDays > 0 ? a.completedDays / a.totalDays : 0;
-    const completionRateB = b.totalDays > 0 ? b.completedDays / b.totalDays : 0;
+    const pointsA = a.total_points || 0;
+    const pointsB = b.total_points || 0;
 
-    if (completionRateB !== completionRateA) {
-      return completionRateB - completionRateA;
+    if (pointsB !== pointsA) {
+      return pointsB - pointsA;
     }
     return b.current_streak - a.current_streak;
   });
-
-  const getCompletionRate = (participant: Participant) => {
-    if (participant.totalDays === 0) return 0;
-    return Math.round((participant.completedDays / participant.totalDays) * 100);
-  };
 
   const getRankBadge = (index: number) => {
     if (index === 0) return <Trophy className="h-4 w-4 text-yellow-500" />;
@@ -55,7 +51,7 @@ export function ParticipantsLeaderboard({ participants, currentUserId }: Partici
         <div className="space-y-3">
           {sortedParticipants.map((participant, index) => {
             const isCurrentUser = participant.user_id === currentUserId;
-            const completionRate = getCompletionRate(participant);
+            const totalPoints = participant.total_points || 0;
 
             return (
               <div
@@ -98,8 +94,8 @@ export function ParticipantsLeaderboard({ participants, currentUserId }: Partici
                 </div>
 
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-blue-600">{completionRate}%</div>
-                  <div className="text-xs text-gray-500">completion</div>
+                  <div className="text-2xl font-bold text-blue-600">{totalPoints}</div>
+                  <div className="text-xs text-gray-500">points</div>
                 </div>
               </div>
             );
