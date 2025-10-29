@@ -31,17 +31,27 @@ export function ProgressCalendar({ entries, challengeStartDate, challengeEndDate
 
   const getDayStatus = (day: Date): 'completed' | 'missed' | 'future' | 'outside' => {
     const dayStr = format(day, 'yyyy-MM-dd');
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    day.setHours(0, 0, 0, 0);
+
+    // Create copies to avoid mutation and normalize to midnight local time
+    const dayMidnight = new Date(day);
+    dayMidnight.setHours(0, 0, 0, 0);
+
+    const todayMidnight = new Date();
+    todayMidnight.setHours(0, 0, 0, 0);
+
+    const startMidnight = new Date(challengeStartDate);
+    startMidnight.setHours(0, 0, 0, 0);
+
+    const endMidnight = new Date(challengeEndDate);
+    endMidnight.setHours(0, 0, 0, 0);
 
     // Check if day is outside challenge period
-    if (day < challengeStartDate || day > challengeEndDate) {
+    if (dayMidnight < startMidnight || dayMidnight > endMidnight) {
       return 'outside';
     }
 
     // Check if day is in the future
-    if (day > today) {
+    if (dayMidnight > todayMidnight) {
       return 'future';
     }
 

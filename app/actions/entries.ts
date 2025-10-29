@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { format } from 'date-fns';
 import { calculateEntryScore } from '@/lib/utils/scoring';
+import { getTodayDateString } from '@/lib/utils/dates';
 
 interface SaveEntryData {
   participantId: string;
@@ -61,7 +62,7 @@ export async function saveDailyEntry(data: SaveEntryData) {
 
     const currentStreak = participantData?.current_streak || 0;
 
-    const today = format(new Date(), 'yyyy-MM-dd');
+    const today = getTodayDateString();
 
     // Check if entry already exists
     const { data: existingEntry } = await supabase

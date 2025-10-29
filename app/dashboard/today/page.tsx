@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Calendar, CheckCircle, XCircle } from 'lucide-react';
 import { format } from 'date-fns';
+import { getTodayDateString } from '@/lib/utils/dates';
 import Link from 'next/link';
 import DailyEntryForm from '@/components/daily-entry/DailyEntryForm';
 
@@ -32,7 +33,7 @@ export default async function TodayPage() {
 
   const activeChallenges: any[] = [];
   const todayEntries: any = {};
-  const todayDate = format(new Date(), 'yyyy-MM-dd');
+  const todayDate = getTodayDateString();
   const todayFormatted = format(new Date(), 'EEEE, MMMM d, yyyy');
 
   if (myParticipations) {
