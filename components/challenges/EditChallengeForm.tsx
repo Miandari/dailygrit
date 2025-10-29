@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
 import { recalculateAllPoints } from '@/app/actions/recalculatePoints';
 import { updateChallengeSettings } from '@/app/actions/updateChallenge';
@@ -41,6 +42,12 @@ export default function EditChallengeForm({ challenge }: EditChallengeFormProps)
   const updateMetricThreshold = (index: number, threshold: number) => {
     const updated = [...metrics];
     updated[index] = { ...updated[index], threshold, scoring_mode: 'binary' };
+    setMetrics(updated);
+  };
+
+  const updateMetricThresholdType = (index: number, thresholdType: 'min' | 'max') => {
+    const updated = [...metrics];
+    updated[index] = { ...updated[index], threshold_type: thresholdType };
     setMetrics(updated);
   };
 
@@ -133,19 +140,38 @@ export default function EditChallengeForm({ challenge }: EditChallengeFormProps)
                   </div>
 
                   {(metric.type === 'number' || metric.type === 'duration') && (
-                    <div>
-                      <Label htmlFor={`threshold-${index}`}>
-                        Minimum for Full Points
-                      </Label>
-                      <Input
-                        id={`threshold-${index}`}
-                        type="number"
-                        min="0"
-                        value={metric.threshold || 0}
-                        onChange={(e) => updateMetricThreshold(index, Number(e.target.value))}
-                        className="mt-1"
-                      />
-                    </div>
+                    <>
+                      <div>
+                        <Label htmlFor={`threshold-type-${index}`}>
+                          Threshold Type
+                        </Label>
+                        <Select
+                          value={metric.threshold_type || 'min'}
+                          onValueChange={(value) => updateMetricThresholdType(index, value as 'min' | 'max')}
+                        >
+                          <SelectTrigger id={`threshold-type-${index}`} className="mt-1">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="min">Minimum (at least)</SelectItem>
+                            <SelectItem value="max">Maximum (at most)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="col-span-2">
+                        <Label htmlFor={`threshold-${index}`}>
+                          {metric.threshold_type === 'max' ? 'Maximum' : 'Minimum'} for Full Points
+                        </Label>
+                        <Input
+                          id={`threshold-${index}`}
+                          type="number"
+                          min="0"
+                          value={metric.threshold || 0}
+                          onChange={(e) => updateMetricThreshold(index, Number(e.target.value))}
+                          className="mt-1"
+                        />
+                      </div>
+                    </>
                   )}
                 </div>
               </div>

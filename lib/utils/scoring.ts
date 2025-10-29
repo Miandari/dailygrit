@@ -23,6 +23,7 @@ export interface MetricWithScoring {
   points?: number;
   scoring_mode?: ScoringMode;
   threshold?: number;
+  threshold_type?: 'min' | 'max';
   tiers?: ScoreTier[];
 }
 
@@ -52,6 +53,7 @@ export function calculateMetricPoints(
         points,
         scoringMode,
         metric.threshold,
+        metric.threshold_type,
         metric.tiers
       );
 
@@ -81,27 +83,56 @@ function calculateNumericPoints(
   maxPoints: number,
   scoringMode: ScoringMode,
   threshold?: number,
+  thresholdType: 'min' | 'max' = 'min',
   tiers?: ScoreTier[]
 ): number {
   if (scoringMode === 'binary') {
-    const minValue = threshold || 0;
-    return value >= minValue ? maxPoints : 0;
+    const targetValue = threshold || 0;
+
+    if (thresholdType === 'max') {
+      // For max threshold: award points if value is AT MOST the threshold
+      return value <= targetValue ? maxPoints : 0;
+    } else {
+      // For min threshold: award points if value is AT LEAST the threshold
+      return value >= targetValue ? maxPoints : 0;
+    }
   }
 
   if (scoringMode === 'scaled') {
     const target = threshold || 100;
-    const percentage = Math.min(value / target, 1);
-    return Math.round(maxPoints * percentage);
+
+    if (thresholdType === 'max') {
+      // For max threshold: less is better, full points at 0, zero points at threshold
+      if (value >= target) return 0;
+      const percentage = 1 - (value / target);
+      return Math.round(maxPoints * Math.max(0, Math.min(1, percentage)));
+    } else {
+      // For min threshold: more is better, full points at threshold or above
+      const percentage = Math.min(value / target, 1);
+      return Math.round(maxPoints * percentage);
+    }
   }
 
   if (scoringMode === 'tiered' && tiers && tiers.length > 0) {
-    // Sort tiers by threshold descending
-    const sortedTiers = [...tiers].sort((a, b) => b.threshold - a.threshold);
+    if (thresholdType === 'max') {
+      // Sort tiers by threshold ascending for max type
+      const sortedTiers = [...tiers].sort((a, b) => a.threshold - b.threshold);
 
-    // Find the highest tier the value meets
-    for (const tier of sortedTiers) {
-      if (value >= tier.threshold) {
-        return tier.points;
+      // Find the highest tier the value meets (value <= threshold)
+      for (const tier of sortedTiers) {
+        if (value <= tier.threshold) {
+          return tier.points;
+        }
+      }
+    } else {
+      // Sort tiers by threshold descending for min type
+      const sortedTiers = [...tiers].sort((a, b) => b.threshold - a.threshold);
+
+      // Find the highest tier the value meets (value >= threshold)
+      for (const tier of sortedTiers) {
+        if (value >= tier.threshold) {
+          return tier.points;
+        }
       }
     }
 

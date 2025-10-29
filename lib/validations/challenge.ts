@@ -24,6 +24,7 @@ export const metricSchema = z.object({
   points: z.number().min(0).default(1),
   scoring_mode: z.enum(['binary', 'scaled', 'tiered']).optional(),
   threshold: z.number().optional(),
+  threshold_type: z.enum(['min', 'max']).default('min').optional(),
   tiers: z.array(z.object({
     threshold: z.number(),
     points: z.number(),
@@ -88,6 +89,7 @@ export const defaultMetricTemplates = {
     points: 1,
     scoring_mode: 'binary' as const,
     threshold: 0,
+    threshold_type: 'min' as const,
   },
   duration: {
     name: '',
@@ -100,6 +102,7 @@ export const defaultMetricTemplates = {
     points: 1,
     scoring_mode: 'binary' as const,
     threshold: 0,
+    threshold_type: 'min' as const,
   },
   choice: {
     name: '',
