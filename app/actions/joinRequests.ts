@@ -138,6 +138,9 @@ export async function approveJoinRequest(requestId: string) {
     }
 
     revalidatePath('/challenges/requests');
+    revalidatePath(`/challenges/${joinRequest.challenge_id}/participants`);
+    revalidatePath(`/challenges/${joinRequest.challenge_id}/progress`);
+    revalidatePath(`/challenges/${joinRequest.challenge_id}`);
     return { success: true };
   } catch (error) {
     console.error('Error approving join request:', error);
@@ -199,6 +202,7 @@ export async function rejectJoinRequest(requestId: string) {
     }
 
     revalidatePath('/challenges/requests');
+    revalidatePath('/challenges/browse');
     return { success: true };
   } catch (error) {
     console.error('Error rejecting join request:', error);

@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import RemoveParticipantButton from '@/components/challenges/RemoveParticipantButton';
 
+export const revalidate = 0;
+
 export default async function ParticipantsManagementPage({
   params
 }: {

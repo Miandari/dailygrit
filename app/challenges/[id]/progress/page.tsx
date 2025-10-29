@@ -10,6 +10,8 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 
+export const revalidate = 0;
+
 export default async function ProgressPage({
   params
 }: {
