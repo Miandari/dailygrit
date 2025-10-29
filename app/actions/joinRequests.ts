@@ -106,18 +106,20 @@ export async function approveJoinRequest(requestId: string) {
       return { success: false, error: 'Only the challenge creator can approve requests' };
     }
 
-    // Add user as participant
-    const { error: participantError } = await supabase
-      .from('challenge_participants')
-      .insert({
-        challenge_id: joinRequest.challenge_id,
-        user_id: joinRequest.user_id,
-        status: 'active',
-      });
+    // Add user as participant using SECURITY DEFINER function to bypass RLS
+    const { data: addResult, error: rpcError } = await supabase.rpc('add_approved_participant', {
+      p_challenge_id: joinRequest.challenge_id,
+      p_user_id: joinRequest.user_id,
+    });
 
-    if (participantError) {
-      console.error('Error adding participant:', participantError);
-      return { success: false, error: 'Failed to add participant' };
+    if (rpcError) {
+      console.error('Error calling add_approved_participant:', rpcError);
+      return { success: false, error: `Failed to add participant: ${rpcError.message}` };
+    }
+
+    if (!addResult?.success) {
+      console.error('Function returned error:', addResult);
+      return { success: false, error: addResult?.error || 'Failed to add participant' };
     }
 
     // Update join request status
