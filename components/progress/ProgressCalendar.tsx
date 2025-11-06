@@ -111,7 +111,7 @@ export function ProgressCalendar({ entries, challengeStartDate, challengeEndDate
   const allDays = [...paddedDays, ...monthDays];
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-card rounded-lg shadow p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold">Progress Calendar</h3>
         <div className="flex items-center gap-2">
@@ -157,7 +157,7 @@ export function ProgressCalendar({ entries, challengeStartDate, challengeEndDate
                 status === 'late' && 'border-yellow-500 bg-yellow-50',
                 status === 'missed' && 'border-red-400 bg-red-50',
                 status === 'today' && 'border-blue-500 bg-blue-50',
-                status === 'future' && 'border-gray-200 bg-white',
+                status === 'future' && 'border-gray-200 bg-card',
                 status === 'outside' && 'border-gray-100 bg-gray-50'
               )}
             >
@@ -209,7 +209,7 @@ export function ProgressCalendar({ entries, challengeStartDate, challengeEndDate
           <span>Missed</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 border-2 border-gray-200 bg-white rounded" />
+          <div className="w-6 h-6 border-2 border-gray-200 bg-card rounded" />
           <span>Upcoming</span>
         </div>
       </div>

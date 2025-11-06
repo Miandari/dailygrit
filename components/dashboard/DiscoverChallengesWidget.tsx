@@ -109,7 +109,7 @@ export function DiscoverChallengesWidget({ challenges, isNewUser, joinRequests =
                 const isLoading = loadingChallenges.has(challenge.id);
 
                 return (
-                  <div key={challenge.id} className="group rounded-lg border bg-white p-4 transition-all hover:border-blue-400 hover:shadow-md">
+                  <div key={challenge.id} className="group rounded-lg border bg-card p-4 transition-all hover:border-blue-400 hover:shadow-md">
                     <Link
                       href={`/challenges/${challenge.id}`}
                       className="block"

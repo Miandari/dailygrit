@@ -137,12 +137,12 @@ export default async function ChallengePage({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{challenge.name}</h1>
+              <h1 className="text-3xl font-bold text-foreground">{challenge.name}</h1>
               {challenge.description && (
                 <p className="mt-2 text-gray-600">{challenge.description}</p>
               )}
@@ -367,7 +367,7 @@ export default async function ChallengePage({
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-4">
-                <code className="rounded bg-gray-100 px-4 py-2 text-xl font-mono">
+                <code className="rounded bg-secondary px-4 py-2 text-xl font-mono">
                   {challenge.invite_code}
                 </code>
                 <CopyInviteCodeButton inviteCode={challenge.invite_code} />

@@ -89,7 +89,7 @@ export function TodayProgressCard({ activeChallenges, todayEntries }: TodayProgr
             {incompleteChallenges.map(challenge => (
               <div
                 key={challenge.id}
-                className="flex items-center justify-between p-3 rounded-lg bg-white border"
+                className="flex items-center justify-between p-3 rounded-lg bg-card border"
               >
                 <div className="flex-1">
                   <div className="font-medium">{challenge.challenge.name}</div>

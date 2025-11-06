@@ -74,7 +74,7 @@ export default async function AllEntriesPage({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-8">
           {/* Breadcrumbs */}
@@ -99,7 +99,7 @@ export default async function AllEntriesPage({
           {/* Header with Actions */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">All Entries</h1>
+              <h1 className="text-3xl font-bold text-foreground">All Entries</h1>
               <p className="mt-2 text-gray-600">{challenge.name}</p>
             </div>
 

@@ -135,7 +135,7 @@ export default async function ProgressPage({
     });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
         <div className="mb-8">
@@ -147,7 +147,7 @@ export default async function ProgressPage({
           </Button>
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Challenge Progress</h1>
+            <h1 className="text-3xl font-bold text-foreground">Challenge Progress</h1>
             <p className="mt-2 text-gray-600">{challenge.name}</p>
           </div>
         </div>
@@ -233,7 +233,7 @@ export default async function ProgressPage({
 
             {/* Additional Stats */}
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-lg bg-white p-6 shadow">
+              <div className="rounded-lg bg-card p-6 shadow">
                 <h3 className="text-lg font-semibold mb-4">Challenge Timeline</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">
@@ -257,7 +257,7 @@ export default async function ProgressPage({
                 </div>
               </div>
 
-              <div className="rounded-lg bg-white p-6 shadow">
+              <div className="rounded-lg bg-card p-6 shadow">
                 <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">

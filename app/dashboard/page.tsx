@@ -141,7 +141,7 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       {/* Welcome Section */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-3xl font-bold text-foreground">
           Welcome back, {profile?.username || 'there'}!
         </h1>
         <p className="mt-2 text-gray-600">
@@ -193,7 +193,7 @@ export default async function DashboardPage() {
 
             {/* Active Challenges */}
             <div>
-              <h2 className="mb-4 text-2xl font-semibold text-gray-900">Active Challenges</h2>
+              <h2 className="mb-4 text-2xl font-semibold text-foreground">Active Challenges</h2>
               <div className="grid gap-4 md:grid-cols-2">
                 {activeChallenges.map((participation: any) => {
                   const challenge = participation.challenge;
@@ -312,7 +312,7 @@ export default async function DashboardPage() {
       {/* Created Challenges (if any that user is not participating in) */}
       {createdOnlyChallenges.length > 0 && (
         <div>
-          <h2 className="mb-4 text-2xl font-semibold text-gray-900">Challenges You Created</h2>
+          <h2 className="mb-4 text-2xl font-semibold text-foreground">Challenges You Created</h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {createdOnlyChallenges.map((challenge: any) => (
               <Link key={challenge.id} href={`/challenges/${challenge.id}`}>

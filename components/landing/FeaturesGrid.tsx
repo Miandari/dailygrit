@@ -6,9 +6,9 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 export function FeaturesGrid() {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
-  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { elementRef: primaryRef, isVisible: primaryVisible } = useScrollAnimation();
-  const { elementRef: socialRef, isVisible: socialVisible } = useScrollAnimation();
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: primaryRef, isVisible: primaryVisible } = useScrollAnimation();
+  const { ref: socialRef, isVisible: socialVisible } = useScrollAnimation();
 
   const primaryFeatures = [
     {
