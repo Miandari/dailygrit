@@ -96,7 +96,7 @@ export default async function ProgressPage({
   const participantIds = allParticipants?.map(p => p.id) || [];
   const { data: allEntries } = await supabase
     .from('daily_entries')
-    .select('participant_id, entry_date, is_completed, metric_data, notes')
+    .select('participant_id, entry_date, is_completed, metric_data, notes, points_earned, bonus_points, submitted_at')
     .in('participant_id', participantIds)
     .order('entry_date', { ascending: true });
 
@@ -291,6 +291,7 @@ export default async function ProgressPage({
               currentUserId={user.id}
               challengeStartDate={new Date(challenge.starts_at)}
               challengeEndDate={new Date(challenge.ends_at)}
+              challengeMetrics={challenge.metrics || []}
             />
           </TabsContent>
         </Tabs>

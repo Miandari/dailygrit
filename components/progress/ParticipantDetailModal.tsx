@@ -45,6 +45,7 @@ interface ParticipantDetailModalProps {
   participant: Participant;
   challengeStartDate: Date;
   challengeEndDate: Date;
+  challengeMetrics: any[];
   isOpen: boolean;
   onClose: () => void;
 }
@@ -53,6 +54,7 @@ export function ParticipantDetailModal({
   participant,
   challengeStartDate,
   challengeEndDate,
+  challengeMetrics,
   isOpen,
   onClose
 }: ParticipantDetailModalProps) {
@@ -310,6 +312,7 @@ export function ParticipantDetailModal({
           date={selectedDay.date}
           entry={selectedDay.entry}
           username={participant.profile.username || 'Unknown User'}
+          challengeMetrics={challengeMetrics}
           isOpen={!!selectedDay}
           onClose={() => setSelectedDay(null)}
         />

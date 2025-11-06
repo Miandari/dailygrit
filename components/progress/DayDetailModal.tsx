@@ -25,6 +25,7 @@ interface DayDetailModalProps {
   date: Date;
   entry: DailyEntry | null;
   username: string;
+  challengeMetrics: any[];
   isOpen: boolean;
   onClose: () => void;
 }
@@ -33,6 +34,7 @@ export function DayDetailModal({
   date,
   entry,
   username,
+  challengeMetrics,
   isOpen,
   onClose
 }: DayDetailModalProps) {
@@ -44,6 +46,11 @@ export function DayDetailModal({
         return submittedDateStr > entry.entry_date;
       })()
     : false;
+
+  // Create a map of metric ID to metric details
+  const metricMap = new Map(
+    challengeMetrics.map(metric => [metric.id, metric])
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -125,20 +132,38 @@ export function DayDetailModal({
                 Metrics
               </h3>
               <div className="space-y-3">
-                {Object.entries(entry.metric_data).map(([key, value]: [string, any]) => (
-                  <div key={key} className="flex justify-between items-center py-2 border-b last:border-0">
-                    <span className="text-gray-600 font-medium capitalize">
-                      {key.replace(/_/g, ' ')}
-                    </span>
-                    <span className="font-semibold text-gray-900">
-                      {typeof value === 'boolean'
-                        ? value ? 'Yes' : 'No'
-                        : typeof value === 'number'
-                        ? value.toLocaleString()
-                        : value?.toString() || 'N/A'}
-                    </span>
-                  </div>
-                ))}
+                {Object.entries(entry.metric_data).map(([metricId, value]: [string, any]) => {
+                  const metric = metricMap.get(metricId);
+                  const metricName = metric?.name || metricId.replace(/_/g, ' ');
+
+                  // Format the value based on metric type
+                  let displayValue = value?.toString() || 'N/A';
+                  if (metric?.type === 'boolean') {
+                    displayValue = value ? 'Yes' : 'No';
+                  } else if (metric?.type === 'number') {
+                    displayValue = typeof value === 'number' ? value.toLocaleString() : value;
+                  } else if (metric?.type === 'duration') {
+                    // Duration is stored in minutes
+                    const hours = Math.floor(value / 60);
+                    const minutes = value % 60;
+                    displayValue = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+                  } else if (metric?.type === 'choice') {
+                    displayValue = Array.isArray(value) ? value.join(', ') : value;
+                  } else if (typeof value === 'number') {
+                    displayValue = value.toLocaleString();
+                  }
+
+                  return (
+                    <div key={metricId} className="flex justify-between items-center py-2 border-b last:border-0">
+                      <span className="text-gray-600 font-medium">
+                        {metricName}
+                      </span>
+                      <span className="font-semibold text-gray-900">
+                        {displayValue}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
