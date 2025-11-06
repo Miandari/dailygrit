@@ -80,7 +80,7 @@ export function DiscoverChallengesWidget({ challenges, isNewUser, joinRequests =
   const challengesToShow = showMore ? (isNewUser ? 6 : 5) : 3;
 
   return (
-    <Card className="border-2 border-blue-200 bg-blue-50/50">
+    <Card className="border-2 border-blue-500/30">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-xl">
           <Target className="h-5 w-5 text-blue-600" />

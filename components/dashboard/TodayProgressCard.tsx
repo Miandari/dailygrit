@@ -30,7 +30,7 @@ export function TodayProgressCard({ activeChallenges, todayEntries }: TodayProgr
   }
 
   return (
-    <Card className={allCompleted ? 'border-green-500 bg-green-50' : noneCompleted ? 'border-amber-500 bg-amber-50' : 'border-blue-500'}>
+    <Card className={allCompleted ? 'border-green-500' : noneCompleted ? 'border-amber-500' : 'border-blue-500'}>
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
@@ -85,7 +85,7 @@ export function TodayProgressCard({ activeChallenges, todayEntries }: TodayProgr
       {isExpanded && incompleteChallenges.length > 0 && (
         <CardContent>
           <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-gray-700 mb-3">Pending Challenges:</h4>
+            <h4 className="text-sm font-semibold text-foreground mb-3">Pending Challenges:</h4>
             {incompleteChallenges.map(challenge => (
               <div
                 key={challenge.id}
@@ -93,7 +93,7 @@ export function TodayProgressCard({ activeChallenges, todayEntries }: TodayProgr
               >
                 <div className="flex-1">
                   <div className="font-medium">{challenge.challenge.name}</div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-muted-foreground mt-1">
                     {(challenge.challenge.metrics as any[])?.length || 0} metrics to track
                   </div>
                 </div>

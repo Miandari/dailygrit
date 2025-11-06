@@ -144,7 +144,7 @@ export default async function DashboardPage() {
         <h1 className="text-3xl font-bold text-foreground">
           Welcome back, {profile?.username || 'there'}!
         </h1>
-        <p className="mt-2 text-gray-600">
+        <p className="mt-2 text-muted-foreground">
           {activeChallenges.length > 0
             ? `You have ${activeChallenges.length} active ${
                 activeChallenges.length === 1 ? 'challenge' : 'challenges'
@@ -222,12 +222,12 @@ export default async function DashboardPage() {
                       <CardContent>
                         <div className="space-y-3">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Progress</span>
+                            <span className="text-muted-foreground">Progress</span>
                             <span className="font-medium">
                               Day {Math.min(daysElapsed + 1, challenge.duration_days)} of {challenge.duration_days}
                             </span>
                           </div>
-                          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                          <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
                             <div
                               className="h-full bg-blue-600 transition-all"
                               style={{ width: `${progress}%` }}
@@ -235,15 +235,15 @@ export default async function DashboardPage() {
                           </div>
                           <div className="grid grid-cols-3 gap-2 text-sm">
                             <div>
-                              <div className="text-gray-600 text-xs">Points</div>
+                              <div className="text-muted-foreground text-xs">Points</div>
                               <div className="font-semibold">{participation.total_points}</div>
                             </div>
                             <div>
-                              <div className="text-gray-600 text-xs">Streak</div>
+                              <div className="text-muted-foreground text-xs">Streak</div>
                               <div className="font-semibold">{participation.current_streak}</div>
                             </div>
                             <div>
-                              <div className="text-gray-600 text-xs">Today</div>
+                              <div className="text-muted-foreground text-xs">Today</div>
                               <div className="font-semibold">
                                 {todayEntry?.is_completed ? (
                                   <span className="text-green-600">Done</span>
@@ -328,7 +328,7 @@ export default async function DashboardPage() {
                       <Badge variant={challenge.is_public ? 'default' : 'secondary'}>
                         {challenge.is_public ? 'Public' : 'Private'}
                       </Badge>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-muted-foreground">
                         {challenge.duration_days} days
                       </span>
                     </div>
