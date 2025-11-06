@@ -42,13 +42,25 @@ export function Navigation() {
 
     fetchUnreadCount();
 
-    // Subscribe to new notifications
+    // Subscribe to new notifications and read status changes
     const channel = supabase
       .channel('notifications')
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${user.id}`,
+        },
+        () => {
+          fetchUnreadCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
           schema: 'public',
           table: 'notifications',
           filter: `user_id=eq.${user.id}`,

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import JoinRequestActions from '@/components/challenges/JoinRequestActions';
+import MarkNotificationsRead from '@/components/notifications/MarkNotificationsRead';
 
 export default async function JoinRequestsPage() {
   const supabase = await createClient();
@@ -66,6 +67,9 @@ export default async function JoinRequestsPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
+      {/* Mark all notifications as read when viewing this page */}
+      <MarkNotificationsRead />
+
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Join Requests</h1>
       <p className="text-gray-600 mb-8">
         Manage requests to join your private challenges
