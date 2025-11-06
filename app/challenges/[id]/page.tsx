@@ -138,13 +138,13 @@ export default async function ChallengePage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-4xl px-4 py-8">
-        <div className="mb-8">
-          <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">{challenge.name}</h1>
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{challenge.name}</h1>
               {challenge.description && (
-                <p className="mt-2 text-gray-600">{challenge.description}</p>
+                <p className="mt-2 text-sm sm:text-base text-gray-600">{challenge.description}</p>
               )}
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <Badge variant={challenge.is_public ? 'default' : 'secondary'}>
@@ -155,7 +155,7 @@ export default async function ChallengePage({
                 {isParticipant && !isCreator && <Badge variant="secondary">Participating</Badge>}
               </div>
             </div>
-            <div className="flex gap-2 justify-end">
+            <div className="flex flex-wrap gap-2 sm:justify-end">
               {!isParticipant && user && !isCreator && (
                 <JoinChallengeButton
                   challengeId={id}
@@ -166,13 +166,13 @@ export default async function ChallengePage({
               )}
               {isParticipant && (
                 <>
-                  <Button asChild size="default">
+                  <Button asChild size="sm" className="w-full sm:w-auto">
                     <Link href="/dashboard/today">Track Today</Link>
                   </Button>
-                  <Button asChild variant="outline" size="default">
+                  <Button asChild variant="outline" size="sm" className="w-full sm:w-auto">
                     <Link href={`/challenges/${id}/progress`}>Leaderboard</Link>
                   </Button>
-                  <Button asChild variant="outline" size="default">
+                  <Button asChild variant="outline" size="sm" className="w-full sm:w-auto">
                     <Link href={`/challenges/${id}/entries`}>View All Days</Link>
                   </Button>
                   <DropdownMenu>
@@ -264,22 +264,22 @@ export default async function ChallengePage({
         {isParticipant && (
           <div className="mb-8">
             {/* Hero Card - Total Points */}
-            <div className="rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 p-6 shadow-lg text-white mb-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-semibold mb-1 opacity-90">Total Points</h3>
-                  <div className="text-4xl font-bold">{myStats.totalPoints}</div>
+            <div className="rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 p-4 sm:p-6 shadow-lg text-white mb-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-xs sm:text-sm font-semibold mb-1 opacity-90">Total Points</h3>
+                  <div className="text-3xl sm:text-4xl font-bold">{myStats.totalPoints}</div>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex-shrink-0">
                   <div className="text-xs opacity-90 mb-1">Current Streak</div>
-                  <div className="text-3xl font-bold">{myStats.currentStreak}</div>
+                  <div className="text-2xl sm:text-3xl font-bold">{myStats.currentStreak}</div>
                   <div className="text-xs opacity-75">days in a row</div>
                 </div>
               </div>
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               <Card>
                 <CardContent className="p-4">
                   <div className="text-sm text-gray-600">Completion</div>

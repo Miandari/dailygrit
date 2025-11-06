@@ -135,11 +135,11 @@ export default async function ProgressPage({
     });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="mx-auto max-w-6xl px-4">
+    <div className="min-h-screen bg-gray-50 py-6 sm:py-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {/* Header */}
-        <div className="mb-8">
-          <Button asChild variant="ghost" className="mb-4">
+        <div className="mb-6 sm:mb-8">
+          <Button asChild variant="ghost" className="mb-4" size="sm">
             <Link href={`/challenges/${id}`}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Challenge
@@ -147,8 +147,8 @@ export default async function ProgressPage({
           </Button>
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Challenge Progress</h1>
-            <p className="mt-2 text-gray-600">{challenge.name}</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Challenge Progress</h1>
+            <p className="mt-2 text-sm sm:text-base text-gray-600">{challenge.name}</p>
           </div>
         </div>
 
@@ -200,15 +200,15 @@ export default async function ProgressPage({
           {/* Your Progress Tab */}
           <TabsContent value="your-progress" className="space-y-8">
             {/* Points Card */}
-            <div className="rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 p-6 shadow-lg text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold mb-1 opacity-90">Total Points</h3>
-                  <div className="text-5xl font-bold">{myParticipation.total_points || 0}</div>
+            <div className="rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 p-4 sm:p-6 shadow-lg text-white">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-base sm:text-lg font-semibold mb-1 opacity-90">Total Points</h3>
+                  <div className="text-4xl sm:text-5xl font-bold">{myParticipation.total_points || 0}</div>
                 </div>
-                <div className="text-right">
-                  <div className="text-sm opacity-90 mb-1">Points breakdown</div>
-                  <div className="space-y-1 text-sm">
+                <div className="text-right flex-shrink-0">
+                  <div className="text-xs sm:text-sm opacity-90 mb-1">Points breakdown</div>
+                  <div className="space-y-1 text-xs sm:text-sm">
                     <div>Base: {myEntries?.reduce((sum, e) => sum + (e.points_earned || 0), 0) || 0}</div>
                     <div>Bonus: {myEntries?.reduce((sum, e) => sum + (e.bonus_points || 0), 0) || 0}</div>
                   </div>
@@ -233,23 +233,23 @@ export default async function ProgressPage({
 
             {/* Additional Stats */}
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-lg bg-white p-6 shadow">
-                <h3 className="text-lg font-semibold mb-4">Challenge Timeline</h3>
+              <div className="rounded-lg bg-white p-4 sm:p-6 shadow">
+                <h3 className="text-base sm:text-lg font-semibold mb-4">Challenge Timeline</h3>
                 <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Started</span>
-                    <span className="font-medium">
+                  <div className="flex justify-between gap-2 text-sm sm:text-base">
+                    <span className="text-gray-600 shrink-0">Started</span>
+                    <span className="font-medium text-right">
                       {format(new Date(challenge.starts_at), 'MMM d, yyyy')}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Ends</span>
-                    <span className="font-medium">
+                  <div className="flex justify-between gap-2 text-sm sm:text-base">
+                    <span className="text-gray-600 shrink-0">Ends</span>
+                    <span className="font-medium text-right">
                       {format(new Date(challenge.ends_at), 'MMM d, yyyy')}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Days Remaining</span>
+                  <div className="flex justify-between gap-2 text-sm sm:text-base">
+                    <span className="text-gray-600 shrink-0">Days Remaining</span>
                     <span className="font-medium">
                       {Math.max(0, challenge.duration_days - maxDays)}
                     </span>
@@ -257,23 +257,23 @@ export default async function ProgressPage({
                 </div>
               </div>
 
-              <div className="rounded-lg bg-white p-6 shadow">
-                <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
+              <div className="rounded-lg bg-white p-4 sm:p-6 shadow">
+                <h3 className="text-base sm:text-lg font-semibold mb-4">Performance Metrics</h3>
                 <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Perfect Weeks</span>
+                  <div className="flex justify-between gap-2 text-sm sm:text-base">
+                    <span className="text-gray-600 shrink-0">Perfect Weeks</span>
                     <span className="font-medium">
                       {Math.floor((myParticipation.longest_streak || 0) / 7)}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Missed Days</span>
+                  <div className="flex justify-between gap-2 text-sm sm:text-base">
+                    <span className="text-gray-600 shrink-0">Missed Days</span>
                     <span className="font-medium">
                       {maxDays - myCompletedDays}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Status</span>
+                  <div className="flex justify-between gap-2 text-sm sm:text-base">
+                    <span className="text-gray-600 shrink-0">Status</span>
                     <span className="font-medium capitalize">
                       {myParticipation.status}
                     </span>
