@@ -37,8 +37,12 @@ export function DayDetailModal({
   onClose
 }: DayDetailModalProps) {
   const totalPoints = entry ? (entry.points_earned || 0) + (entry.bonus_points || 0) : 0;
-  const isLate = entry?.submitted_at
-    ? new Date(entry.submitted_at).toDateString() !== date.toDateString()
+  const isLate = entry?.submitted_at && entry?.entry_date
+    ? (() => {
+        const submittedDate = new Date(entry.submitted_at);
+        const submittedDateStr = `${submittedDate.getFullYear()}-${String(submittedDate.getMonth() + 1).padStart(2, '0')}-${String(submittedDate.getDate()).padStart(2, '0')}`;
+        return submittedDateStr > entry.entry_date;
+      })()
     : false;
 
   return (

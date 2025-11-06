@@ -29,8 +29,12 @@ export default function EntriesClient({
   const selectedEntry = selectedDate ? entryMap.get(selectedDate) : null;
 
   const isToday = selectedDate === format(new Date(), 'yyyy-MM-dd');
-  const isLate = selectedEntry?.submitted_at && selectedEntry?.is_completed &&
-    new Date(selectedEntry.submitted_at).toDateString() !== new Date(selectedDate!).toDateString();
+  const isLate = selectedEntry?.submitted_at && selectedEntry?.is_completed && selectedEntry?.entry_date &&
+    (() => {
+      const submittedDate = new Date(selectedEntry.submitted_at);
+      const submittedDateStr = `${submittedDate.getFullYear()}-${String(submittedDate.getMonth() + 1).padStart(2, '0')}-${String(submittedDate.getDate()).padStart(2, '0')}`;
+      return submittedDateStr > selectedEntry.entry_date;
+    })();
 
   return (
     <div className="grid md:grid-cols-[280px,1fr] gap-6">

@@ -59,8 +59,12 @@ export function DateSelector({
     }
 
     if (entry?.is_completed) {
-      const isLate = entry.submitted_at &&
-        new Date(entry.submitted_at).toDateString() !== day.toDateString();
+      const isLate = entry.submitted_at && entry.entry_date &&
+        (() => {
+          const submittedDate = new Date(entry.submitted_at);
+          const submittedDateStr = `${submittedDate.getFullYear()}-${String(submittedDate.getMonth() + 1).padStart(2, '0')}-${String(submittedDate.getDate()).padStart(2, '0')}`;
+          return submittedDateStr > entry.entry_date;
+        })();
       return isLate ? 'late' : 'completed';
     }
 

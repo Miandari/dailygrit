@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, CheckCircle2, Circle, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths } from 'date-fns';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, addMonths, subMonths } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 interface DailyEntry {
@@ -71,11 +71,12 @@ export function ProgressCalendar({ entries, challengeStartDate, challengeEndDate
     const entry = entryMap.get(dayStr);
     if (entry?.is_completed) {
       // Check if it was submitted late (after the entry_date)
-      if (entry.submitted_at) {
+      if (entry.submitted_at && entry.entry_date) {
+        // Compare the submission date (in local time) with the entry_date
         const submittedDate = new Date(entry.submitted_at);
-        submittedDate.setHours(0, 0, 0, 0);
+        const submittedDateStr = `${submittedDate.getFullYear()}-${String(submittedDate.getMonth() + 1).padStart(2, '0')}-${String(submittedDate.getDate()).padStart(2, '0')}`;
         // If submitted on a different day than entry_date, it's late
-        if (submittedDate.getTime() > dayMidnight.getTime()) {
+        if (submittedDateStr > entry.entry_date) {
           return 'late';
         }
       }
@@ -144,7 +145,6 @@ export function ProgressCalendar({ entries, challengeStartDate, challengeEndDate
         {allDays.map((day, index) => {
           const status = getDayStatus(day);
           const isCurrentMonth = isSameMonth(day, currentMonth);
-          const isToday = isSameDay(day, new Date());
           const points = getDayPoints(day, status);
 
           return (
