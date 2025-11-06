@@ -9,10 +9,22 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card } from '@/components/ui/card';
-import { Clock, CheckCircle, AlertCircle } from 'lucide-react';
-import { saveDailyEntry } from '@/app/actions/entries';
+import { Clock, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
+import { saveDailyEntry, deleteDailyEntry } from '@/app/actions/entries';
 import { useRouter } from 'next/navigation';
 import { FileUpload } from '@/components/ui/file-upload';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import toast from 'react-hot-toast';
 
 interface Metric {
   id: string;
@@ -51,6 +63,7 @@ export default function DailyEntryForm({
 }: DailyEntryFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState<Record<string, any>>(
     existingEntry?.metric_data || {}
@@ -96,6 +109,29 @@ export default function DailyEntryForm({
       ...prev,
       [metricId]: value,
     }));
+  };
+
+  const handleDelete = async () => {
+    if (!existingEntry?.id) return;
+
+    setIsDeleting(true);
+    setError('');
+
+    try {
+      const result = await deleteDailyEntry(existingEntry.id, challenge.id);
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to delete entry');
+      }
+
+      toast.success('Entry deleted successfully');
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete entry');
+      toast.error(err instanceof Error ? err.message : 'Failed to delete entry');
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const renderMetricInput = (metric: Metric) => {
@@ -345,6 +381,37 @@ export default function DailyEntryForm({
             <CheckCircle className="mr-2 h-4 w-4" />
             Save & Lock
           </Button>
+        )}
+        {existingEntry && !isLocked && (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isDeleting || isSubmitting}
+                className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Entry</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete this entry? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
       </div>
 

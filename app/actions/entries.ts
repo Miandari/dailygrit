@@ -229,6 +229,78 @@ async function updateTotalPoints(participantId: string) {
   }
 }
 
+export async function deleteDailyEntry(entryId: string, challengeId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: 'Not authenticated' };
+  }
+
+  try {
+    // Get the entry and verify ownership
+    const { data: entry, error: fetchError } = await supabase
+      .from('daily_entries')
+      .select('id, participant_id, is_locked')
+      .eq('id', entryId)
+      .single() as any;
+
+    if (fetchError || !entry) {
+      return { success: false, error: 'Entry not found' };
+    }
+
+    // Verify the entry belongs to the user's participation
+    const { data: participation, error: participationError } = await supabase
+      .from('challenge_participants')
+      .select('id, user_id')
+      .eq('id', entry.participant_id)
+      .eq('user_id', user.id)
+      .single() as any;
+
+    if (participationError || !participation) {
+      return { success: false, error: 'Unauthorized to delete this entry' };
+    }
+
+    // Check if entry is locked
+    if (entry.is_locked) {
+      return { success: false, error: 'Cannot delete a locked entry' };
+    }
+
+    // Delete the entry
+    const { error: deleteError } = await supabase
+      .from('daily_entries')
+      .delete()
+      .eq('id', entryId);
+
+    if (deleteError) {
+      console.error('Delete error:', deleteError);
+      throw deleteError;
+    }
+
+    // Update streak and total points
+    await updateStreak(entry.participant_id);
+    await updateTotalPoints(entry.participant_id);
+
+    // Revalidate paths
+    revalidatePath('/dashboard/today');
+    revalidatePath('/dashboard');
+    revalidatePath(`/challenges/${challengeId}`);
+    revalidatePath(`/challenges/${challengeId}/progress`);
+    revalidatePath(`/challenges/${challengeId}/entries`);
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting entry:', error);
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+    return { success: false, error: 'Failed to delete entry' };
+  }
+}
+
 export async function getDailyEntries(challengeId: string, date?: string) {
   const supabase = await createClient();
 
