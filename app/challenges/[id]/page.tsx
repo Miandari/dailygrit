@@ -144,7 +144,7 @@ export default async function ChallengePage({
             <div>
               <h1 className="text-3xl font-bold text-foreground">{challenge.name}</h1>
               {challenge.description && (
-                <p className="mt-2 text-gray-600">{challenge.description}</p>
+                <p className="mt-2 text-muted-foreground">{challenge.description}</p>
               )}
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <Badge variant={challenge.is_public ? 'default' : 'secondary'}>
@@ -282,23 +282,23 @@ export default async function ChallengePage({
             <div className="grid grid-cols-3 gap-4">
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-sm text-gray-600">Completion</div>
+                  <div className="text-sm text-muted-foreground">Completion</div>
                   <div className="text-2xl font-bold">{myStats.completionRate}%</div>
-                  <div className="text-xs text-gray-500">{myStats.completedDays}/{myStats.totalDays} days</div>
+                  <div className="text-xs text-muted-foreground">{myStats.completedDays}/{myStats.totalDays} days</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-sm text-gray-600">Longest Streak</div>
+                  <div className="text-sm text-muted-foreground">Longest Streak</div>
                   <div className="text-2xl font-bold">{myStats.longestStreak}</div>
-                  <div className="text-xs text-gray-500">personal best</div>
+                  <div className="text-xs text-muted-foreground">personal best</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-sm text-gray-600">Days Left</div>
+                  <div className="text-sm text-muted-foreground">Days Left</div>
                   <div className="text-2xl font-bold">{Math.max(0, challenge.duration_days - myStats.totalDays)}</div>
-                  <div className="text-xs text-gray-500">to complete</div>
+                  <div className="text-xs text-muted-foreground">to complete</div>
                 </CardContent>
               </Card>
             </div>
@@ -312,19 +312,19 @@ export default async function ChallengePage({
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
-                <span className="text-sm font-medium text-gray-600">Created by:</span>
+                <span className="text-sm font-medium text-muted-foreground">Created by:</span>
                 <p>{creatorProfile?.username || 'Unknown'}</p>
               </div>
               <div>
-                <span className="text-sm font-medium text-gray-600">Start Date:</span>
+                <span className="text-sm font-medium text-muted-foreground">Start Date:</span>
                 <p>{format(new Date(challenge.starts_at), 'MMMM d, yyyy')}</p>
               </div>
               <div>
-                <span className="text-sm font-medium text-gray-600">End Date:</span>
+                <span className="text-sm font-medium text-muted-foreground">End Date:</span>
                 <p>{format(new Date(challenge.ends_at), 'MMMM d, yyyy')}</p>
               </div>
               <div>
-                <span className="text-sm font-medium text-gray-600">Failure Mode:</span>
+                <span className="text-sm font-medium text-muted-foreground">Failure Mode:</span>
                 <p>{getFailureModeLabel(challenge.failure_mode)}</p>
               </div>
               {challenge.lock_entries_after_day && (
@@ -342,7 +342,7 @@ export default async function ChallengePage({
               <div className="space-y-2">
                 {(challenge.metrics as any[])?.map((metric: any, index: number) => (
                   <div key={metric.id} className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">{index + 1}.</span>
+                    <span className="text-sm text-muted-foreground">{index + 1}.</span>
                     <span className="font-medium">{metric.name}</span>
                     <Badge variant="secondary" className="text-xs">
                       {metric.type}

@@ -104,8 +104,8 @@ export default async function ChallengesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">My Challenges</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-foreground">My Challenges</h1>
+          <p className="mt-2 text-muted-foreground">
             {hasNoChallenges
               ? 'Start your journey by creating or joining a challenge'
               : `Managing ${activeChallenges.length + createdOnlyChallenges.length} ${
@@ -133,11 +133,11 @@ export default async function ChallengesPage() {
       {hasNoChallenges ? (
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-            <Trophy className="h-16 w-16 text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Trophy className="h-16 w-16 text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold text-foreground mb-2">
               No Challenges Yet
             </h3>
-            <p className="text-gray-600 mb-6 max-w-md">
+            <p className="text-muted-foreground mb-6 max-w-md">
               You haven't joined or created any challenges yet. Start tracking your habits and compete with friends!
             </p>
             <div className="flex gap-3">
@@ -161,7 +161,7 @@ export default async function ChallengesPage() {
           {/* Active Challenges Section */}
           {activeChallenges.length > 0 && (
             <div>
-              <h2 className="mb-4 text-2xl font-semibold text-gray-900 flex items-center">
+              <h2 className="mb-4 text-2xl font-semibold text-foreground flex items-center">
                 <TrendingUp className="mr-2 h-6 w-6 text-blue-600" />
                 Active Challenges
                 <Badge variant="secondary" className="ml-3">
@@ -203,12 +203,12 @@ export default async function ChallengesPage() {
                       <CardContent>
                         <div className="space-y-3">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Progress</span>
+                            <span className="text-muted-foreground">Progress</span>
                             <span className="font-medium">
                               Day {Math.min(daysElapsed + 1, challenge.duration_days)} of {challenge.duration_days}
                             </span>
                           </div>
-                          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                          <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
                             <div
                               className="h-full bg-blue-600 transition-all"
                               style={{ width: `${progress}%` }}
@@ -216,15 +216,15 @@ export default async function ChallengesPage() {
                           </div>
                           <div className="grid grid-cols-3 gap-2 text-sm">
                             <div>
-                              <div className="text-gray-600 text-xs">Points</div>
+                              <div className="text-muted-foreground text-xs">Points</div>
                               <div className="font-semibold">{participation.total_points}</div>
                             </div>
                             <div>
-                              <div className="text-gray-600 text-xs">Streak</div>
+                              <div className="text-muted-foreground text-xs">Streak</div>
                               <div className="font-semibold">{participation.current_streak}</div>
                             </div>
                             <div>
-                              <div className="text-gray-600 text-xs">Today</div>
+                              <div className="text-muted-foreground text-xs">Today</div>
                               <div className="font-semibold">
                                 {todayEntry?.is_completed ? (
                                   <span className="text-green-600">Done</span>
@@ -256,7 +256,7 @@ export default async function ChallengesPage() {
           {/* Created Challenges Section */}
           {createdOnlyChallenges.length > 0 && (
             <div>
-              <h2 className="mb-4 text-2xl font-semibold text-gray-900 flex items-center">
+              <h2 className="mb-4 text-2xl font-semibold text-foreground flex items-center">
                 <Trophy className="mr-2 h-6 w-6 text-purple-600" />
                 Challenges You Created
                 <Badge variant="secondary" className="ml-3">
@@ -283,14 +283,14 @@ export default async function ChallengesPage() {
                       <CardContent>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between text-sm">
-                            <div className="flex items-center text-gray-600">
+                            <div className="flex items-center text-muted-foreground">
                               <Calendar className="mr-1 h-4 w-4" />
                               Duration
                             </div>
                             <span className="font-medium">{challenge.duration_days} days</span>
                           </div>
                           <div className="flex items-center justify-between text-sm">
-                            <div className="flex items-center text-gray-600">
+                            <div className="flex items-center text-muted-foreground">
                               <Users className="mr-1 h-4 w-4" />
                               Type
                             </div>
@@ -312,7 +312,7 @@ export default async function ChallengesPage() {
       {/* Discover Section - Always show if there are challenges to discover */}
       {discoverChallenges.length > 0 && (
         <div>
-          <h2 className="mb-4 text-2xl font-semibold text-gray-900 flex items-center">
+          <h2 className="mb-4 text-2xl font-semibold text-foreground flex items-center">
             <Search className="mr-2 h-6 w-6 text-green-600" />
             Discover Challenges
           </h2>
@@ -341,7 +341,7 @@ export default async function ChallengesPage() {
                     <CardContent>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between text-sm">
-                          <div className="flex items-center text-gray-600">
+                          <div className="flex items-center text-muted-foreground">
                             <Calendar className="mr-1 h-4 w-4" />
                             Duration
                           </div>
