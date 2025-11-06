@@ -69,12 +69,12 @@ export default function EntriesClient({
                   {selectedEntry?.is_completed ? (
                     <>
                       {isLate && (
-                        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
+                        <Badge variant="outline" className="bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30">
                           <Clock className="mr-1 h-3 w-3" />
                           Late
                         </Badge>
                       )}
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
+                      <Badge variant="outline" className="bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30">
                         <CheckCircle className="mr-1 h-3 w-3" />
                         Completed
                       </Badge>
@@ -83,7 +83,7 @@ export default function EntriesClient({
                       </span>
                     </>
                   ) : (
-                    <Badge variant="outline" className="bg-red-50 text-red-700 border-red-300">
+                    <Badge variant="outline" className="bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30">
                       <XCircle className="mr-1 h-3 w-3" />
                       Not Completed
                     </Badge>
@@ -102,7 +102,7 @@ export default function EntriesClient({
           </Card>
         ) : (
           <Card>
-            <CardContent className="p-12 text-center text-gray-500">
+            <CardContent className="p-12 text-center text-muted-foreground">
               Select a day from the list to view or edit your entry
             </CardContent>
           </Card>

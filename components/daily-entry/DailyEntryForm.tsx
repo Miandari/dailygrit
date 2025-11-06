@@ -172,7 +172,7 @@ export default function DailyEntryForm({
               required={metric.required}
             />
             {metric.config?.min !== undefined && metric.config?.max !== undefined && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Range: {metric.config.min} - {metric.config.max}
               </p>
             )}
@@ -202,7 +202,7 @@ export default function DailyEntryForm({
                   placeholder="0"
                   disabled={isLocked}
                 />
-                <span className="text-xs text-gray-500 ml-1">hours</span>
+                <span className="text-xs text-muted-foreground ml-1">hours</span>
               </div>
               <div className="flex-1">
                 <Input
@@ -219,10 +219,10 @@ export default function DailyEntryForm({
                   placeholder="0"
                   disabled={isLocked}
                 />
-                <span className="text-xs text-gray-500 ml-1">minutes</span>
+                <span className="text-xs text-muted-foreground ml-1">minutes</span>
               </div>
             </div>
-            <p className="text-xs text-gray-500 flex items-center">
+            <p className="text-xs text-muted-foreground flex items-center">
               <Clock className="h-3 w-3 mr-1" />
               Total: {Math.floor((value || 0) / 60)}h {(value || 0) % 60}m
             </p>
@@ -299,7 +299,7 @@ export default function DailyEntryForm({
               rows={3}
             />
             {metric.config?.maxLength && (
-              <p className="text-xs text-gray-500 text-right">
+              <p className="text-xs text-muted-foreground text-right">
                 {(value || '').length}/{metric.config.maxLength}
               </p>
             )}
@@ -389,7 +389,7 @@ export default function DailyEntryForm({
                 type="button"
                 variant="outline"
                 disabled={isDeleting || isSubmitting}
-                className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                className="border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/10 dark:hover:bg-red-500/20"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -405,7 +405,7 @@ export default function DailyEntryForm({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleDelete}
-                  className="bg-red-600 hover:bg-red-700"
+                  className="bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
                 >
                   {isDeleting ? 'Deleting...' : 'Delete'}
                 </AlertDialogAction>
@@ -416,7 +416,7 @@ export default function DailyEntryForm({
       </div>
 
       {challenge.lock_entries_after_day && (
-        <p className="text-xs text-gray-500 text-center">
+        <p className="text-xs text-muted-foreground text-center">
           Note: Entries will be automatically locked after submission if configured
         </p>
       )}
