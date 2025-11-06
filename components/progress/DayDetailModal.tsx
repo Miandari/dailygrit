@@ -8,8 +8,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import { CheckCircle2, XCircle, Clock, FileText } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, FileText, PlusCircle } from 'lucide-react';
+import Link from 'next/link';
 
 interface DailyEntry {
   entry_date: string;
@@ -25,6 +27,9 @@ interface DayDetailModalProps {
   date: Date;
   entry: DailyEntry | null;
   username: string;
+  participantUserId: string;
+  currentUserId: string;
+  challengeId: string;
   challengeMetrics: any[];
   isOpen: boolean;
   onClose: () => void;
@@ -34,6 +39,9 @@ export function DayDetailModal({
   date,
   entry,
   username,
+  participantUserId,
+  currentUserId,
+  challengeId,
   challengeMetrics,
   isOpen,
   onClose
@@ -123,6 +131,18 @@ export function DayDetailModal({
               </div>
             )}
           </div>
+
+          {/* Log This Day Button */}
+          {participantUserId === currentUserId && !entry?.is_completed && (
+            <div className="flex justify-center">
+              <Button asChild size="lg" className="w-full sm:w-auto">
+                <Link href={`/challenges/${challengeId}/entries?date=${format(date, 'yyyy-MM-dd')}`}>
+                  <PlusCircle className="mr-2 h-5 w-5" />
+                  Log This Day
+                </Link>
+              </Button>
+            </div>
+          )}
 
           {/* Metrics Data */}
           {entry?.metric_data && Object.keys(entry.metric_data).length > 0 && (

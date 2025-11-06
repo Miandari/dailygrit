@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
@@ -23,7 +24,12 @@ export default function EntriesClient({
   challengeStartDate,
   challengeEndDate,
 }: EntriesClientProps) {
-  const [selectedDate, setSelectedDate] = useState<string | null>(format(new Date(), 'yyyy-MM-dd'));
+  const searchParams = useSearchParams();
+  const dateParam = searchParams.get('date');
+
+  const [selectedDate, setSelectedDate] = useState<string | null>(
+    dateParam || format(new Date(), 'yyyy-MM-dd')
+  );
 
   const entryMap = new Map(entries.map(e => [e.entry_date, e]));
   const selectedEntry = selectedDate ? entryMap.get(selectedDate) : null;

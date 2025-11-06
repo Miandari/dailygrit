@@ -289,6 +289,7 @@ export default async function ProgressPage({
             <ParticipantsLeaderboard
               participants={participantsWithStats}
               currentUserId={user.id}
+              challengeId={challenge.id}
               challengeStartDate={new Date(challenge.starts_at)}
               challengeEndDate={new Date(challenge.ends_at)}
               challengeMetrics={challenge.metrics || []}

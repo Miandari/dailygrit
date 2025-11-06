@@ -25,6 +25,7 @@ interface Participant {
 interface ParticipantsLeaderboardProps {
   participants: Participant[];
   currentUserId: string;
+  challengeId: string;
   challengeStartDate: Date;
   challengeEndDate: Date;
   challengeMetrics: any[];
@@ -33,6 +34,7 @@ interface ParticipantsLeaderboardProps {
 export function ParticipantsLeaderboard({
   participants,
   currentUserId,
+  challengeId,
   challengeStartDate,
   challengeEndDate,
   challengeMetrics
@@ -129,6 +131,8 @@ export function ParticipantsLeaderboard({
       {selectedParticipant && (
         <ParticipantDetailModal
           participant={selectedParticipant}
+          currentUserId={currentUserId}
+          challengeId={challengeId}
           challengeStartDate={challengeStartDate}
           challengeEndDate={challengeEndDate}
           challengeMetrics={challengeMetrics}
