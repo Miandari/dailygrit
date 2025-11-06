@@ -18,6 +18,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import toast from 'react-hot-toast';
 import { Bell } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export function Navigation() {
   const pathname = usePathname();
@@ -107,6 +108,9 @@ export function Navigation() {
           <div className="flex items-center gap-4">
             {user ? (
               <>
+                {/* Theme Toggle */}
+                <ThemeToggle />
+
                 {/* Notification Bell */}
                 <Link href="/challenges/requests" className="relative">
                   <Button variant="ghost" size="icon" className="relative">
