@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { notFound, redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { BarChart3, Target } from 'lucide-react';
 import EntriesClient from './EntriesClient';
 
 export const revalidate = 0;
@@ -77,15 +77,47 @@ export default async function AllEntriesPage({
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-8">
-          <Button asChild variant="ghost" className="mb-4">
-            <Link href={`/challenges/${id}`}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Challenge
-            </Link>
-          </Button>
+          {/* Breadcrumbs */}
+          <nav className="mb-4">
+            <ol className="flex items-center gap-2 text-sm text-gray-600">
+              <li>
+                <Link href="/dashboard" className="hover:text-gray-900 transition-colors">
+                  Dashboard
+                </Link>
+              </li>
+              <li>/</li>
+              <li>
+                <Link href={`/challenges/${id}`} className="hover:text-gray-900 transition-colors">
+                  {challenge.name}
+                </Link>
+              </li>
+              <li>/</li>
+              <li className="text-gray-900 font-medium">All Entries</li>
+            </ol>
+          </nav>
 
-          <h1 className="text-3xl font-bold text-gray-900">All Entries</h1>
-          <p className="mt-2 text-gray-600">{challenge.name}</p>
+          {/* Header with Actions */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">All Entries</h1>
+              <p className="mt-2 text-gray-600">{challenge.name}</p>
+            </div>
+
+            <div className="flex gap-2">
+              <Button asChild variant="outline" size="default">
+                <Link href={`/challenges/${id}/progress`}>
+                  <BarChart3 className="mr-2 h-4 w-4" />
+                  Leaderboard
+                </Link>
+              </Button>
+              <Button asChild size="default">
+                <Link href="/dashboard/today">
+                  <Target className="mr-2 h-4 w-4" />
+                  Track Today
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
 
         <EntriesClient
