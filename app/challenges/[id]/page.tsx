@@ -155,7 +155,7 @@ export default async function ChallengePage({
                 {isParticipant && !isCreator && <Badge variant="secondary">Participating</Badge>}
               </div>
             </div>
-            <div className="flex flex-wrap gap-2 sm:justify-end">
+            <div className="flex flex-col sm:flex-row gap-2 sm:justify-end sm:flex-wrap">
               {!isParticipant && user && !isCreator && (
                 <JoinChallengeButton
                   challengeId={id}
@@ -177,8 +177,9 @@ export default async function ChallengePage({
                   </Button>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="icon">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto sm:size-9 sm:px-0">
                         <MoreVertical className="h-4 w-4" />
+                        <span className="sm:hidden ml-2">More Options</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
@@ -227,8 +228,9 @@ export default async function ChallengePage({
               {isCreator && !isParticipant && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto sm:size-9 sm:px-0">
                       <MoreVertical className="h-4 w-4" />
+                      <span className="sm:hidden ml-2">More Options</span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
