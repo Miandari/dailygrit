@@ -109,10 +109,10 @@ export default async function BrowseChallengesPage({
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">Browse Challenges</h1>
-        <p className="mt-2 text-muted-foreground">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-8">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Browse Challenges</h1>
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           Discover public and private challenges
         </p>
 
@@ -127,7 +127,10 @@ export default async function BrowseChallengesPage({
               className="pl-10"
             />
           </div>
-          <Button type="submit">Search</Button>
+          <Button type="submit" className="sm:px-4 px-3">
+            <span className="hidden sm:inline">Search</span>
+            <Search className="h-4 w-4 sm:hidden" />
+          </Button>
         </form>
       </div>
 
@@ -142,7 +145,7 @@ export default async function BrowseChallengesPage({
         </Card>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {challengesWithCounts.map((challenge: any) => {
           const status = getChallengeStatus(challenge);
           const daysElapsed = Math.floor(
@@ -155,9 +158,9 @@ export default async function BrowseChallengesPage({
             <Link key={challenge.id} href={`/challenges/${challenge.id}`}>
               <Card className="h-full transition-shadow hover:shadow-lg">
                 <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <CardTitle className="line-clamp-1">{challenge.name}</CardTitle>
-                    <Badge variant={status.variant} className="ml-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <CardTitle className="line-clamp-1 flex-1 min-w-0">{challenge.name}</CardTitle>
+                    <Badge variant={status.variant} className="shrink-0">
                       {status.label}
                     </Badge>
                   </div>
@@ -167,28 +170,28 @@ export default async function BrowseChallengesPage({
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Created by</span>
-                      <span className="font-medium">
+                    <div className="flex items-center justify-between text-sm gap-2">
+                      <span className="text-muted-foreground shrink-0">Created by</span>
+                      <span className="font-medium truncate">
                         {challenge.creator?.username || 'Unknown'}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Duration</span>
+                    <div className="flex items-center justify-between text-sm gap-2">
+                      <span className="text-muted-foreground shrink-0">Duration</span>
                       <span className="font-medium">{challenge.duration_days} days</span>
                     </div>
 
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Participants</span>
+                    <div className="flex items-center justify-between text-sm gap-2">
+                      <span className="text-muted-foreground shrink-0">Participants</span>
                       <span className="font-medium">{challenge.participantCount}</span>
                     </div>
 
                     {status.label === 'Active' && (
                       <>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">Progress</span>
-                          <span className="font-medium">
+                        <div className="flex items-center justify-between text-sm gap-2">
+                          <span className="text-muted-foreground shrink-0">Progress</span>
+                          <span className="font-medium shrink-0">
                             Day {Math.min(daysElapsed + 1, challenge.duration_days)} of{' '}
                             {challenge.duration_days}
                           </span>
