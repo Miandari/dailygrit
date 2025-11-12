@@ -83,12 +83,12 @@ export default function ProfileInfoSection({ profile, userEmail }: ProfileInfoSe
                     value={formData.avatar_url}
                     onChange={(e) => setFormData({ ...formData, avatar_url: e.target.value })}
                   />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     Enter a URL to your profile picture
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   {formData.avatar_url ? 'Profile picture set' : 'No profile picture set'}
                 </p>
               )}
@@ -121,9 +121,9 @@ export default function ProfileInfoSection({ profile, userEmail }: ProfileInfoSe
               type="email"
               value={userEmail}
               disabled
-              className="bg-gray-50"
+              className="bg-muted"
             />
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               Email cannot be changed. Contact support if needed.
             </p>
           </div>
@@ -140,10 +140,10 @@ export default function ProfileInfoSection({ profile, userEmail }: ProfileInfoSe
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               disabled={!isEditing}
-              className={!isEditing ? 'bg-gray-50' : ''}
+              className={!isEditing ? 'bg-muted' : ''}
             />
             {isEditing && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 3-20 characters, letters, numbers, underscores, and hyphens only
               </p>
             )}
@@ -159,7 +159,7 @@ export default function ProfileInfoSection({ profile, userEmail }: ProfileInfoSe
               value={formData.full_name}
               onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
               disabled={!isEditing}
-              className={!isEditing ? 'bg-gray-50' : ''}
+              className={!isEditing ? 'bg-muted' : ''}
             />
           </div>
 
@@ -172,11 +172,11 @@ export default function ProfileInfoSection({ profile, userEmail }: ProfileInfoSe
               value={formData.bio}
               onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
               disabled={!isEditing}
-              className={!isEditing ? 'bg-gray-50' : ''}
+              className={!isEditing ? 'bg-muted' : ''}
               rows={4}
             />
             {isEditing && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Brief description for your profile
               </p>
             )}

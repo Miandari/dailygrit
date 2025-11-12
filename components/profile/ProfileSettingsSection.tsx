@@ -60,7 +60,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Mail className="h-5 w-5 text-gray-600" />
+            <Mail className="h-5 w-5 text-muted-foreground" />
             <div>
               <CardTitle>Email Notifications</CardTitle>
               <CardDescription>Manage what emails you receive from us</CardDescription>
@@ -74,7 +74,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
               <Label htmlFor="email_notifications_enabled" className="text-base font-medium">
                 Enable Email Notifications
               </Label>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Receive email notifications from DailyGrit
               </p>
             </div>
@@ -92,7 +92,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="email_daily_reminder">Daily Reminder</Label>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Get reminded to complete your daily challenges
                 </p>
               </div>
@@ -108,7 +108,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="email_challenge_updates">Challenge Updates</Label>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Updates about challenges you're participating in
                 </p>
               </div>
@@ -124,7 +124,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="email_join_requests">Join Requests</Label>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Notifications when someone requests to join your challenge
                 </p>
               </div>
@@ -140,7 +140,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="email_weekly_summary">Weekly Summary</Label>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   A weekly summary of your progress and achievements
                 </p>
               </div>
@@ -159,7 +159,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Bell className="h-5 w-5 text-gray-600" />
+            <Bell className="h-5 w-5 text-muted-foreground" />
             <div>
               <CardTitle>In-App Notifications</CardTitle>
               <CardDescription>Manage in-app notification preferences</CardDescription>
@@ -172,7 +172,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
               <Label htmlFor="app_notifications_enabled" className="text-base font-medium">
                 Enable In-App Notifications
               </Label>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Show notifications within the app
               </p>
             </div>
@@ -190,7 +190,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-gray-600" />
+            <Shield className="h-5 w-5 text-muted-foreground" />
             <div>
               <CardTitle>Privacy Settings</CardTitle>
               <CardDescription>Control your privacy and visibility</CardDescription>
@@ -202,7 +202,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="show_email">Show Email on Profile</Label>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Allow others to see your email address
               </p>
             </div>
@@ -220,7 +220,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
       <Card className="opacity-50">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Palette className="h-5 w-5 text-gray-600" />
+            <Palette className="h-5 w-5 text-muted-foreground" />
             <div>
               <CardTitle>Display Preferences</CardTitle>
               <CardDescription>Theme and display settings (Coming Soon)</CardDescription>
@@ -228,7 +228,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Theme customization and display preferences will be available in a future update.
           </p>
         </CardContent>
