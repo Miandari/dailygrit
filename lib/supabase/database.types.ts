@@ -203,6 +203,56 @@ export type Database = {
           access_reason?: string | null
         }
       }
+      user_preferences: {
+        Row: {
+          id: string
+          user_id: string
+          email_notifications_enabled: boolean
+          email_daily_reminder: boolean
+          email_challenge_updates: boolean
+          email_join_requests: boolean
+          email_weekly_summary: boolean
+          app_notifications_enabled: boolean
+          profile_visibility: string
+          show_email: boolean
+          theme: string
+          timezone: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          email_notifications_enabled?: boolean
+          email_daily_reminder?: boolean
+          email_challenge_updates?: boolean
+          email_join_requests?: boolean
+          email_weekly_summary?: boolean
+          app_notifications_enabled?: boolean
+          profile_visibility?: string
+          show_email?: boolean
+          theme?: string
+          timezone?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          email_notifications_enabled?: boolean
+          email_daily_reminder?: boolean
+          email_challenge_updates?: boolean
+          email_join_requests?: boolean
+          email_weekly_summary?: boolean
+          app_notifications_enabled?: boolean
+          profile_visibility?: string
+          show_email?: boolean
+          theme?: string
+          timezone?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never

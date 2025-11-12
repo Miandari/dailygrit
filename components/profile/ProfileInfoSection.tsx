@@ -115,6 +115,106 @@ export default function ProfileInfoSection({ profile, userEmail }: ProfileInfoSe
         </CardContent>
       </Card>
 
+      {/* Basic Information Card */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Basic Information</CardTitle>
+              <CardDescription>Your personal information and bio</CardDescription>
+            </div>
+            {!isEditing && (
+              <Button onClick={() => setIsEditing(true)} variant="outline">
+                Edit
+              </Button>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Email (read-only) */}
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={userEmail}
+              disabled
+              className="bg-muted"
+            />
+            <p className="text-xs text-muted-foreground">
+              Email cannot be changed. Contact support if needed.
+            </p>
+          </div>
+
+          {/* Username */}
+          <div className="space-y-2">
+            <Label htmlFor="username">
+              Username {isEditing && <span className="text-red-500">*</span>}
+            </Label>
+            <Input
+              id="username"
+              type="text"
+              placeholder="johndoe"
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              disabled={!isEditing}
+              className={!isEditing ? 'bg-muted' : ''}
+            />
+            {isEditing && (
+              <p className="text-xs text-muted-foreground">
+                3-20 characters, letters, numbers, underscores, and hyphens only
+              </p>
+            )}
+          </div>
+
+          {/* Full Name */}
+          <div className="space-y-2">
+            <Label htmlFor="full_name">Full Name</Label>
+            <Input
+              id="full_name"
+              type="text"
+              placeholder="John Doe"
+              value={formData.full_name}
+              onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+              disabled={!isEditing}
+              className={!isEditing ? 'bg-muted' : ''}
+            />
+          </div>
+
+          {/* Bio */}
+          <div className="space-y-2">
+            <Label htmlFor="bio">Bio</Label>
+            <Textarea
+              id="bio"
+              placeholder="Tell us about yourself..."
+              value={formData.bio}
+              onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+              disabled={!isEditing}
+              className={!isEditing ? 'bg-muted' : ''}
+              rows={4}
+            />
+            {isEditing && (
+              <p className="text-xs text-muted-foreground">
+                Brief description for your profile
+              </p>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          {isEditing && (
+            <div className="flex gap-2 pt-4">
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+              </Button>
+              <Button onClick={handleCancel} variant="outline" disabled={isSaving}>
+                Cancel
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Social Links & Location Card */}
       <Card>
         <CardHeader>
@@ -248,106 +348,6 @@ export default function ProfileInfoSection({ profile, userEmail }: ProfileInfoSe
               </p>
             )}
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Basic Information Card */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Basic Information</CardTitle>
-              <CardDescription>Your personal information and bio</CardDescription>
-            </div>
-            {!isEditing && (
-              <Button onClick={() => setIsEditing(true)} variant="outline">
-                Edit
-              </Button>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Email (read-only) */}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={userEmail}
-              disabled
-              className="bg-muted"
-            />
-            <p className="text-xs text-muted-foreground">
-              Email cannot be changed. Contact support if needed.
-            </p>
-          </div>
-
-          {/* Username */}
-          <div className="space-y-2">
-            <Label htmlFor="username">
-              Username {isEditing && <span className="text-red-500">*</span>}
-            </Label>
-            <Input
-              id="username"
-              type="text"
-              placeholder="johndoe"
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              disabled={!isEditing}
-              className={!isEditing ? 'bg-muted' : ''}
-            />
-            {isEditing && (
-              <p className="text-xs text-muted-foreground">
-                3-20 characters, letters, numbers, underscores, and hyphens only
-              </p>
-            )}
-          </div>
-
-          {/* Full Name */}
-          <div className="space-y-2">
-            <Label htmlFor="full_name">Full Name</Label>
-            <Input
-              id="full_name"
-              type="text"
-              placeholder="John Doe"
-              value={formData.full_name}
-              onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-              disabled={!isEditing}
-              className={!isEditing ? 'bg-muted' : ''}
-            />
-          </div>
-
-          {/* Bio */}
-          <div className="space-y-2">
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea
-              id="bio"
-              placeholder="Tell us about yourself..."
-              value={formData.bio}
-              onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-              disabled={!isEditing}
-              className={!isEditing ? 'bg-muted' : ''}
-              rows={4}
-            />
-            {isEditing && (
-              <p className="text-xs text-muted-foreground">
-                Brief description for your profile
-              </p>
-            )}
-          </div>
-
-          {/* Action Buttons */}
-          {isEditing && (
-            <div className="flex gap-2 pt-4">
-              <Button onClick={handleSave} disabled={isSaving}>
-                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Changes
-              </Button>
-              <Button onClick={handleCancel} variant="outline" disabled={isSaving}>
-                Cancel
-              </Button>
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>

@@ -4,7 +4,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProfileInfoSection from '@/components/profile/ProfileInfoSection';
 import ProfileSettingsSection from '@/components/profile/ProfileSettingsSection';
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
+  const params = await searchParams;
+  const defaultTab = params.tab === 'settings' ? 'settings' : 'info';
+
   const supabase = await createClient();
 
   const {
@@ -67,7 +74,7 @@ export default async function ProfilePage() {
         </div>
 
         {/* Tabs for different sections */}
-        <Tabs defaultValue="info" className="w-full">
+        <Tabs defaultValue={defaultTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger value="info">Basic Info</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
