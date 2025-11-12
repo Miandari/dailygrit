@@ -84,19 +84,72 @@ Should be able to use:
 
 ## Pending Work
 
+### App Redesign - Match Landing Page Style
+- [ ] **Add Dark/Light Theme Toggle System**
+  - Implement theme provider (next-themes or custom context)
+  - Add theme toggle component to navigation
+  - Persist theme preference in localStorage
+
+- [ ] **Update Color Scheme**
+  - Primary background: `#0A0A0B`
+  - Secondary background: `#0F1419`
+  - Accent color: `#00FF88`
+  - Card background: `#151515`
+  - Card borders: `#2A2A2A`
+  - Primary text: `#FFFFFF`
+  - Secondary text: `#9CA3AF`
+
+- [ ] **Apply Dark Gradient Backgrounds**
+  - Use `linear-gradient(to bottom, #0A0A0B 0%, #0F1419 100%)` throughout app
+  - Add subtle radial green glow (`rgba(0, 255, 136, 0.15)`) where appropriate
+
+- [ ] **Update Button Styles**
+  - Primary: Green accent (`#00FF88`) with dark text (`#0A0A0B`)
+  - Secondary: White (`#FFFFFF`) with dark text
+  - Add hover scale animations (`hover:scale-105`)
+
+- [ ] **Update Icons and Components**
+  - Ensure all icons from lucide-react match landing page style
+  - Update icon colors to match theme
+
+- [ ] **Update Card Components**
+  - Background: `#151515`
+  - Borders: `#2A2A2A` (1px)
+  - Border radius: rounded-2xl
+  - Apply consistent padding
+
+- [ ] **Apply Inter Font Family**
+  - Set `fontFamily: 'Inter, system-ui, -apple-system, sans-serif'` globally
+  - Update all custom styled components
+
+- [ ] **Update Navigation Bar**
+  - Match landing page dark aesthetic
+  - Use new color scheme
+  - Add theme toggle button
+
+- [ ] **Test Theme Switching**
+  - Test all pages with dark theme
+  - Test all pages with light theme (if implemented)
+  - Ensure no style conflicts or broken components
+
+### Reminder System
+- [ ] **Implement Daily Reminder Notifications**
+  - Set up notification service (Web Push API or external service)
+  - Create backend endpoints for scheduling reminders
+  - Handle notification permissions
+
+- [ ] **Add Reminder Settings Page**
+  - Time selection for daily reminders
+  - Notification preferences (email, push, SMS)
+  - Per-challenge reminder customization
+  - Snooze options
+
 ### UX Improvements
 - [ ] **Interactive Daily Metrics Cards** - Make metrics clickable on challenge detail page for quick logging
   - Need to handle challenges with many metrics (pagination or scrolling)
   - Show recent values/activity for each metric
   - Consider modal or inline quick-log functionality
   - Location: `/app/challenges/[id]/page.tsx`
-
-- [ ] **Dashboard Redesign** - Implement balanced two-column layout
-  - Left column: Today's Progress (expandable), Active Challenges (with stats and quick actions)
-  - Right column: Quick Stats widget, Streak tracker, Quick actions, Recent activity
-  - Remove fire emoji from streak displays
-  - Add expandable metrics for incomplete days
-  - Location: `/app/dashboard/page.tsx`
 
 ### Database Migrations
 - [ ] Run `supabase/temp_add_threshold_type.sql` to add threshold_type to existing metrics

@@ -59,8 +59,12 @@ export function DateSelector({
     }
 
     if (entry?.is_completed) {
-      const isLate = entry.submitted_at &&
-        new Date(entry.submitted_at).toDateString() !== day.toDateString();
+      const isLate = entry.submitted_at && entry.entry_date &&
+        (() => {
+          const submittedDate = new Date(entry.submitted_at);
+          const submittedDateStr = `${submittedDate.getFullYear()}-${String(submittedDate.getMonth() + 1).padStart(2, '0')}-${String(submittedDate.getDate()).padStart(2, '0')}`;
+          return submittedDateStr > entry.entry_date;
+        })();
       return isLate ? 'late' : 'completed';
     }
 
@@ -70,15 +74,15 @@ export function DateSelector({
   const getDayIcon = (status: string) => {
     switch (status) {
       case 'completed':
-        return <CheckCircle className="h-3 w-3 text-green-600" />;
+        return <CheckCircle className="h-3 w-3 text-green-600 dark:text-green-400" />;
       case 'late':
-        return <Clock className="h-3 w-3 text-yellow-600" />;
+        return <Clock className="h-3 w-3 text-yellow-600 dark:text-yellow-400" />;
       case 'today':
-        return <div className="h-3 w-3 rounded-full border-2 border-blue-600" />;
+        return <div className="h-3 w-3 rounded-full border-2 border-blue-600 dark:border-blue-400" />;
       case 'missed':
-        return <XCircle className="h-3 w-3 text-red-500" />;
+        return <XCircle className="h-3 w-3 text-red-500 dark:text-red-400" />;
       case 'outside':
-        return <Minus className="h-2 w-2 text-gray-300" />;
+        return <Minus className="h-2 w-2 text-muted-foreground/40" />;
       default:
         return null;
     }
@@ -138,7 +142,7 @@ export function DateSelector({
 
         <div className="grid grid-cols-7 gap-0.5">
           {weekDays.map(day => (
-            <div key={day} className="text-center text-[10px] font-medium text-gray-500 py-1">
+            <div key={day} className="text-center text-[10px] font-medium text-muted-foreground py-1">
               {day.slice(0, 2)}
             </div>
           ))}
@@ -162,26 +166,26 @@ export function DateSelector({
                   !isCurrentMonth && 'opacity-40',
                   isClickable && 'hover:shadow-sm cursor-pointer',
                   !isClickable && 'cursor-not-allowed',
-                  isSelected && 'ring-1 ring-blue-500',
-                  status === 'completed' && 'border-green-500 bg-green-50',
-                  status === 'late' && 'border-yellow-500 bg-yellow-50',
-                  status === 'today' && 'border-blue-500 bg-blue-50',
-                  status === 'missed' && 'border-red-400 bg-red-50',
-                  status === 'outside' && 'border-gray-200 bg-gray-50'
+                  isSelected && 'ring-1 ring-primary',
+                  status === 'completed' && 'border-green-500 bg-green-500/10 dark:bg-green-500/20',
+                  status === 'late' && 'border-yellow-500 bg-yellow-500/10 dark:bg-yellow-500/20',
+                  status === 'today' && 'border-blue-500 bg-blue-500/10 dark:bg-blue-500/20',
+                  status === 'missed' && 'border-red-400 bg-red-400/10 dark:bg-red-400/20',
+                  status === 'outside' && 'border-border/50 bg-muted/50'
                 )}
               >
                 <span className={cn(
                   'font-medium',
-                  !isCurrentMonth && 'text-gray-400',
-                  status === 'outside' && 'text-gray-300'
+                  !isCurrentMonth && 'text-muted-foreground/60',
+                  status === 'outside' && 'text-muted-foreground/40'
                 )}>
                   {format(day, 'd')}
                 </span>
                 {points > 0 ? (
                   <span className={cn(
                     'font-bold',
-                    status === 'completed' && 'text-green-700',
-                    status === 'late' && 'text-yellow-700'
+                    status === 'completed' && 'text-green-600 dark:text-green-400',
+                    status === 'late' && 'text-yellow-600 dark:text-yellow-400'
                   )}>
                     {points}
                   </span>
@@ -197,19 +201,19 @@ export function DateSelector({
 
         <div className="flex items-center justify-center gap-2 mt-2 text-[9px] flex-wrap">
           <div className="flex items-center gap-0.5">
-            <CheckCircle className="h-2 w-2 text-green-600" />
+            <CheckCircle className="h-2 w-2 text-green-600 dark:text-green-400" />
             <span>Done</span>
           </div>
           <div className="flex items-center gap-0.5">
-            <Clock className="h-2 w-2 text-yellow-600" />
+            <Clock className="h-2 w-2 text-yellow-600 dark:text-yellow-400" />
             <span>Late</span>
           </div>
           <div className="flex items-center gap-0.5">
-            <div className="h-2 w-2 rounded-full border border-blue-600" />
+            <div className="h-2 w-2 rounded-full border border-blue-600 dark:border-blue-400" />
             <span>Today</span>
           </div>
           <div className="flex items-center gap-0.5">
-            <XCircle className="h-2 w-2 text-red-500" />
+            <XCircle className="h-2 w-2 text-red-500 dark:text-red-400" />
             <span>Miss</span>
           </div>
         </div>

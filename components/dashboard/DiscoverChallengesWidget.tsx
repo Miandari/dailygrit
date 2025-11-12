@@ -80,7 +80,7 @@ export function DiscoverChallengesWidget({ challenges, isNewUser, joinRequests =
   const challengesToShow = showMore ? (isNewUser ? 6 : 5) : 3;
 
   return (
-    <Card className="border-2 border-blue-200 bg-blue-50/50">
+    <Card className="border-2 border-blue-500/30">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-xl">
           <Target className="h-5 w-5 text-blue-600" />
@@ -109,7 +109,7 @@ export function DiscoverChallengesWidget({ challenges, isNewUser, joinRequests =
                 const isLoading = loadingChallenges.has(challenge.id);
 
                 return (
-                  <div key={challenge.id} className="group rounded-lg border bg-white p-4 transition-all hover:border-blue-400 hover:shadow-md">
+                  <div key={challenge.id} className="group rounded-lg border bg-card p-4 transition-all hover:border-blue-400 hover:shadow-md">
                     <Link
                       href={`/challenges/${challenge.id}`}
                       className="block"
@@ -118,23 +118,23 @@ export function DiscoverChallengesWidget({ challenges, isNewUser, joinRequests =
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <h4 className="font-semibold text-gray-900 line-clamp-1 group-hover:text-blue-600">
+                              <h4 className="font-semibold text-foreground line-clamp-1 group-hover:text-blue-600">
                                 {challenge.name}
                               </h4>
                               {!challenge.is_public && (
-                                <Lock className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                                <Lock className="h-3 w-3 text-muted-foreground flex-shrink-0" />
                               )}
                             </div>
                           </div>
-                          <ArrowRight className="h-4 w-4 text-gray-400 flex-shrink-0 group-hover:text-blue-600 group-hover:translate-x-1 transition-transform" />
+                          <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0 group-hover:text-blue-600 group-hover:translate-x-1 transition-transform" />
                         </div>
                         {challenge.description && (
-                          <p className="text-sm text-gray-600 line-clamp-2">
+                          <p className="text-sm text-muted-foreground line-clamp-2">
                             {challenge.description}
                           </p>
                         )}
                         <div className="flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-3 text-xs text-gray-500">
+                          <div className="flex items-center gap-3 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1">
                               <Users className="h-3 w-3" />
                               {participantCount}
@@ -198,7 +198,7 @@ export function DiscoverChallengesWidget({ challenges, isNewUser, joinRequests =
           </>
         ) : (
           <div className="py-6 text-center">
-            <p className="mb-4 text-sm text-gray-600">
+            <p className="mb-4 text-sm text-muted-foreground">
               No public challenges available right now
             </p>
             <Button asChild variant="default" size="sm">

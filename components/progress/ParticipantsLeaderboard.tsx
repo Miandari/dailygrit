@@ -25,15 +25,19 @@ interface Participant {
 interface ParticipantsLeaderboardProps {
   participants: Participant[];
   currentUserId: string;
+  challengeId: string;
   challengeStartDate: Date;
   challengeEndDate: Date;
+  challengeMetrics: any[];
 }
 
 export function ParticipantsLeaderboard({
   participants,
   currentUserId,
+  challengeId,
   challengeStartDate,
-  challengeEndDate
+  challengeEndDate,
+  challengeMetrics
 }: ParticipantsLeaderboardProps) {
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
 
@@ -127,8 +131,11 @@ export function ParticipantsLeaderboard({
       {selectedParticipant && (
         <ParticipantDetailModal
           participant={selectedParticipant}
+          currentUserId={currentUserId}
+          challengeId={challengeId}
           challengeStartDate={challengeStartDate}
           challengeEndDate={challengeEndDate}
+          challengeMetrics={challengeMetrics}
           isOpen={!!selectedParticipant}
           onClose={() => setSelectedParticipant(null)}
         />

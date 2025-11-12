@@ -73,15 +73,15 @@ export default async function TodayPage() {
     return (
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Today&apos;s Tasks</h1>
-          <p className="mt-2 text-gray-600">{todayFormatted}</p>
+          <h1 className="text-3xl font-bold text-foreground">Today&apos;s Tasks</h1>
+          <p className="mt-2 text-muted-foreground">{todayFormatted}</p>
         </div>
 
         <Card>
           <CardContent className="py-12 text-center">
-            <Calendar className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <Calendar className="mx-auto h-12 w-12 text-muted-foreground/60 mb-4" />
             <h3 className="text-lg font-semibold mb-2">No Active Challenges</h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-muted-foreground mb-4">
               You don&apos;t have any active challenges to track today.
             </p>
             <div className="flex gap-2 justify-center">
@@ -101,8 +101,8 @@ export default async function TodayPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Today&apos;s Tasks</h1>
-        <p className="mt-2 text-gray-600">{todayFormatted}</p>
+        <h1 className="text-3xl font-bold text-foreground">Today&apos;s Tasks</h1>
+        <p className="mt-2 text-muted-foreground">{todayFormatted}</p>
       </div>
 
       {/* Summary */}
@@ -143,7 +143,7 @@ export default async function TodayPage() {
           );
 
           return (
-            <Card key={challenge.id} className={isCompleted ? 'border-green-500' : ''}>
+            <Card key={challenge.id} className={isCompleted ? 'border-green-500 border-2' : ''}>
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>
@@ -153,9 +153,9 @@ export default async function TodayPage() {
                     </CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary">🔥 {challenge.current_streak} day streak</Badge>
+                    <Badge variant="secondary">{challenge.current_streak} day streak</Badge>
                     {isCompleted && (
-                      <Badge variant="default" className="bg-green-600">
+                      <Badge variant="default" className="bg-green-600 dark:bg-green-600">
                         <CheckCircle className="mr-1 h-3 w-3" />
                         Completed
                       </Badge>

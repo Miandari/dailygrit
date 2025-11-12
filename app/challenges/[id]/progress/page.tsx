@@ -96,7 +96,7 @@ export default async function ProgressPage({
   const participantIds = allParticipants?.map(p => p.id) || [];
   const { data: allEntries } = await supabase
     .from('daily_entries')
-    .select('participant_id, entry_date, is_completed, metric_data, notes')
+    .select('participant_id, entry_date, is_completed, metric_data, notes, points_earned, bonus_points, submitted_at')
     .in('participant_id', participantIds)
     .order('entry_date', { ascending: true });
 
@@ -135,7 +135,7 @@ export default async function ProgressPage({
     });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6 sm:py-8">
+    <div className="min-h-screen bg-background py-6 sm:py-8">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
@@ -147,8 +147,8 @@ export default async function ProgressPage({
           </Button>
 
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Challenge Progress</h1>
-            <p className="mt-2 text-sm sm:text-base text-gray-600">{challenge.name}</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Challenge Progress</h1>
+            <p className="mt-2 text-sm sm:text-base text-muted-foreground">{challenge.name}</p>
           </div>
         </div>
 
@@ -233,23 +233,23 @@ export default async function ProgressPage({
 
             {/* Additional Stats */}
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-lg bg-white p-4 sm:p-6 shadow">
+              <div className="rounded-lg bg-card p-4 sm:p-6 shadow">
                 <h3 className="text-base sm:text-lg font-semibold mb-4">Challenge Timeline</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between gap-2 text-sm sm:text-base">
-                    <span className="text-gray-600 shrink-0">Started</span>
+                    <span className="text-muted-foreground shrink-0">Started</span>
                     <span className="font-medium text-right">
                       {format(new Date(challenge.starts_at), 'MMM d, yyyy')}
                     </span>
                   </div>
                   <div className="flex justify-between gap-2 text-sm sm:text-base">
-                    <span className="text-gray-600 shrink-0">Ends</span>
+                    <span className="text-muted-foreground shrink-0">Ends</span>
                     <span className="font-medium text-right">
                       {format(new Date(challenge.ends_at), 'MMM d, yyyy')}
                     </span>
                   </div>
                   <div className="flex justify-between gap-2 text-sm sm:text-base">
-                    <span className="text-gray-600 shrink-0">Days Remaining</span>
+                    <span className="text-muted-foreground shrink-0">Days Remaining</span>
                     <span className="font-medium">
                       {Math.max(0, challenge.duration_days - maxDays)}
                     </span>
@@ -257,23 +257,23 @@ export default async function ProgressPage({
                 </div>
               </div>
 
-              <div className="rounded-lg bg-white p-4 sm:p-6 shadow">
+              <div className="rounded-lg bg-card p-4 sm:p-6 shadow">
                 <h3 className="text-base sm:text-lg font-semibold mb-4">Performance Metrics</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between gap-2 text-sm sm:text-base">
-                    <span className="text-gray-600 shrink-0">Perfect Weeks</span>
+                    <span className="text-muted-foreground shrink-0">Perfect Weeks</span>
                     <span className="font-medium">
                       {Math.floor((myParticipation.longest_streak || 0) / 7)}
                     </span>
                   </div>
                   <div className="flex justify-between gap-2 text-sm sm:text-base">
-                    <span className="text-gray-600 shrink-0">Missed Days</span>
+                    <span className="text-muted-foreground shrink-0">Missed Days</span>
                     <span className="font-medium">
                       {maxDays - myCompletedDays}
                     </span>
                   </div>
                   <div className="flex justify-between gap-2 text-sm sm:text-base">
-                    <span className="text-gray-600 shrink-0">Status</span>
+                    <span className="text-muted-foreground shrink-0">Status</span>
                     <span className="font-medium capitalize">
                       {myParticipation.status}
                     </span>
@@ -289,8 +289,10 @@ export default async function ProgressPage({
             <ParticipantsLeaderboard
               participants={participantsWithStats}
               currentUserId={user.id}
+              challengeId={challenge.id}
               challengeStartDate={new Date(challenge.starts_at)}
               challengeEndDate={new Date(challenge.ends_at)}
+              challengeMetrics={challenge.metrics || []}
             />
           </TabsContent>
         </Tabs>

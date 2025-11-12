@@ -111,15 +111,15 @@ export default async function BrowseChallengesPage({
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-8">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Browse Challenges</h1>
-        <p className="mt-2 text-sm sm:text-base text-gray-600">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Browse Challenges</h1>
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           Discover public and private challenges
         </p>
 
         {/* Search bar */}
         <form className="mt-6 flex gap-2">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               name="search"
               placeholder="Search challenges..."
@@ -137,7 +137,7 @@ export default async function BrowseChallengesPage({
       {challenges && challenges.length === 0 && (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-gray-600">No public challenges found</p>
+            <p className="text-muted-foreground">No public challenges found</p>
             <Button asChild className="mt-4">
               <Link href="/challenges/create">Create the First Challenge</Link>
             </Button>
@@ -171,32 +171,32 @@ export default async function BrowseChallengesPage({
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-sm gap-2">
-                      <span className="text-gray-600 shrink-0">Created by</span>
+                      <span className="text-muted-foreground shrink-0">Created by</span>
                       <span className="font-medium truncate">
                         {challenge.creator?.username || 'Unknown'}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between text-sm gap-2">
-                      <span className="text-gray-600 shrink-0">Duration</span>
+                      <span className="text-muted-foreground shrink-0">Duration</span>
                       <span className="font-medium">{challenge.duration_days} days</span>
                     </div>
 
                     <div className="flex items-center justify-between text-sm gap-2">
-                      <span className="text-gray-600 shrink-0">Participants</span>
+                      <span className="text-muted-foreground shrink-0">Participants</span>
                       <span className="font-medium">{challenge.participantCount}</span>
                     </div>
 
                     {status.label === 'Active' && (
                       <>
                         <div className="flex items-center justify-between text-sm gap-2">
-                          <span className="text-gray-600 shrink-0">Progress</span>
+                          <span className="text-muted-foreground shrink-0">Progress</span>
                           <span className="font-medium shrink-0">
                             Day {Math.min(daysElapsed + 1, challenge.duration_days)} of{' '}
                             {challenge.duration_days}
                           </span>
                         </div>
-                        <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                        <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
                           <div
                             className="h-full bg-blue-600 transition-all"
                             style={{ width: `${progress}%` }}
@@ -207,7 +207,7 @@ export default async function BrowseChallengesPage({
 
                     {status.label === 'Upcoming' && (
                       <div className="text-sm">
-                        <span className="text-gray-600">Starts: </span>
+                        <span className="text-muted-foreground">Starts: </span>
                         <span className="font-medium">
                           {format(new Date(challenge.starts_at), 'MMM d, yyyy')}
                         </span>

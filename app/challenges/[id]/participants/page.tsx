@@ -72,7 +72,7 @@ export default async function ParticipantsManagementPage({
   })) || [];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="mx-auto max-w-4xl px-4">
         <div className="mb-8">
           <Button asChild variant="ghost" className="mb-4">
@@ -82,7 +82,7 @@ export default async function ParticipantsManagementPage({
             </Link>
           </Button>
 
-          <h1 className="text-3xl font-bold text-gray-900">Manage Participants</h1>
+          <h1 className="text-3xl font-bold text-foreground">Manage Participants</h1>
           <p className="mt-2 text-gray-600">{challenge.name}</p>
         </div>
 

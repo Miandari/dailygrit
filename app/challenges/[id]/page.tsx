@@ -137,14 +137,14 @@ export default async function ChallengePage({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-8">
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{challenge.name}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{challenge.name}</h1>
               {challenge.description && (
-                <p className="mt-2 text-sm sm:text-base text-gray-600">{challenge.description}</p>
+                <p className="mt-2 text-sm sm:text-base text-muted-foreground">{challenge.description}</p>
               )}
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <Badge variant={challenge.is_public ? 'default' : 'secondary'}>
@@ -284,23 +284,23 @@ export default async function ChallengePage({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-sm text-gray-600">Completion</div>
+                  <div className="text-sm text-muted-foreground">Completion</div>
                   <div className="text-2xl font-bold">{myStats.completionRate}%</div>
-                  <div className="text-xs text-gray-500">{myStats.completedDays}/{myStats.totalDays} days</div>
+                  <div className="text-xs text-muted-foreground">{myStats.completedDays}/{myStats.totalDays} days</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-sm text-gray-600">Longest Streak</div>
+                  <div className="text-sm text-muted-foreground">Longest Streak</div>
                   <div className="text-2xl font-bold">{myStats.longestStreak}</div>
-                  <div className="text-xs text-gray-500">personal best</div>
+                  <div className="text-xs text-muted-foreground">personal best</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-sm text-gray-600">Days Left</div>
+                  <div className="text-sm text-muted-foreground">Days Left</div>
                   <div className="text-2xl font-bold">{Math.max(0, challenge.duration_days - myStats.totalDays)}</div>
-                  <div className="text-xs text-gray-500">to complete</div>
+                  <div className="text-xs text-muted-foreground">to complete</div>
                 </CardContent>
               </Card>
             </div>
@@ -314,19 +314,19 @@ export default async function ChallengePage({
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
-                <span className="text-sm font-medium text-gray-600">Created by:</span>
+                <span className="text-sm font-medium text-muted-foreground">Created by:</span>
                 <p>{creatorProfile?.username || 'Unknown'}</p>
               </div>
               <div>
-                <span className="text-sm font-medium text-gray-600">Start Date:</span>
+                <span className="text-sm font-medium text-muted-foreground">Start Date:</span>
                 <p>{format(new Date(challenge.starts_at), 'MMMM d, yyyy')}</p>
               </div>
               <div>
-                <span className="text-sm font-medium text-gray-600">End Date:</span>
+                <span className="text-sm font-medium text-muted-foreground">End Date:</span>
                 <p>{format(new Date(challenge.ends_at), 'MMMM d, yyyy')}</p>
               </div>
               <div>
-                <span className="text-sm font-medium text-gray-600">Failure Mode:</span>
+                <span className="text-sm font-medium text-muted-foreground">Failure Mode:</span>
                 <p>{getFailureModeLabel(challenge.failure_mode)}</p>
               </div>
               {challenge.lock_entries_after_day && (
@@ -344,7 +344,7 @@ export default async function ChallengePage({
               <div className="space-y-2">
                 {(challenge.metrics as any[])?.map((metric: any, index: number) => (
                   <div key={metric.id} className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">{index + 1}.</span>
+                    <span className="text-sm text-muted-foreground">{index + 1}.</span>
                     <span className="font-medium">{metric.name}</span>
                     <Badge variant="secondary" className="text-xs">
                       {metric.type}
@@ -369,7 +369,7 @@ export default async function ChallengePage({
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-4">
-                <code className="rounded bg-gray-100 px-4 py-2 text-xl font-mono">
+                <code className="rounded bg-secondary px-4 py-2 text-xl font-mono">
                   {challenge.invite_code}
                 </code>
                 <CopyInviteCodeButton inviteCode={challenge.invite_code} />

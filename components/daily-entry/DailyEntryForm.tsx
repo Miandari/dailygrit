@@ -9,10 +9,22 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card } from '@/components/ui/card';
-import { Clock, CheckCircle, AlertCircle } from 'lucide-react';
-import { saveDailyEntry } from '@/app/actions/entries';
+import { Clock, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
+import { saveDailyEntry, deleteDailyEntry } from '@/app/actions/entries';
 import { useRouter } from 'next/navigation';
 import { FileUpload } from '@/components/ui/file-upload';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import toast from 'react-hot-toast';
 
 interface Metric {
   id: string;
@@ -51,6 +63,7 @@ export default function DailyEntryForm({
 }: DailyEntryFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState<Record<string, any>>(
     existingEntry?.metric_data || {}
@@ -98,6 +111,29 @@ export default function DailyEntryForm({
     }));
   };
 
+  const handleDelete = async () => {
+    if (!existingEntry?.id) return;
+
+    setIsDeleting(true);
+    setError('');
+
+    try {
+      const result = await deleteDailyEntry(existingEntry.id, challenge.id);
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to delete entry');
+      }
+
+      toast.success('Entry deleted successfully');
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete entry');
+      toast.error(err instanceof Error ? err.message : 'Failed to delete entry');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const renderMetricInput = (metric: Metric) => {
     const value = formData[metric.id];
 
@@ -136,7 +172,7 @@ export default function DailyEntryForm({
               required={metric.required}
             />
             {metric.config?.min !== undefined && metric.config?.max !== undefined && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Range: {metric.config.min} - {metric.config.max}
               </p>
             )}
@@ -166,7 +202,7 @@ export default function DailyEntryForm({
                   placeholder="0"
                   disabled={isLocked}
                 />
-                <span className="text-xs text-gray-500 ml-1">hours</span>
+                <span className="text-xs text-muted-foreground ml-1">hours</span>
               </div>
               <div className="flex-1">
                 <Input
@@ -183,10 +219,10 @@ export default function DailyEntryForm({
                   placeholder="0"
                   disabled={isLocked}
                 />
-                <span className="text-xs text-gray-500 ml-1">minutes</span>
+                <span className="text-xs text-muted-foreground ml-1">minutes</span>
               </div>
             </div>
-            <p className="text-xs text-gray-500 flex items-center">
+            <p className="text-xs text-muted-foreground flex items-center">
               <Clock className="h-3 w-3 mr-1" />
               Total: {Math.floor((value || 0) / 60)}h {(value || 0) % 60}m
             </p>
@@ -263,7 +299,7 @@ export default function DailyEntryForm({
               rows={3}
             />
             {metric.config?.maxLength && (
-              <p className="text-xs text-gray-500 text-right">
+              <p className="text-xs text-muted-foreground text-right">
                 {(value || '').length}/{metric.config.maxLength}
               </p>
             )}
@@ -346,10 +382,41 @@ export default function DailyEntryForm({
             Save & Lock
           </Button>
         )}
+        {existingEntry && !isLocked && (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isDeleting || isSubmitting}
+                className="border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/10 dark:hover:bg-red-500/20"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Entry</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete this entry? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
       </div>
 
       {challenge.lock_entries_after_day && (
-        <p className="text-xs text-gray-500 text-center">
+        <p className="text-xs text-muted-foreground text-center">
           Note: Entries will be automatically locked after submission if configured
         </p>
       )}

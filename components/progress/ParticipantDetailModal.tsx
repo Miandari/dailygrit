@@ -43,16 +43,22 @@ interface Participant {
 
 interface ParticipantDetailModalProps {
   participant: Participant;
+  currentUserId: string;
+  challengeId: string;
   challengeStartDate: Date;
   challengeEndDate: Date;
+  challengeMetrics: any[];
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function ParticipantDetailModal({
   participant,
+  currentUserId,
+  challengeId,
   challengeStartDate,
   challengeEndDate,
+  challengeMetrics,
   isOpen,
   onClose
 }: ParticipantDetailModalProps) {
@@ -168,34 +174,34 @@ export function ParticipantDetailModal({
           <div className="space-y-6">
             {/* Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-blue-50 rounded-lg p-4">
-                <div className="text-sm text-gray-600 mb-1">Total Points</div>
-                <div className="text-2xl font-bold text-blue-600">
+              <div className="bg-blue-500/10 dark:bg-blue-500/20 rounded-lg p-4 border border-blue-500/20">
+                <div className="text-sm text-muted-foreground mb-1">Total Points</div>
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                   {participant.total_points || 0}
                 </div>
               </div>
-              <div className="bg-orange-50 rounded-lg p-4">
-                <div className="text-sm text-gray-600 mb-1">Current Streak</div>
-                <div className="text-2xl font-bold text-orange-600">
+              <div className="bg-orange-500/10 dark:bg-orange-500/20 rounded-lg p-4 border border-orange-500/20">
+                <div className="text-sm text-muted-foreground mb-1">Current Streak</div>
+                <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
                   {participant.current_streak}
                 </div>
               </div>
-              <div className="bg-yellow-50 rounded-lg p-4">
-                <div className="text-sm text-gray-600 mb-1">Longest Streak</div>
-                <div className="text-2xl font-bold text-yellow-600">
+              <div className="bg-yellow-500/10 dark:bg-yellow-500/20 rounded-lg p-4 border border-yellow-500/20">
+                <div className="text-sm text-muted-foreground mb-1">Longest Streak</div>
+                <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
                   {participant.longest_streak}
                 </div>
               </div>
-              <div className="bg-green-50 rounded-lg p-4">
-                <div className="text-sm text-gray-600 mb-1">Completion</div>
-                <div className="text-2xl font-bold text-green-600">
+              <div className="bg-green-500/10 dark:bg-green-500/20 rounded-lg p-4 border border-green-500/20">
+                <div className="text-sm text-muted-foreground mb-1">Completion</div>
+                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                   {completionRate}%
                 </div>
               </div>
             </div>
 
             {/* Calendar */}
-            <div className="bg-white rounded-lg border p-6">
+            <div className="bg-card rounded-lg border p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold">Progress Calendar</h3>
                 <div className="flex items-center gap-2">
@@ -221,7 +227,7 @@ export function ParticipantDetailModal({
 
               <div className="grid grid-cols-7 gap-1">
                 {weekDays.map(day => (
-                  <div key={day} className="text-center text-xs font-medium text-gray-500 pb-2">
+                  <div key={day} className="text-center text-xs font-medium text-muted-foreground pb-2">
                     {day}
                   </div>
                 ))}
@@ -239,33 +245,33 @@ export function ParticipantDetailModal({
                       className={cn(
                         'aspect-square flex flex-col items-center justify-center rounded-lg border-2 transition-colors',
                         !isCurrentMonth && 'opacity-50',
-                        isClickable && 'cursor-pointer hover:ring-2 hover:ring-blue-400',
-                        status === 'completed' && 'border-green-500 bg-green-50',
-                        status === 'late' && 'border-yellow-500 bg-yellow-50',
-                        status === 'missed' && 'border-red-400 bg-red-50',
-                        status === 'today' && 'border-blue-500 bg-blue-50',
-                        status === 'future' && 'border-gray-200 bg-white',
-                        status === 'outside' && 'border-gray-100 bg-gray-50'
+                        isClickable && 'cursor-pointer hover:ring-2 hover:ring-primary',
+                        status === 'completed' && 'border-green-500 bg-green-500/10 dark:bg-green-500/20',
+                        status === 'late' && 'border-yellow-500 bg-yellow-500/10 dark:bg-yellow-500/20',
+                        status === 'missed' && 'border-red-400 bg-red-400/10 dark:bg-red-400/20',
+                        status === 'today' && 'border-blue-500 bg-blue-500/10 dark:bg-blue-500/20',
+                        status === 'future' && 'border-border bg-card',
+                        status === 'outside' && 'border-border/50 bg-muted/50'
                       )}
                     >
                       <span className={cn(
                         'text-xs font-medium mb-0.5',
-                        !isCurrentMonth && 'text-gray-400',
-                        status === 'outside' && 'text-gray-300'
+                        !isCurrentMonth && 'text-muted-foreground/60',
+                        status === 'outside' && 'text-muted-foreground/40'
                       )}>
                         {format(day, 'd')}
                       </span>
                       {points !== null ? (
                         <span className={cn(
                           'text-sm font-bold',
-                          status === 'completed' && 'text-green-700',
-                          status === 'late' && 'text-yellow-700',
-                          status === 'missed' && 'text-red-600'
+                          status === 'completed' && 'text-green-600 dark:text-green-400',
+                          status === 'late' && 'text-yellow-600 dark:text-yellow-400',
+                          status === 'missed' && 'text-red-600 dark:text-red-400'
                         )}>
                           {points}
                         </span>
                       ) : status === 'outside' ? (
-                        <Minus className="h-4 w-4 text-gray-300" />
+                        <Minus className="h-4 w-4 text-muted-foreground/40" />
                       ) : null}
                     </div>
                   );
@@ -274,30 +280,30 @@ export function ParticipantDetailModal({
 
               <div className="flex items-center justify-center gap-4 mt-6 text-sm flex-wrap">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 border-2 border-green-500 bg-green-50 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-green-700">12</span>
+                  <div className="w-6 h-6 border-2 border-green-500 bg-green-500/10 dark:bg-green-500/20 rounded flex items-center justify-center">
+                    <span className="text-xs font-bold text-green-600 dark:text-green-400">12</span>
                   </div>
                   <span>On Time</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 border-2 border-yellow-500 bg-yellow-50 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-yellow-700">8</span>
+                  <div className="w-6 h-6 border-2 border-yellow-500 bg-yellow-500/10 dark:bg-yellow-500/20 rounded flex items-center justify-center">
+                    <span className="text-xs font-bold text-yellow-600 dark:text-yellow-400">8</span>
                   </div>
                   <span>Late</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 border-2 border-blue-500 bg-blue-50 rounded" />
+                  <div className="w-6 h-6 border-2 border-blue-500 bg-blue-500/10 dark:bg-blue-500/20 rounded" />
                   <span>Today</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 border-2 border-red-400 bg-red-50 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold text-red-600">0</span>
+                  <div className="w-6 h-6 border-2 border-red-400 bg-red-400/10 dark:bg-red-400/20 rounded flex items-center justify-center">
+                    <span className="text-xs font-bold text-red-600 dark:text-red-400">0</span>
                   </div>
                   <span>Missed</span>
                 </div>
               </div>
 
-              <div className="mt-4 text-sm text-center text-gray-500">
+              <div className="mt-4 text-sm text-center text-muted-foreground">
                 Click on any day to view details
               </div>
             </div>
@@ -310,6 +316,10 @@ export function ParticipantDetailModal({
           date={selectedDay.date}
           entry={selectedDay.entry}
           username={participant.profile.username || 'Unknown User'}
+          participantUserId={participant.user_id}
+          currentUserId={currentUserId}
+          challengeId={challengeId}
+          challengeMetrics={challengeMetrics}
           isOpen={!!selectedDay}
           onClose={() => setSelectedDay(null)}
         />

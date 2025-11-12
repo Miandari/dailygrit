@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
@@ -23,14 +24,23 @@ export default function EntriesClient({
   challengeStartDate,
   challengeEndDate,
 }: EntriesClientProps) {
-  const [selectedDate, setSelectedDate] = useState<string | null>(format(new Date(), 'yyyy-MM-dd'));
+  const searchParams = useSearchParams();
+  const dateParam = searchParams.get('date');
+
+  const [selectedDate, setSelectedDate] = useState<string | null>(
+    dateParam || format(new Date(), 'yyyy-MM-dd')
+  );
 
   const entryMap = new Map(entries.map(e => [e.entry_date, e]));
   const selectedEntry = selectedDate ? entryMap.get(selectedDate) : null;
 
   const isToday = selectedDate === format(new Date(), 'yyyy-MM-dd');
-  const isLate = selectedEntry?.submitted_at && selectedEntry?.is_completed &&
-    new Date(selectedEntry.submitted_at).toDateString() !== new Date(selectedDate!).toDateString();
+  const isLate = selectedEntry?.submitted_at && selectedEntry?.is_completed && selectedEntry?.entry_date &&
+    (() => {
+      const submittedDate = new Date(selectedEntry.submitted_at);
+      const submittedDateStr = `${submittedDate.getFullYear()}-${String(submittedDate.getMonth() + 1).padStart(2, '0')}-${String(submittedDate.getDate()).padStart(2, '0')}`;
+      return submittedDateStr > selectedEntry.entry_date;
+    })();
 
   return (
     <div className="grid md:grid-cols-[280px,1fr] gap-6">
@@ -59,12 +69,12 @@ export default function EntriesClient({
                   {selectedEntry?.is_completed ? (
                     <>
                       {isLate && (
-                        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
+                        <Badge variant="outline" className="bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30">
                           <Clock className="mr-1 h-3 w-3" />
                           Late
                         </Badge>
                       )}
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
+                      <Badge variant="outline" className="bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30">
                         <CheckCircle className="mr-1 h-3 w-3" />
                         Completed
                       </Badge>
@@ -73,7 +83,7 @@ export default function EntriesClient({
                       </span>
                     </>
                   ) : (
-                    <Badge variant="outline" className="bg-red-50 text-red-700 border-red-300">
+                    <Badge variant="outline" className="bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30">
                       <XCircle className="mr-1 h-3 w-3" />
                       Not Completed
                     </Badge>
@@ -92,7 +102,7 @@ export default function EntriesClient({
           </Card>
         ) : (
           <Card>
-            <CardContent className="p-12 text-center text-gray-500">
+            <CardContent className="p-12 text-center text-muted-foreground">
               Select a day from the list to view or edit your entry
             </CardContent>
           </Card>
