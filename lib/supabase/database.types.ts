@@ -137,6 +137,13 @@ export type Database = {
           avatar_url: string | null
           full_name: string | null
           bio: string | null
+          website_url: string | null
+          twitter_handle: string | null
+          github_handle: string | null
+          instagram_handle: string | null
+          location: string | null
+          public_profile_url: string | null
+          last_active_at: string
           created_at: string
           updated_at: string
         }
@@ -146,6 +153,13 @@ export type Database = {
           avatar_url?: string | null
           full_name?: string | null
           bio?: string | null
+          website_url?: string | null
+          twitter_handle?: string | null
+          github_handle?: string | null
+          instagram_handle?: string | null
+          location?: string | null
+          public_profile_url?: string | null
+          last_active_at?: string
           created_at?: string
           updated_at?: string
         }
@@ -155,6 +169,13 @@ export type Database = {
           avatar_url?: string | null
           full_name?: string | null
           bio?: string | null
+          website_url?: string | null
+          twitter_handle?: string | null
+          github_handle?: string | null
+          instagram_handle?: string | null
+          location?: string | null
+          public_profile_url?: string | null
+          last_active_at?: string
           created_at?: string
           updated_at?: string
         }

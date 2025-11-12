@@ -14,8 +14,16 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     full_name TEXT,
     avatar_url TEXT,
     bio TEXT,
+    website_url TEXT,
+    twitter_handle TEXT,
+    github_handle TEXT,
+    instagram_handle TEXT,
+    location TEXT,
+    public_profile_url TEXT UNIQUE,
+    last_active_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT public_profile_url_format CHECK (public_profile_url ~ '^[a-z0-9-]+$' OR public_profile_url IS NULL)
 );
 
 -- =====================================================
@@ -103,6 +111,8 @@ CREATE TABLE IF NOT EXISTS public.user_challenge_access (
 
 -- Profiles indexes
 CREATE INDEX IF NOT EXISTS idx_profiles_username ON public.profiles(username);
+CREATE INDEX IF NOT EXISTS idx_profiles_public_profile_url ON public.profiles(public_profile_url);
+CREATE INDEX IF NOT EXISTS idx_profiles_last_active_at ON public.profiles(last_active_at DESC);
 
 -- Challenges indexes
 CREATE INDEX IF NOT EXISTS idx_challenges_creator ON public.challenges(creator_id);
@@ -128,6 +138,7 @@ CREATE INDEX IF NOT EXISTS idx_access_challenge ON public.user_challenge_access(
 -- TRIGGERS FOR UPDATED_AT
 -- =====================================================
 
+-- Generic updated_at trigger function (for challenges, entries, etc.)
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -136,8 +147,18 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+-- Profiles-specific trigger function (updates both updated_at and last_active_at)
+CREATE OR REPLACE FUNCTION update_profile_timestamps()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    NEW.last_active_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
 CREATE TRIGGER update_profiles_updated_at BEFORE UPDATE ON public.profiles
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION update_profile_timestamps();
 
 CREATE TRIGGER update_challenges_updated_at BEFORE UPDATE ON public.challenges
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -166,3 +187,17 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TRIGGER on_auth_user_created
     AFTER INSERT ON auth.users
     FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- =====================================================
+-- COLUMN COMMENTS
+-- =====================================================
+
+-- Profile column comments
+COMMENT ON COLUMN public.profiles.bio IS 'User biography/about me text';
+COMMENT ON COLUMN public.profiles.website_url IS 'User personal website URL';
+COMMENT ON COLUMN public.profiles.twitter_handle IS 'Twitter/X username (without @)';
+COMMENT ON COLUMN public.profiles.github_handle IS 'GitHub username';
+COMMENT ON COLUMN public.profiles.instagram_handle IS 'Instagram username (without @)';
+COMMENT ON COLUMN public.profiles.location IS 'User location (e.g., "San Francisco, CA")';
+COMMENT ON COLUMN public.profiles.public_profile_url IS 'Custom URL slug for public profile (lowercase, alphanumeric and hyphens only)';
+COMMENT ON COLUMN public.profiles.last_active_at IS 'Timestamp of last user activity';

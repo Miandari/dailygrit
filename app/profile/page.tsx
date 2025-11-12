@@ -15,10 +15,25 @@ export default async function ProfilePage() {
     redirect('/login');
   }
 
-  // Fetch user profile
+  // Fetch user profile with all fields
   const { data: profile } = await supabase
     .from('profiles')
-    .select('*')
+    .select(`
+      id,
+      username,
+      full_name,
+      avatar_url,
+      bio,
+      website_url,
+      twitter_handle,
+      github_handle,
+      instagram_handle,
+      location,
+      public_profile_url,
+      last_active_at,
+      created_at,
+      updated_at
+    `)
     .eq('id', user.id)
     .single();
 

@@ -11,6 +11,12 @@ export async function updateProfile(data: {
   full_name?: string;
   bio?: string;
   avatar_url?: string;
+  website_url?: string;
+  twitter_handle?: string;
+  github_handle?: string;
+  instagram_handle?: string;
+  location?: string;
+  public_profile_url?: string;
 }) {
   const supabase = await createClient();
 
@@ -43,6 +49,33 @@ export async function updateProfile(data: {
         return {
           success: false,
           error: 'Username must be 3-20 characters and contain only letters, numbers, underscores, and hyphens',
+        };
+      }
+    }
+
+    // Validate public_profile_url if provided
+    if (data.public_profile_url) {
+      // Ensure it's lowercase
+      data.public_profile_url = data.public_profile_url.toLowerCase();
+
+      // Check if public_profile_url is already taken (excluding current user)
+      const { data: existingProfile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('public_profile_url', data.public_profile_url)
+        .neq('id', user.id)
+        .single();
+
+      if (existingProfile) {
+        return { success: false, error: 'This profile URL is already taken' };
+      }
+
+      // Validate format (lowercase, alphanumeric, hyphens only)
+      const urlRegex = /^[a-z0-9-]+$/;
+      if (!urlRegex.test(data.public_profile_url)) {
+        return {
+          success: false,
+          error: 'Profile URL must contain only lowercase letters, numbers, and hyphens',
         };
       }
     }
