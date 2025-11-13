@@ -150,7 +150,7 @@ export default async function TodayPage() {
                     <CardTitle>
                       <Link
                         href={`/challenges/${challenge.id}`}
-                        className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors group w-fit underline-offset-4 hover:underline"
+                        className="flex items-center gap-2 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors group w-fit underline-offset-4 hover:underline"
                       >
                         {challenge.name}
                         <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
