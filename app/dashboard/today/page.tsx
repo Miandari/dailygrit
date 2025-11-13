@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Calendar, CheckCircle, XCircle } from 'lucide-react';
+import { Calendar, CheckCircle, XCircle, ArrowUpRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { getTodayDateString } from '@/lib/utils/dates';
 import Link from 'next/link';
@@ -147,7 +147,15 @@ export default async function TodayPage() {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>
-                    <CardTitle>{challenge.name}</CardTitle>
+                    <CardTitle>
+                      <Link
+                        href={`/challenges/${challenge.id}`}
+                        className="flex items-center gap-2 hover:text-primary transition-colors group w-fit"
+                      >
+                        {challenge.name}
+                        <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    </CardTitle>
                     <CardDescription className="mt-1">
                       Day {daysElapsed + 1} of {challenge.duration_days}
                     </CardDescription>
