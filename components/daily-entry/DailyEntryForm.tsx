@@ -82,7 +82,7 @@ export default function DailyEntryForm({
     try {
       // Validate required fields
       for (const metric of challenge.metrics) {
-        if (metric.required && !formData[metric.id]) {
+        if (metric.required && (formData[metric.id] === undefined || formData[metric.id] === null || formData[metric.id] === '')) {
           setError(`Please complete the required field: ${metric.name}`);
           setIsSubmitting(false);
           return;
@@ -168,11 +168,14 @@ export default function DailyEntryForm({
             <Input
               id={metric.id}
               type="number"
-              value={value || ''}
-              onChange={(e) => updateMetricValue(metric.id, parseFloat(e.target.value) || 0)}
+              value={value ?? ''}
+              onChange={(e) => {
+                const val = e.target.value;
+                updateMetricValue(metric.id, val === '' ? undefined : parseFloat(val));
+              }}
               min={metric.config?.min}
               max={metric.config?.max}
-              placeholder={metric.config?.placeholder}
+              placeholder={metric.config?.placeholder || '0'}
               disabled={isLocked}
               required={metric.required}
             />
@@ -198,11 +201,13 @@ export default function DailyEntryForm({
                   type="number"
                   min="0"
                   max="23"
-                  value={Math.floor((value || 0) / 60)}
+                  value={value ? Math.floor(value / 60) || '' : ''}
                   onChange={(e) => {
-                    const hours = parseInt(e.target.value) || 0;
+                    const val = e.target.value;
+                    const hours = val === '' ? 0 : parseInt(val);
                     const currentMinutes = (value || 0) % 60;
-                    updateMetricValue(metric.id, hours * 60 + currentMinutes);
+                    const totalMinutes = hours * 60 + currentMinutes;
+                    updateMetricValue(metric.id, totalMinutes === 0 ? undefined : totalMinutes);
                   }}
                   placeholder="0"
                   disabled={isLocked}
@@ -215,11 +220,13 @@ export default function DailyEntryForm({
                   type="number"
                   min="0"
                   max="59"
-                  value={(value || 0) % 60}
+                  value={value ? (value % 60) || '' : ''}
                   onChange={(e) => {
-                    const minutes = parseInt(e.target.value) || 0;
+                    const val = e.target.value;
+                    const minutes = val === '' ? 0 : parseInt(val);
                     const currentHours = Math.floor((value || 0) / 60);
-                    updateMetricValue(metric.id, currentHours * 60 + minutes);
+                    const totalMinutes = currentHours * 60 + minutes;
+                    updateMetricValue(metric.id, totalMinutes === 0 ? undefined : totalMinutes);
                   }}
                   placeholder="0"
                   disabled={isLocked}
