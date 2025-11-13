@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -68,6 +68,11 @@ export default function DailyEntryForm({
   const [formData, setFormData] = useState<Record<string, any>>(
     existingEntry?.metric_data || {}
   );
+
+  // Update form data when existingEntry changes (when user selects different date)
+  useEffect(() => {
+    setFormData(existingEntry?.metric_data || {});
+  }, [existingEntry]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
