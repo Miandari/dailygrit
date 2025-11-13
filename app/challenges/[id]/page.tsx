@@ -315,7 +315,16 @@ export default async function ChallengePage({
             <CardContent className="space-y-3">
               <div>
                 <span className="text-sm font-medium text-muted-foreground">Created by:</span>
-                <p>{creatorProfile?.username || 'Unknown'}</p>
+                {creatorProfile?.username ? (
+                  <Link
+                    href={`/profile/${creatorProfile.username}`}
+                    className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:underline underline-offset-2 transition-colors"
+                  >
+                    {creatorProfile.username}
+                  </Link>
+                ) : (
+                  <p>Unknown</p>
+                )}
               </div>
               <div>
                 <span className="text-sm font-medium text-muted-foreground">Start Date:</span>

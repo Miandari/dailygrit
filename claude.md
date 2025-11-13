@@ -1,5 +1,16 @@
 # DailyGrit - Claude Notes & Pinned Issues
 
+## CRITICAL: Data Safety
+
+**NEVER RUN `supabase db reset` IN PRODUCTION OR WITH REAL USER DATA!**
+- This app contains real user data that MUST NOT be lost
+- Database resets are ONLY for local development with test data
+- For production database changes:
+  - Use `supabase db push` to push migrations to remote
+  - Or apply migrations manually via Supabase Dashboard
+  - ALWAYS backup data before any schema changes
+- User data is the most valuable asset - preserve it at all costs
+
 ## Code Style Guidelines
 
 **NO EMOJIS**: Do not use emojis anywhere in the codebase, file content, UI/UX, or commit messages unless explicitly necessary. Keep all text professional and emoji-free.
@@ -75,6 +86,21 @@ Should be able to use:
 - `/components/challenges/create/TemplateSelectionScreen.tsx` - Template gallery UI
 - `/components/challenges/create/TemplateCard.tsx` - Individual template cards
 - `/lib/stores/challengeStore.ts` - Template pre-fill logic
+
+### Public Profile System (2025-01-13)
+- [DONE] Public profile page at `/profile/[username]`
+- [DONE] Shows aggregate stats from all challenges (total points, active challenges, longest streak)
+- [DONE] Lists public challenges with full details
+- [DONE] Counts private challenges without revealing details (privacy-safe)
+- [DONE] Clickable usernames throughout app (leaderboard, participants, challenge creators)
+- [DONE] Social links display (Twitter, GitHub, Instagram, website)
+- [DONE] Fixed RLS policy to allow viewing participants of public challenges
+
+### Key Files:
+- `/app/profile/[username]/page.tsx` - Public profile page
+- `/components/progress/ParticipantsLeaderboard.tsx` - Clickable usernames on leaderboard
+- `/components/progress/ParticipantProgressCard.tsx` - Clickable usernames in progress cards
+- `/supabase/migrations/20250113000001_fix_public_profile_rls.sql` - RLS policy fix
 
 ### UX Improvements (2025-01-13)
 - [DONE] Fixed form values not displaying when navigating between dates in /entries
@@ -230,6 +256,21 @@ Should be able to use:
   - Snooze options
 
 ### UX Improvements
+- [DONE] **Avatar Upload** - Allow users to upload custom profile avatars (2025-01-13)
+  - Integrated Supabase Storage for avatar images
+  - Added image upload UI with camera icon overlay
+  - File validation (JPEG, PNG, WebP, 2MB max)
+  - Delete avatar functionality with confirmation
+  - RLS policies for secure storage
+  - Location: `/app/profile/page.tsx`, `/components/profile/AvatarUpload.tsx`
+
+- [ ] **Participant Section for Each Challenge** - Add dedicated participants tab/section to challenge detail page
+  - Show all participants with their stats
+  - Make it easy to see who's in the challenge
+  - Include participant search/filter
+  - Show participant activity/progress
+  - Location: `/app/challenges/[id]/page.tsx`
+
 - [ ] **Interactive Daily Metrics Cards** - Make metrics clickable on challenge detail page for quick logging
   - Need to handle challenges with many metrics (pagination or scrolling)
   - Show recent values/activity for each metric

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { AvatarUpload } from '@/components/profile/AvatarUpload';
 import { updateProfile } from '@/app/actions/profile';
 import toast from 'react-hot-toast';
 import { Loader2, User, Globe, Twitter, Github, Instagram, MapPin, Link as LinkIcon } from 'lucide-react';
@@ -80,38 +81,13 @@ export default function ProfileInfoSection({ profile, userEmail }: ProfileInfoSe
       <Card>
         <CardHeader>
           <CardTitle>Profile Picture</CardTitle>
-          <CardDescription>Update your profile picture</CardDescription>
+          <CardDescription>Upload and manage your profile picture</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-6">
-            <Avatar className="h-20 w-20">
-              <AvatarImage src={formData.avatar_url || ''} alt={formData.username || 'User'} />
-              <AvatarFallback>
-                <User className="h-10 w-10" />
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-              {isEditing ? (
-                <div className="space-y-2">
-                  <Label htmlFor="avatar_url">Avatar URL</Label>
-                  <Input
-                    id="avatar_url"
-                    type="url"
-                    placeholder="https://example.com/avatar.jpg"
-                    value={formData.avatar_url}
-                    onChange={(e) => setFormData({ ...formData, avatar_url: e.target.value })}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Enter a URL to your profile picture
-                  </p>
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  {formData.avatar_url ? 'Profile picture set' : 'No profile picture set'}
-                </p>
-              )}
-            </div>
-          </div>
+        <CardContent className="flex justify-center">
+          <AvatarUpload
+            currentAvatarUrl={profile?.avatar_url || null}
+            username={profile?.username || null}
+          />
         </CardContent>
       </Card>
 

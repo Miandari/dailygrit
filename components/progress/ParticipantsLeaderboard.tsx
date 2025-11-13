@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Trophy, TrendingUp, Calendar } from 'lucide-react';
 import { ParticipantDetailModal } from './ParticipantDetailModal';
+import Link from 'next/link';
 
 interface Participant {
   id: string;
@@ -75,8 +76,10 @@ export function ParticipantsLeaderboard({
               <div
                 key={participant.id}
                 onClick={() => setSelectedParticipant(participant)}
-                className={`flex items-center justify-between rounded-lg border p-3 cursor-pointer hover:bg-gray-50 transition-colors ${
-                  isCurrentUser ? 'border-blue-500 bg-blue-50 hover:bg-blue-100' : 'border-gray-200'
+                className={`flex items-center justify-between rounded-lg border p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                  isCurrentUser
+                    ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30'
+                    : 'border-gray-200 dark:border-gray-700'
                 }`}
               >
                 <div className="flex items-center gap-3 flex-1">
@@ -88,16 +91,20 @@ export function ParticipantsLeaderboard({
 
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">
+                      <Link
+                        href={`/profile/${participant.profile.username || 'unknown'}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="font-medium text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:underline underline-offset-2 transition-colors"
+                      >
                         {participant.profile.username || 'Unknown User'}
-                      </span>
+                      </Link>
                       {isCurrentUser && (
                         <Badge variant="secondary" className="text-xs">
                           You
                         </Badge>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-600">
+                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-600 dark:text-gray-400">
                       <div className="flex items-center gap-1">
                         <TrendingUp className="h-3 w-3" />
                         <span>{participant.current_streak} day streak</span>
@@ -113,8 +120,8 @@ export function ParticipantsLeaderboard({
                 </div>
 
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-blue-600">{totalPoints}</div>
-                  <div className="text-xs text-gray-500">points</div>
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{totalPoints}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">points</div>
                 </div>
               </div>
             );
