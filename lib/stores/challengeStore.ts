@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { MetricFormData, ChallengeFormData, generateMetricId } from '@/lib/validations/challenge';
+import { ChallengeTemplate } from '@/lib/templates/challengeTemplates';
 
 interface ChallengeWizardState {
   currentStep: number;
@@ -15,6 +16,7 @@ interface ChallengeWizardState {
   updateMetric: (id: string, metric: Partial<MetricFormData>) => void;
   removeMetric: (id: string) => void;
   reorderMetrics: (metrics: MetricFormData[]) => void;
+  loadFromTemplate: (template: ChallengeTemplate) => void;
   reset: () => void;
 }
 
@@ -74,6 +76,28 @@ export const useChallengeWizardStore = create<ChallengeWizardState>((set) => ({
     }),
 
   reorderMetrics: (metrics) => set({ metrics }),
+
+  loadFromTemplate: (template) => {
+    const metricsWithIds: MetricFormData[] = template.metrics.map((metric, index) => ({
+      ...metric,
+      id: generateMetricId(),
+      order: index,
+    }));
+
+    set({
+      currentStep: 1,
+      formData: {
+        ...initialState.formData,
+        name: template.name,
+        enable_streak_bonus: template.settings.enable_streak_bonus,
+        streak_bonus_points: template.settings.streak_bonus_points,
+        enable_perfect_day_bonus: template.settings.enable_perfect_day_bonus,
+        perfect_day_bonus_points: template.settings.perfect_day_bonus_points,
+        lock_entries_after_day: template.settings.lock_entries_after_day,
+      },
+      metrics: metricsWithIds,
+    });
+  },
 
   reset: () => set(initialState),
 }));

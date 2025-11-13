@@ -63,6 +63,25 @@ Should be able to use:
 
 ## Recent Features Implemented
 
+### Challenge Template System (2025-01-13)
+- [DONE] Created 8 pre-configured challenge templates
+- [DONE] Template selection screen with category filtering
+- [DONE] Template preview modal showing metrics and bonuses
+- [DONE] Pre-fill functionality - templates populate entire create form
+- [DONE] Users can fully customize templates before creating
+
+### Key Files:
+- `/lib/templates/challengeTemplates.ts` - Template definitions
+- `/components/challenges/create/TemplateSelectionScreen.tsx` - Template gallery UI
+- `/components/challenges/create/TemplateCard.tsx` - Individual template cards
+- `/lib/stores/challengeStore.ts` - Template pre-fill logic
+
+### UX Improvements (2025-01-13)
+- [DONE] Fixed form values not displaying when navigating between dates in /entries
+- [DONE] Fixed number input UX - empty fields instead of showing "0"
+- [DONE] Made challenge titles clickable on /today page with green color and arrow icon
+- [DONE] Fixed step indicator dark mode colors (changed blue to green, proper contrast)
+
 ### Points-Based Scoring System
 - [DONE] Configurable points per metric
 - [DONE] Threshold-based scoring (binary, scaled, tiered modes)
@@ -217,6 +236,67 @@ Should be able to use:
   - Consider modal or inline quick-log functionality
   - Location: `/app/challenges/[id]/page.tsx`
 
+### Challenge Template System
+**Status**: Phase 1 (MVP) Complete
+
+#### Phase 1: Basic Templates (DONE)
+- [x] **Template Data Structure**
+  - Created 8 default templates (Fitness, Healthy Habits, Productivity, Morning Routine, Study, Reading, Mindfulness, No-Zero Days)
+  - Location: `/lib/templates/challengeTemplates.ts`
+
+- [x] **Template Selection UI**
+  - Template selection screen (Step 0) with "Start from Scratch" vs "Use Template"
+  - Template gallery with category filtering (All, Fitness, Productivity, Learning, Wellness)
+  - Template cards with preview functionality
+  - Location: `/components/challenges/create/TemplateSelectionScreen.tsx`
+
+- [x] **Pre-fill Functionality**
+  - Templates pre-populate entire create form (name, metrics, scoring, bonuses)
+  - Users can edit everything before creating
+  - Seamless transition to 4-step wizard
+  - Location: `/lib/stores/challengeStore.ts` (loadFromTemplate action)
+
+#### Phase 2: User-Created Templates (Future)
+- [ ] **Allow users to publish their challenges as templates**
+  - Add "Publish as Template" option in challenge settings page
+  - Template visibility options: Private (only you), Public (anyone), Link only
+  - Category selection for templates
+  - Template description field
+
+- [ ] **Database Schema for User Templates**
+  ```sql
+  CREATE TABLE challenge_templates (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    creator_id UUID REFERENCES profiles(id),
+    source_challenge_id UUID REFERENCES challenges(id),
+    name VARCHAR NOT NULL,
+    description TEXT,
+    category VARCHAR NOT NULL,
+    metrics JSONB NOT NULL,
+    settings JSONB NOT NULL,
+    visibility VARCHAR DEFAULT 'private',
+    times_used INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT NOW()
+  );
+  ```
+
+- [ ] **Template Management Features**
+  - My Templates page - view/edit/delete user's published templates
+  - Usage statistics (how many times template was used)
+  - Update template from source challenge
+
+#### Phase 3: Community Templates (Future)
+- [ ] **Enhanced Discovery**
+  - Search templates by name/description
+  - Sort by popularity (times used)
+  - Filter by creator
+  - Featured templates section
+
+- [ ] **Quality & Engagement**
+  - Template ratings/reviews
+  - Report inappropriate templates
+  - Admin approval/moderation system (optional)
+
 ### Database Migrations
 - [ ] Run `supabase/temp_add_threshold_type.sql` to add threshold_type to existing metrics
 - [ ] Investigate and fix foreign key schema cache issue
@@ -275,4 +355,4 @@ git add . && git commit && git push
 
 ---
 
-*Last updated: 2025-11-12*
+*Last updated: 2025-01-13*
