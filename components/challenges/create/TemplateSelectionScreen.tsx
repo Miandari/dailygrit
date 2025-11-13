@@ -64,9 +64,6 @@ export function TemplateSelectionScreen({ onSelectTemplate }: TemplateSelectionS
                     Quick start with pre-configured challenges
                   </p>
                 </div>
-                <Badge className="bg-green-600 dark:bg-green-600 text-white">
-                  Recommended
-                </Badge>
               </div>
             </CardContent>
           </Card>

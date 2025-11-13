@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useChallengeWizardStore } from '@/lib/stores/challengeStore';
 import { addDays, format } from 'date-fns';
+import { ArrowLeft } from 'lucide-react';
 
 const step1Schema = z.object({
   name: z.string().min(3, 'Challenge name must be at least 3 characters').max(100),
@@ -31,9 +32,10 @@ type Step1FormData = z.infer<typeof step1Schema>;
 
 interface Step1BasicInfoProps {
   onNext: () => void;
+  onBackToTemplates?: () => void;
 }
 
-export function Step1BasicInfo({ onNext }: Step1BasicInfoProps) {
+export function Step1BasicInfo({ onNext, onBackToTemplates }: Step1BasicInfoProps) {
   const { formData, updateFormData } = useChallengeWizardStore();
 
   const {
@@ -137,8 +139,16 @@ export function Step1BasicInfo({ onNext }: Step1BasicInfoProps) {
         </div>
       )}
 
-      <div className="flex justify-end">
-        <Button type="submit">Next: Add Metrics</Button>
+      <div className="flex justify-between">
+        {onBackToTemplates && (
+          <Button type="button" variant="outline" onClick={onBackToTemplates}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Templates
+          </Button>
+        )}
+        <Button type="submit" className={!onBackToTemplates ? 'ml-auto' : ''}>
+          Next: Add Metrics
+        </Button>
       </div>
     </form>
   );
