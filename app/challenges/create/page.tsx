@@ -26,6 +26,9 @@ import { ChallengeTemplate } from '@/lib/templates/challengeTemplates';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
+// Make this page dynamic since it uses searchParams and requires auth
+export const dynamic = 'force-dynamic';
+
 export default function CreateChallengePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
