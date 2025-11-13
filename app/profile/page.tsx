@@ -1,17 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import ProfileInfoSection from '@/components/profile/ProfileInfoSection';
-import ProfileSettingsSection from '@/components/profile/ProfileSettingsSection';
+import ProfileTabs from '@/components/profile/ProfileTabs';
 
-export default async function ProfilePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ tab?: string }>;
-}) {
-  const params = await searchParams;
-  const defaultTab = params.tab === 'settings' ? 'settings' : 'info';
-
+export default async function ProfilePage() {
   const supabase = await createClient();
 
   const {
@@ -74,27 +65,11 @@ export default async function ProfilePage({
         </div>
 
         {/* Tabs for different sections */}
-        <Tabs defaultValue={defaultTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="info">Basic Info</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
-
-          {/* Basic Info Tab */}
-          <TabsContent value="info">
-            <ProfileInfoSection
-              profile={profile}
-              userEmail={user.email || ''}
-            />
-          </TabsContent>
-
-          {/* Settings Tab */}
-          <TabsContent value="settings">
-            <ProfileSettingsSection
-              preferences={preferences}
-            />
-          </TabsContent>
-        </Tabs>
+        <ProfileTabs
+          profile={profile}
+          userEmail={user.email || ''}
+          preferences={preferences}
+        />
 
         {/* Expandable sections placeholder */}
         {/* Future sections can be added here as new TabsTrigger and TabsContent */}
