@@ -132,7 +132,73 @@ Should be able to use:
   - Test all pages with light theme (if implemented)
   - Ensure no style conflicts or broken components
 
-### Reminder System
+### Email Notification System (Using Resend + Supabase)
+**Strategy**: Conservative defaults - only challenge updates enabled initially
+
+#### Phase 1: Core Infrastructure
+- [ ] **Database Schema for Email System**
+  - Create `email_queue` table for reliable processing
+  - Create `email_unsubscribe_tokens` table
+  - Update `user_preferences` with email settings (all OFF except challenge_updates)
+  - Migration: `/supabase/migrations/[timestamp]_email_system.sql`
+
+- [ ] **Resend Email Service Setup**
+  - Sign up for Resend free tier (3,000 emails/month)
+  - Add dailygrit.com domain to Resend
+  - Configure DNS records (SPF, DKIM, DMARC)
+  - Store RESEND_API_KEY in Supabase secrets
+
+- [ ] **Email Processor Edge Function**
+  - Create `/supabase/functions/email-processor/index.ts`
+  - Implement queue processing with retry logic
+  - Add email templates (HTML + text versions)
+  - Focus on 'challenge_update' type initially
+
+#### Phase 2: Challenge Update Emails (MVP)
+- [ ] **Challenge Update UI**
+  - Add "Email Participants" button to challenge detail page (creator only)
+  - Create `/components/challenges/SendUpdateModal.tsx`
+  - Show participant count who will receive email
+
+- [ ] **Server Action for Updates**
+  - Create `/app/actions/sendChallengeUpdate.ts`
+  - Verify sender is challenge creator
+  - Queue emails for opted-in participants only
+
+- [ ] **Unsubscribe System**
+  - Create `/app/unsubscribe/[token]/page.tsx`
+  - Generate secure unsubscribe tokens
+  - Add List-Unsubscribe headers to emails
+
+#### Phase 3: User Preferences
+- [ ] **Email Settings in Profile**
+  - Update `/components/profile/ProfileSettingsSection.tsx`
+  - Add email notification toggles (all OFF by default except challenge_updates)
+  - Show clear opt-in messaging
+
+#### Phase 4: Future Email Types (Not Active by Default)
+- [ ] **Daily Reminders** (Default: OFF)
+  - Implement with pg_cron scheduling
+  - Timezone-aware delivery
+  - Users must explicitly opt-in
+
+- [ ] **Weekly Summaries** (Default: OFF)
+  - Monday morning delivery
+  - Include stats, streaks, points
+  - Users must explicitly opt-in
+
+- [ ] **Join Request Notifications** (Default: OFF)
+  - Database trigger on join_requests table
+  - Instant delivery to challenge creator
+  - Users must explicitly opt-in
+
+#### Key Implementation Notes:
+- **Conservative approach**: Start with only challenge updates enabled
+- **Free tier friendly**: Stay under 3,000 emails/month initially
+- **Spam prevention**: Proper DNS setup, warming strategy, unsubscribe links
+- **User trust**: Let users opt-in to additional emails vs forcing them
+
+### Reminder System (Web Push Notifications - Future)
 - [ ] **Implement Daily Reminder Notifications**
   - Set up notification service (Web Push API or external service)
   - Create backend endpoints for scheduling reminders
@@ -196,6 +262,7 @@ git add . && git commit && git push
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY` (for admin operations)
+- `RESEND_API_KEY` (for email service)
 
 ---
 
@@ -208,4 +275,4 @@ git add . && git commit && git push
 
 ---
 
-*Last updated: 2025-01-28*
+*Last updated: 2025-11-12*
