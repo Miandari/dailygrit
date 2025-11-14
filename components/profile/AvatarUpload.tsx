@@ -5,6 +5,7 @@ import { Camera, Trash2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { uploadAvatar, deleteAvatar } from '@/app/actions/uploadAvatar';
 import toast from 'react-hot-toast';
+import imageCompression from 'browser-image-compression';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,29 +39,38 @@ export function AvatarUpload({ currentAvatarUrl, username }: AvatarUploadProps) 
       return;
     }
 
-    const maxSize = 2 * 1024 * 1024; // 2MB
-    if (file.size > maxSize) {
-      toast.error('File too large. Maximum size is 2MB.');
-      return;
-    }
-
     setUploading(true);
 
-    const formData = new FormData();
-    formData.append('avatar', file);
+    try {
+      // Compress the image before upload
+      const options = {
+        maxSizeMB: 1.5,
+        maxWidthOrHeight: 512,
+        useWebWorker: true,
+      };
 
-    const result = await uploadAvatar(formData);
+      const compressedFile = await imageCompression(file, options);
 
-    setUploading(false);
+      // Create FormData with compressed file
+      const formData = new FormData();
+      formData.append('avatar', compressedFile);
 
-    if (result.error) {
-      toast.error(result.error);
-    } else {
-      toast.success('Avatar updated successfully!');
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+      const result = await uploadAvatar(formData);
+
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        toast.success('Avatar updated successfully!');
+        // Reset file input
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
       }
+    } catch (error) {
+      toast.error('Failed to process image. Please try again.');
+      console.error('Image compression error:', error);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -143,7 +153,7 @@ export function AvatarUpload({ currentAvatarUrl, username }: AvatarUploadProps) 
       </div>
 
       <p className="text-xs text-muted-foreground text-center max-w-xs">
-        JPG, PNG or WebP. Max size 2MB.
+        JPG, PNG or WebP. Large images will be automatically compressed and resized.
       </p>
 
       {/* Delete Confirmation Dialog */}
