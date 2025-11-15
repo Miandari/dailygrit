@@ -26,9 +26,21 @@ export function Navigation() {
   const router = useRouter();
   const supabase = createClient();
   const [unreadCount, setUnreadCount] = useState(0);
+  const [profile, setProfile] = useState<{ username: string | null; avatar_url: string | null } | null>(null);
 
   useEffect(() => {
     if (!user) return;
+
+    // Fetch profile data including avatar
+    const fetchProfile = async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('username, avatar_url')
+        .eq('id', user.id)
+        .single();
+
+      setProfile(data);
+    };
 
     // Fetch unread notifications count
     const fetchUnreadCount = async () => {
@@ -41,10 +53,28 @@ export function Navigation() {
       setUnreadCount(count || 0);
     };
 
+    fetchProfile();
     fetchUnreadCount();
 
+    // Subscribe to profile changes (avatar updates)
+    const profileChannel = supabase
+      .channel('profile-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'profiles',
+          filter: `id=eq.${user.id}`,
+        },
+        () => {
+          fetchProfile();
+        }
+      )
+      .subscribe();
+
     // Subscribe to new notifications and read status changes
-    const channel = supabase
+    const notificationsChannel = supabase
       .channel('notifications')
       .on(
         'postgres_changes',
@@ -73,7 +103,8 @@ export function Navigation() {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(profileChannel);
+      supabase.removeChannel(notificationsChannel);
     };
   }, [user, supabase]);
 
@@ -141,18 +172,18 @@ export function Navigation() {
                     <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                       <Avatar>
                         <AvatarImage
-                          src={user.user_metadata?.avatar_url}
-                          alt={user.user_metadata?.username || user.email || 'User'}
+                          src={profile?.avatar_url || undefined}
+                          alt={profile?.username || user.email || 'User'}
                         />
                         <AvatarFallback>
-                          {(user.user_metadata?.username?.[0] || user.email?.[0] || 'U').toUpperCase()}
+                          {(profile?.username?.[0] || user.email?.[0] || 'U').toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>
-                      {user.user_metadata?.username || user.email}
+                      {profile?.username || user.email}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>

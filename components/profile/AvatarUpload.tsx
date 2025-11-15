@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { Camera, Trash2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { uploadAvatar, deleteAvatar } from '@/app/actions/uploadAvatar';
@@ -23,6 +24,7 @@ interface AvatarUploadProps {
 }
 
 export function AvatarUpload({ currentAvatarUrl, username }: AvatarUploadProps) {
+  const router = useRouter();
   const [uploading, setUploading] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -65,6 +67,8 @@ export function AvatarUpload({ currentAvatarUrl, username }: AvatarUploadProps) 
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
         }
+        // Force router refresh to show new avatar everywhere
+        router.refresh();
       }
     } catch (error) {
       toast.error('Failed to process image. Please try again.');
@@ -86,6 +90,8 @@ export function AvatarUpload({ currentAvatarUrl, username }: AvatarUploadProps) 
       toast.error(result.error);
     } else {
       toast.success('Avatar removed successfully!');
+      // Force router refresh to update avatar everywhere
+      router.refresh();
     }
   };
 

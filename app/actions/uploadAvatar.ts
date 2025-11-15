@@ -62,15 +62,18 @@ export async function uploadAvatar(formData: FormData) {
       return { error: 'Failed to upload avatar' };
     }
 
-    // Get public URL
+    // Get public URL with cache-busting timestamp
     const {
       data: { publicUrl },
     } = supabase.storage.from('avatars').getPublicUrl(fileName);
 
+    // Add timestamp to bust browser cache
+    const cacheBustedUrl = `${publicUrl}?t=${Date.now()}`;
+
     // Update profile with new avatar URL
     const { error: updateError } = await supabase
       .from('profiles')
-      .update({ avatar_url: publicUrl })
+      .update({ avatar_url: cacheBustedUrl })
       .eq('id', user.id);
 
     if (updateError) {
@@ -78,11 +81,25 @@ export async function uploadAvatar(formData: FormData) {
       return { error: 'Failed to update profile' };
     }
 
-    // Revalidate profile page
-    revalidatePath('/profile');
-    revalidatePath(`/profile/${user.id}`);
+    // Get username for revalidation
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', user.id)
+      .single();
 
-    return { success: true, url: publicUrl };
+    // Revalidate all pages where avatars appear
+    revalidatePath('/profile');
+    revalidatePath('/dashboard');
+    revalidatePath('/today');
+    if (profile?.username) {
+      revalidatePath(`/profile/${profile.username}`);
+    }
+    // Revalidate all challenge pages (broader scope)
+    revalidatePath('/challenges/[id]/progress', 'page');
+    revalidatePath('/challenges/[id]/participants', 'page');
+
+    return { success: true, url: cacheBustedUrl };
   } catch (error) {
     console.error('Avatar upload error:', error);
     return { error: 'An unexpected error occurred' };
@@ -123,9 +140,23 @@ export async function deleteAvatar() {
       return { error: 'Failed to update profile' };
     }
 
-    // Revalidate profile page
+    // Get username for revalidation
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', user.id)
+      .single();
+
+    // Revalidate all pages where avatars appear
     revalidatePath('/profile');
-    revalidatePath(`/profile/${user.id}`);
+    revalidatePath('/dashboard');
+    revalidatePath('/today');
+    if (profile?.username) {
+      revalidatePath(`/profile/${profile.username}`);
+    }
+    // Revalidate all challenge pages (broader scope)
+    revalidatePath('/challenges/[id]/progress', 'page');
+    revalidatePath('/challenges/[id]/participants', 'page');
 
     return { success: true };
   } catch (error) {
