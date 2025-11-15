@@ -10,7 +10,7 @@
 1. Go to https://supabase.com/dashboard
 2. Click "New Project"
 3. Fill in project details:
-   - Name: dailygrit
+   - Name: gritful
    - Database Password: (choose a strong password)
    - Region: (choose closest to your users)
 

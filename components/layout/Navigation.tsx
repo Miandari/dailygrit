@@ -129,7 +129,7 @@ export function Navigation() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/dashboard" className="text-xl font-bold text-primary">
-              DailyGrit
+              Gritful
             </Link>
             <div className="hidden space-x-4 md:flex">
               {navItems.map((item) => (

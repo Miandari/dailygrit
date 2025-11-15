@@ -1,6 +1,6 @@
-# DailyGrit Database Migrations
+# Gritful Database Migrations
 
-This directory contains SQL migration files for setting up the DailyGrit database schema.
+This directory contains SQL migration files for setting up the Gritful database schema.
 
 ## TL;DR
 
@@ -33,12 +33,12 @@ This directory contains SQL migration files for setting up the DailyGrit databas
 
 ### New Projects (Fresh Setup)
 
-If you're setting up DailyGrit from scratch:
+If you're setting up Gritful from scratch:
 
 ```bash
 # Clone the repository
 git clone <repo-url>
-cd dailygrit
+cd gritful
 
 # Start Supabase and apply all migrations
 supabase start

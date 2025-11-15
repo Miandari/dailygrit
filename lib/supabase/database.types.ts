@@ -130,6 +130,94 @@ export type Database = {
           values?: any
         }
       }
+      email_queue: {
+        Row: {
+          id: string
+          user_id: string | null
+          email_type: string
+          recipient_email: string
+          subject: string
+          template_name: string
+          template_data: any
+          status: string
+          retry_count: number
+          max_retries: number
+          scheduled_for: string
+          sent_at: string | null
+          failed_at: string | null
+          error_message: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          email_type: string
+          recipient_email: string
+          subject: string
+          template_name: string
+          template_data?: any
+          status?: string
+          retry_count?: number
+          max_retries?: number
+          scheduled_for?: string
+          sent_at?: string | null
+          failed_at?: string | null
+          error_message?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          email_type?: string
+          recipient_email?: string
+          subject?: string
+          template_name?: string
+          template_data?: any
+          status?: string
+          retry_count?: number
+          max_retries?: number
+          scheduled_for?: string
+          sent_at?: string | null
+          failed_at?: string | null
+          error_message?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      email_unsubscribe_tokens: {
+        Row: {
+          id: string
+          user_id: string
+          token: string
+          email_type: string | null
+          challenge_id: string | null
+          used_at: string | null
+          created_at: string
+          expires_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          token: string
+          email_type?: string | null
+          challenge_id?: string | null
+          used_at?: string | null
+          created_at?: string
+          expires_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          token?: string
+          email_type?: string | null
+          challenge_id?: string | null
+          used_at?: string | null
+          created_at?: string
+          expires_at?: string
+        }
+      }
       profiles: {
         Row: {
           id: string

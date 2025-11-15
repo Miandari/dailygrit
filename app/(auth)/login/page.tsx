@@ -62,7 +62,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Welcome Back</CardTitle>
-          <CardDescription>Log in to your DailyGrit account</CardDescription>
+          <CardDescription>Log in to your Gritful account</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <form onSubmit={handleEmailLogin} className="space-y-4">

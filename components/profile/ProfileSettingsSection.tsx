@@ -68,6 +68,12 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Info about email preferences */}
+          <div className="rounded-lg bg-blue-50 dark:bg-blue-950/20 p-3 text-sm">
+            <p className="text-blue-900 dark:text-blue-100">
+              <strong>Email preferences:</strong> Most email types are OFF by default. You can opt-in to receive daily reminders, join requests, or weekly summaries. Challenge updates are enabled by default to keep you informed.
+            </p>
+          </div>
           {/* Master Toggle */}
           <div className="flex items-center justify-between pb-4 border-b">
             <div className="space-y-0.5">
@@ -75,7 +81,7 @@ export default function ProfileSettingsSection({ preferences }: ProfileSettingsS
                 Enable Email Notifications
               </Label>
               <p className="text-sm text-muted-foreground">
-                Receive email notifications from DailyGrit
+                Receive email notifications from Gritful
               </p>
             </div>
             <Switch

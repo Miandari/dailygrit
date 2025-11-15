@@ -44,7 +44,7 @@
 }
 
 /**
- * DailyGrit Color System
+ * Gritful Color System
  *
  * This design system provides a comprehensive color palette for both light and dark themes.
  * The dark theme matches the landing page aesthetic (#0A0A0B, #00FF88, #FFFFFF).
@@ -163,7 +163,7 @@
   }
 }
 
-/* DailyGrit Design System Utilities */
+/* Gritful Design System Utilities */
 @layer utilities {
   /* Main App Gradient Background (matches landing page) */
   .app-gradient-dark {

@@ -1,4 +1,4 @@
-# DailyGrit - Claude Notes & Pinned Issues
+# Gritful - Claude Notes & Pinned Issues
 
 ## CRITICAL: Data Safety
 
@@ -189,7 +189,7 @@ Should be able to use:
 
 - [ ] **Resend Email Service Setup**
   - Sign up for Resend free tier (3,000 emails/month)
-  - Add dailygrit.com domain to Resend
+  - Add gritful.com domain to Resend
   - Configure DNS records (SPF, DKIM, DMARC)
   - Store RESEND_API_KEY in Supabase secrets
 
@@ -256,14 +256,6 @@ Should be able to use:
   - Snooze options
 
 ### UX Improvements
-- [DONE] **Avatar Upload** - Allow users to upload custom profile avatars (2025-01-13)
-  - Integrated Supabase Storage for avatar images
-  - Added image upload UI with camera icon overlay
-  - File validation (JPEG, PNG, WebP, 2MB max)
-  - Delete avatar functionality with confirmation
-  - RLS policies for secure storage
-  - Location: `/app/profile/page.tsx`, `/components/profile/AvatarUpload.tsx`
-
 - [ ] **Participant Section for Each Challenge** - Add dedicated participants tab/section to challenge detail page
   - Show all participants with their stats
   - Make it easy to see who's in the challenge

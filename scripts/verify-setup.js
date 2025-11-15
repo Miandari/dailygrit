@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * Verification script to check if DailyGrit is properly configured
+ * Verification script to check if Gritful is properly configured
  * Run with: node scripts/verify-setup.js
  */
 
 const fs = require('fs');
 const path = require('path');
 
-console.log('🔍 Verifying DailyGrit Setup...\n');
+console.log('🔍 Verifying Gritful Setup...\n');
 
 let hasErrors = false;
 let warnings = [];

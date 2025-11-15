@@ -1,4 +1,4 @@
-# DailyGrit Deployment Guide
+# Gritful Deployment Guide
 
 ## Features Implemented
 
@@ -128,7 +128,7 @@ SELECT * FROM storage.buckets WHERE id = 'challenge-uploads';
 
 ## Success!
 
-Your DailyGrit app is now ready for production! Users can:
+Your Gritful app is now ready for production! Users can:
 - Create accountability challenges
 - Track daily progress
 - Upload progress photos

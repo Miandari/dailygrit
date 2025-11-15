@@ -12,7 +12,7 @@ export function SocialProof() {
       role: 'Fitness Enthusiast',
       avatar: 'SJ',
       rating: 5,
-      text: 'DailyGrit transformed my workout routine. The streak tracking keeps me motivated, and competing with friends adds that extra push I needed.',
+      text: 'Gritful transformed my workout routine. The streak tracking keeps me motivated, and competing with friends adds that extra push I needed.',
     },
     {
       name: 'Michael Chen',
@@ -48,7 +48,7 @@ export function SocialProof() {
             <span className="landing-gradient-text">Achievers</span>
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Join thousands who have built lasting habits with DailyGrit
+            Join thousands who have built lasting habits with Gritful
           </p>
         </div>
 

@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'DailyGrit - Track Your Daily Challenges',
+  title: 'Gritful - Track Your Daily Challenges',
   description: 'Create, join, and track daily challenges with custom metrics',
 };
 

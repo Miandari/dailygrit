@@ -1,10 +1,10 @@
-# DailyGrit - Daily Challenge Tracker
+# Gritful - Daily Challenge Tracker
 
 A web application for tracking habits and challenges through daily check-ins and metrics. Built as a full-stack application demonstrating modern web development practices with Next.js, TypeScript, and Supabase.
 
 ## What This Project Does
 
-DailyGrit is a habit tracking application that helps users maintain consistency in their personal goals. Users can create challenges with custom metrics, log daily progress, and view their completion history through calendars and streak counters.
+Gritful is a habit tracking application that helps users maintain consistency in their personal goals. Users can create challenges with custom metrics, log daily progress, and view their completion history through calendars and streak counters.
 
 The application demonstrates several key technical implementations:
 - Flexible metric system supporting multiple data types
@@ -37,9 +37,9 @@ Many people struggle to maintain consistency when working toward personal goals.
 3. Accountability through shared challenges
 4. Flexibility to track any type of measurable goal
 
-### What Makes DailyGrit Different
+### What Makes Gritful Different
 
-Unlike simple habit trackers, DailyGrit offers:
+Unlike simple habit trackers, Gritful offers:
 
 **Flexible Metric System**: Define exactly what success looks like for your challenge. Track binary yes/no completions, specific numbers (steps, minutes, calories), time durations, multiple choice selections, written reflections, or visual progress through photo uploads.
 
@@ -131,7 +131,7 @@ Built with Next.js, Supabase, and TypeScript.
 1. **Clone the repository**
    ```bash
    git clone <your-repo-url>
-   cd dailygrit
+   cd gritful
    ```
 
 2. **Install dependencies**
@@ -171,7 +171,7 @@ Built with Next.js, Supabase, and TypeScript.
 ## Project Structure
 
 ```
-dailygrit/
+gritful/
 ├── app/                      # Next.js App Router pages
 │   ├── (auth)/              # Auth pages (login, signup)
 │   ├── dashboard/           # Dashboard and user pages

@@ -1,7 +1,11 @@
 {
-  "name": "dailygrit",
+  "name": "gritful",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Miandari/gritful.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
